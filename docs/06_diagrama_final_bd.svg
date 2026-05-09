@@ -1,0 +1,512 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="1850" viewBox="0 0 2600 1850">
+  <defs>
+    <style>
+      .bg { fill: #f6f8fb; }
+      .title { font: 700 30px "Segoe UI", Arial, sans-serif; fill: #15314b; }
+      .subtitle { font: 400 16px "Segoe UI", Arial, sans-serif; fill: #486581; }
+      .lane { rx: 18; ry: 18; stroke-width: 2; fill-opacity: 0.18; }
+      .lane-title { font: 700 20px "Segoe UI", Arial, sans-serif; }
+      .entity { fill: #ffffff; stroke: #264653; stroke-width: 2; rx: 12; ry: 12; }
+      .head { fill: #264653; }
+      .headText { font: 700 15px "Segoe UI", Arial, sans-serif; fill: #ffffff; }
+      .field { font: 12px "Consolas", "Courier New", monospace; fill: #243b53; }
+      .line { stroke: #5b6c7d; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#arrow); }
+      .line-soft { stroke: #829ab1; stroke-width: 1.7; fill: none; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#arrow-soft); }
+      .rel { font: 600 12px "Segoe UI", Arial, sans-serif; fill: #334e68; }
+      .note { fill: #ffffff; stroke: #9fb3c8; stroke-width: 1.5; rx: 12; ry: 12; }
+      .noteTitle { font: 700 15px "Segoe UI", Arial, sans-serif; fill: #15314b; }
+      .noteText { font: 13px "Segoe UI", Arial, sans-serif; fill: #334e68; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6c7d" />
+    </marker>
+    <marker id="arrow-soft" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#829ab1" />
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="2600" height="1850" />
+  <text class="title" x="50" y="55">Vera - Final Database Diagram</text>
+  <text class="subtitle" x="50" y="84">Core, compliance, documents, analytics, notifications and billing</text>
+
+  <!-- Lanes -->
+  <rect class="lane" x="30" y="110" width="730" height="720" fill="#d9f0ff" stroke="#6baed6" />
+  <text class="lane-title" x="55" y="145" fill="#2b6c9c">1. Core</text>
+
+  <rect class="lane" x="790" y="110" width="760" height="720" fill="#e5f7e8" stroke="#74c69d" />
+  <text class="lane-title" x="815" y="145" fill="#2d6a4f">2. Compliance and Documents</text>
+
+  <rect class="lane" x="30" y="860" width="1140" height="660" fill="#fff4d6" stroke="#e0a100" />
+  <text class="lane-title" x="55" y="895" fill="#9c6b00">3. Analytics</text>
+
+  <rect class="lane" x="1200" y="860" width="650" height="930" fill="#fde8ef" stroke="#d66a8a" />
+  <text class="lane-title" x="1225" y="895" fill="#a23b5a">4. Billing</text>
+
+  <rect class="lane" x="1880" y="110" width="690" height="1680" fill="#ece7ff" stroke="#8f7aea" />
+  <text class="lane-title" x="1905" y="145" fill="#5a46c8">5. Notifications</text>
+
+  <!-- Core -->
+  <g transform="translate(50 180)">
+    <rect class="entity" x="0" y="0" width="290" height="155" />
+    <rect class="entity head" x="0" y="0" width="290" height="34" />
+    <text class="headText" x="18" y="22">PARTIES</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">party_type</text>
+    <text class="field" x="16" y="98">rfc</text>
+    <text class="field" x="16" y="118">legal_name</text>
+    <text class="field" x="16" y="138">display_name, phone, email</text>
+  </g>
+
+  <g transform="translate(50 390)">
+    <rect class="entity" x="0" y="0" width="290" height="140" />
+    <rect class="entity head" x="0" y="0" width="290" height="34" />
+    <text class="headText" x="18" y="22">USERS</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK party_id</text>
+    <text class="field" x="16" y="98">email, password_hash</text>
+    <text class="field" x="16" y="118">full_name, is_admin</text>
+  </g>
+
+  <g transform="translate(50 580)">
+    <rect class="entity" x="0" y="0" width="290" height="145" />
+    <rect class="entity head" x="0" y="0" width="290" height="34" />
+    <text class="headText" x="18" y="22">PARTY_CONTACTS</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK party_id</text>
+    <text class="field" x="16" y="98">contact_name</text>
+    <text class="field" x="16" y="118">email, whatsapp_phone</text>
+    <text class="field" x="16" y="138">receives_reports</text>
+  </g>
+
+  <g transform="translate(390 180)">
+    <rect class="entity" x="0" y="0" width="320" height="165" />
+    <rect class="entity head" x="0" y="0" width="320" height="34" />
+    <text class="headText" x="18" y="22">VEHICLES</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">plate, serial_niv</text>
+    <text class="field" x="16" y="98">engine_number</text>
+    <text class="field" x="16" y="118">unit_type, regime</text>
+    <text class="field" x="16" y="138">schedule_marker_effective</text>
+    <text class="field" x="16" y="158">is_active</text>
+  </g>
+
+  <g transform="translate(390 400)">
+    <rect class="entity" x="0" y="0" width="320" height="150" />
+    <rect class="entity head" x="0" y="0" width="320" height="34" />
+    <text class="headText" x="18" y="22">VEHICLE_PARTY_ROLES</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK vehicle_id</text>
+    <text class="field" x="16" y="98">FK party_id</text>
+    <text class="field" x="16" y="118">role_type</text>
+    <text class="field" x="16" y="138">is_current</text>
+  </g>
+
+  <g transform="translate(390 595)">
+    <rect class="entity" x="0" y="0" width="320" height="130" />
+    <rect class="entity head" x="0" y="0" width="320" height="34" />
+    <text class="headText" x="18" y="22">USER_VEHICLE_ACCESS</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK user_id, FK vehicle_id</text>
+    <text class="field" x="16" y="98">access_type, is_active</text>
+    <text class="field" x="16" y="118">granted_by_user_id</text>
+  </g>
+
+  <!-- Compliance -->
+  <g transform="translate(820 180)">
+    <rect class="entity" x="0" y="0" width="300" height="140" />
+    <rect class="entity head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="18" y="22">VERIFICATION_CENTERS</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">center_type</text>
+    <text class="field" x="16" y="98">code, name</text>
+    <text class="field" x="16" y="118">contact_name</text>
+  </g>
+
+  <g transform="translate(820 370)">
+    <rect class="entity" x="0" y="0" width="300" height="170" />
+    <rect class="entity head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="18" y="22">VERIFICATION_EVENTS</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK vehicle_id</text>
+    <text class="field" x="16" y="98">FK center_id</text>
+    <text class="field" x="16" y="118">FK source_document_id</text>
+    <text class="field" x="16" y="138">verification_type</text>
+    <text class="field" x="16" y="158">event_date, valid_until</text>
+  </g>
+
+  <g transform="translate(820 590)">
+    <rect class="entity" x="0" y="0" width="300" height="150" />
+    <rect class="entity head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="18" y="22">VERIFICATION_SCHEDULE_RULES</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">regime, schedule_position</text>
+    <text class="field" x="16" y="98">schedule_marker</text>
+    <text class="field" x="16" y="118">verification_type</text>
+    <text class="field" x="16" y="138">window_label</text>
+  </g>
+
+  <g transform="translate(1180 180)">
+    <rect class="entity" x="0" y="0" width="320" height="165" />
+    <rect class="entity head" x="0" y="0" width="320" height="34" />
+    <text class="headText" x="18" y="22">DOCUMENTS</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK vehicle_id</text>
+    <text class="field" x="16" y="98">related_party_id</text>
+    <text class="field" x="16" y="118">document_type</text>
+    <text class="field" x="16" y="138">valid_until, document_status</text>
+    <text class="field" x="16" y="158">is_visible_to_owner</text>
+  </g>
+
+  <g transform="translate(1180 400)">
+    <rect class="entity" x="0" y="0" width="320" height="150" />
+    <rect class="entity head" x="0" y="0" width="320" height="34" />
+    <text class="headText" x="18" y="22">DOCUMENT_FILES</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK document_id</text>
+    <text class="field" x="16" y="98">version_no, mime_type</text>
+    <text class="field" x="16" y="118">storage_kind, storage_path</text>
+    <text class="field" x="16" y="138">is_current</text>
+  </g>
+
+  <!-- Analytics -->
+  <g transform="translate(50 940)">
+    <rect class="entity" x="0" y="0" width="320" height="150" />
+    <rect class="entity head" x="0" y="0" width="320" height="34" />
+    <text class="headText" x="18" y="22">VEHICLE_STATUS_HISTORY</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK vehicle_id</text>
+    <text class="field" x="16" y="98">status_date</text>
+    <text class="field" x="16" y="118">physical_status</text>
+    <text class="field" x="16" y="138">emissions_status</text>
+  </g>
+
+  <g transform="translate(420 940)">
+    <rect class="entity" x="0" y="0" width="340" height="170" />
+    <rect class="entity head" x="0" y="0" width="340" height="34" />
+    <text class="headText" x="18" y="22">DAILY_VEHICLE_STATUS_SNAPSHOT</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">snapshot_date</text>
+    <text class="field" x="16" y="98">FK vehicle_id</text>
+    <text class="field" x="16" y="118">FK client_party_id</text>
+    <text class="field" x="16" y="138">regime, unit_type</text>
+    <text class="field" x="16" y="158">schedule_marker_effective</text>
+  </g>
+
+  <g transform="translate(820 940)">
+    <rect class="entity" x="0" y="0" width="300" height="170" />
+    <rect class="entity head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="18" y="22">VERIFICATION_SESSIONS</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK vehicle_id</text>
+    <text class="field" x="16" y="98">FK center_id</text>
+    <text class="field" x="16" y="118">verification_type</text>
+    <text class="field" x="16" y="138">scheduled_at, finished_at</text>
+    <text class="field" x="16" y="158">duration_minutes, session_result</text>
+  </g>
+
+  <g transform="translate(820 1170)">
+    <rect class="entity" x="0" y="0" width="300" height="155" />
+    <rect class="entity head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="18" y="22">VERIFICATION_CENTER_CAPACITY_DAILY</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK center_id</text>
+    <text class="field" x="16" y="98">capacity_date</text>
+    <text class="field" x="16" y="118">lines_available, hours_open</text>
+    <text class="field" x="16" y="138">capacity_operational</text>
+  </g>
+
+  <g transform="translate(420 1185)">
+    <rect class="entity" x="0" y="0" width="340" height="140" />
+    <rect class="entity head" x="0" y="0" width="340" height="34" />
+    <text class="headText" x="18" y="22">CALENDAR_BUSINESS_DAYS</text>
+    <text class="field" x="16" y="58">PK calendar_date</text>
+    <text class="field" x="16" y="78">is_business_day</text>
+    <text class="field" x="16" y="98">is_holiday</text>
+    <text class="field" x="16" y="118">holiday_name</text>
+  </g>
+
+  <g transform="translate(50 1165)">
+    <rect class="entity" x="0" y="0" width="320" height="160" />
+    <rect class="entity head" x="0" y="0" width="320" height="34" />
+    <text class="headText" x="18" y="22">DATA_QUALITY_ISSUES</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">entity_type, entity_id</text>
+    <text class="field" x="16" y="98">issue_type</text>
+    <text class="field" x="16" y="118">severity, status</text>
+    <text class="field" x="16" y="138">detected_at, resolved_at</text>
+  </g>
+
+  <!-- Billing -->
+  <g transform="translate(1230 940)">
+    <rect class="entity" x="0" y="0" width="300" height="145" />
+    <rect class="entity head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="18" y="22">SERVICE_ORDERS</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">folio</text>
+    <text class="field" x="16" y="98">FK vehicle_id, FK client_party_id</text>
+    <text class="field" x="16" y="118">service_date, service_type</text>
+  </g>
+
+  <g transform="translate(1230 1140)">
+    <rect class="entity" x="0" y="0" width="300" height="130" />
+    <rect class="entity head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="18" y="22">SERVICE_ORDER_ITEMS</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK service_order_id</text>
+    <text class="field" x="16" y="98">concept, amount</text>
+    <text class="field" x="16" y="118">currency</text>
+  </g>
+
+  <g transform="translate(1230 1320)">
+    <rect class="entity" x="0" y="0" width="300" height="150" />
+    <rect class="entity head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="18" y="22">CLIENT_ACCOUNTS</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK client_party_id</text>
+    <text class="field" x="16" y="98">account_status</text>
+    <text class="field" x="16" y="118">credit_limit, credit_days</text>
+    <text class="field" x="16" y="138">billing_email</text>
+  </g>
+
+  <g transform="translate(1230 1525)">
+    <rect class="entity" x="0" y="0" width="300" height="170" />
+    <rect class="entity head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="18" y="22">RECEIVABLE_DOCUMENTS</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK client_account_id</text>
+    <text class="field" x="16" y="98">FK service_order_id</text>
+    <text class="field" x="16" y="118">folio, issue_date, due_date</text>
+    <text class="field" x="16" y="138">total_amount, balance_amount</text>
+    <text class="field" x="16" y="158">receivable_status</text>
+  </g>
+
+  <!-- Notifications / right side includes billing details -->
+  <g transform="translate(1910 180)">
+    <rect class="entity" x="0" y="0" width="300" height="140" />
+    <rect class="entity head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="18" y="22">REPORT_RECIPIENTS</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK client_party_id</text>
+    <text class="field" x="16" y="98">FK party_contact_id</text>
+    <text class="field" x="16" y="118">channel, report_type</text>
+  </g>
+
+  <g transform="translate(1910 360)">
+    <rect class="entity" x="0" y="0" width="300" height="150" />
+    <rect class="entity head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="18" y="22">NOTIFICATION_RULES</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">rule_code</text>
+    <text class="field" x="16" y="98">report_type</text>
+    <text class="field" x="16" y="118">trigger_status</text>
+    <text class="field" x="16" y="138">trigger_offset_days</text>
+  </g>
+
+  <g transform="translate(1910 560)">
+    <rect class="entity" x="0" y="0" width="300" height="130" />
+    <rect class="entity head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="18" y="22">MESSAGE_TEMPLATES</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">template_code</text>
+    <text class="field" x="16" y="98">channel, template_name</text>
+    <text class="field" x="16" y="118">subject, body</text>
+  </g>
+
+  <g transform="translate(1910 740)">
+    <rect class="entity" x="0" y="0" width="300" height="170" />
+    <rect class="entity head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="18" y="22">NOTIFICATION_BATCHES</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK report_recipient_id</text>
+    <text class="field" x="16" y="98">FK party_contact_id</text>
+    <text class="field" x="16" y="118">FK rule_id, FK template_id</text>
+    <text class="field" x="16" y="138">scheduled_for, status</text>
+    <text class="field" x="16" y="158">dedupe_key</text>
+  </g>
+
+  <g transform="translate(1910 965)">
+    <rect class="entity" x="0" y="0" width="300" height="145" />
+    <rect class="entity head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="18" y="22">NOTIFICATION_BATCH_ITEMS</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK batch_id</text>
+    <text class="field" x="16" y="98">FK vehicle_id</text>
+    <text class="field" x="16" y="118">verification_type</text>
+    <text class="field" x="16" y="138">due_status, due_date</text>
+  </g>
+
+  <g transform="translate(1910 1160)">
+    <rect class="entity" x="0" y="0" width="300" height="130" />
+    <rect class="entity head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="18" y="22">NOTIFICATION_LOG</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK batch_id</text>
+    <text class="field" x="16" y="98">channel, destination</text>
+    <text class="field" x="16" y="118">delivery_status, sent_at</text>
+  </g>
+
+  <g transform="translate(2250 950)">
+    <rect class="entity" x="0" y="0" width="280" height="150" />
+    <rect class="entity head" x="0" y="0" width="280" height="34" />
+    <text class="headText" x="18" y="22">RECEIVABLE_INSTALLMENTS</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK receivable_document_id</text>
+    <text class="field" x="16" y="98">installment_no, due_date</text>
+    <text class="field" x="16" y="118">amount_due, amount_paid</text>
+    <text class="field" x="16" y="138">installment_status</text>
+  </g>
+
+  <g transform="translate(2250 1145)">
+    <rect class="entity" x="0" y="0" width="280" height="150" />
+    <rect class="entity head" x="0" y="0" width="280" height="34" />
+    <text class="headText" x="18" y="22">PAYMENT_TRANSACTIONS</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK client_account_id</text>
+    <text class="field" x="16" y="98">payment_date, payment_method</text>
+    <text class="field" x="16" y="118">amount, status</text>
+    <text class="field" x="16" y="138">reference</text>
+  </g>
+
+  <g transform="translate(2250 1340)">
+    <rect class="entity" x="0" y="0" width="280" height="140" />
+    <rect class="entity head" x="0" y="0" width="280" height="34" />
+    <text class="headText" x="18" y="22">PAYMENT_APPLICATIONS</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK payment_transaction_id</text>
+    <text class="field" x="16" y="98">FK receivable_document_id</text>
+    <text class="field" x="16" y="118">applied_amount</text>
+  </g>
+
+  <g transform="translate(2250 1530)">
+    <rect class="entity" x="0" y="0" width="280" height="145" />
+    <rect class="entity head" x="0" y="0" width="280" height="34" />
+    <text class="headText" x="18" y="22">ACCOUNT_MOVEMENTS</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK client_account_id</text>
+    <text class="field" x="16" y="98">movement_type</text>
+    <text class="field" x="16" y="118">debit, credit, balance_after</text>
+    <text class="field" x="16" y="138">movement_date</text>
+  </g>
+
+  <!-- Relationship lines -->
+  <path class="line" d="M 340 255 L 365 255 L 365 475 L 390 475" />
+  <text class="rel" x="372" y="360">1:N party roles</text>
+
+  <path class="line" d="M 550 345 L 550 400" />
+  <text class="rel" x="562" y="378">1:N vehicle roles</text>
+
+  <path class="line" d="M 340 460 L 365 460 L 365 660 L 390 660" />
+  <text class="rel" x="372" y="570">1:N access</text>
+
+  <path class="line" d="M 340 652 L 365 652 L 365 780 L 1860 780 L 1860 250 L 1910 250" />
+  <text class="rel" x="995" y="772">contacts for notifications</text>
+
+  <path class="line" d="M 710 255 L 765 255 L 765 455 L 820 455" />
+  <text class="rel" x="776" y="350">1:N verification events</text>
+
+  <path class="line" d="M 710 210 L 740 210 L 740 165 L 1160 165 L 1160 255 L 1180 255" />
+  <text class="rel" x="860" y="158">1:N documents</text>
+
+  <path class="line" d="M 710 305 L 760 305 L 760 820 L 1380 820 L 1380 940" />
+  <text class="rel" x="1010" y="812">1:N service orders</text>
+
+  <path class="line" d="M 710 330 L 740 330 L 740 850 L 210 850 L 210 940" />
+  <text class="rel" x="322" y="842">1:N status history</text>
+
+  <path class="line" d="M 710 330 L 740 330 L 740 880 L 590 880 L 590 940" />
+  <text class="rel" x="508" y="872">1:N snapshots</text>
+
+  <path class="line" d="M 710 330 L 740 330 L 740 910 L 970 910 L 970 940" />
+  <text class="rel" x="792" y="902">1:N sessions</text>
+
+  <path class="line" d="M 340 255 L 380 255 L 380 1340 L 1185 1340 L 1185 1395 L 1230 1395" />
+  <text class="rel" x="700" y="1332">1:1 client account</text>
+
+  <path class="line" d="M 1120 250 L 1160 250 L 1160 455 L 1120 455" />
+  <text class="rel" x="1168" y="360">1:N center events</text>
+
+  <path class="line" d="M 1120 250 L 1160 250 L 1160 1025 L 1120 1025" />
+  <text class="rel" x="1168" y="650">1:N center sessions</text>
+
+  <path class="line" d="M 1120 250 L 1160 250 L 1160 1245 L 1120 1245" />
+  <text class="rel" x="1168" y="800">1:N center capacity</text>
+
+  <path class="line" d="M 1120 455 L 1150 455 L 1150 360 L 1340 360 L 1340 345" />
+  <text class="rel" x="1185" y="352">source doc</text>
+
+  <path class="line" d="M 1340 345 L 1340 400" />
+  <text class="rel" x="1352" y="378">1:N versions</text>
+
+  <path class="line" d="M 1380 1085 L 1380 1140" />
+  <text class="rel" x="1392" y="1120">1:N items</text>
+
+  <path class="line" d="M 1530 1012 L 1560 1012 L 1560 1610 L 1530 1610" />
+  <text class="rel" x="1568" y="1320">0..N receivables</text>
+
+  <path class="line" d="M 1380 1470 L 1380 1525" />
+  <text class="rel" x="1392" y="1504">1:N docs</text>
+
+  <path class="line" d="M 1530 1395 L 1860 1395 L 1860 1130 L 2230 1130 L 2230 1220 L 2250 1220" />
+  <text class="rel" x="1890" y="1122">1:N payments</text>
+
+  <path class="line" d="M 1530 1395 L 1860 1395 L 1860 1602 L 2250 1602" />
+  <text class="rel" x="1890" y="1594">1:N movements</text>
+
+  <path class="line" d="M 1530 1610 L 1860 1610 L 1860 935 L 2230 935 L 2230 1025 L 2250 1025" />
+  <text class="rel" x="1890" y="927">1:N installments</text>
+
+  <path class="line" d="M 2390 1295 L 2390 1340" />
+  <text class="rel" x="2402" y="1320">1:N</text>
+
+  <path class="line" d="M 2210 250 L 2240 250 L 2240 825 L 2210 825" />
+  <text class="rel" x="2250" y="540">1:N batches</text>
+
+  <path class="line" d="M 2210 435 L 2260 435 L 2260 825 L 2210 825" />
+  <text class="rel" x="2270" y="640">1:N rules</text>
+
+  <path class="line" d="M 2210 625 L 2280 625 L 2280 825 L 2210 825" />
+  <text class="rel" x="2290" y="720">1:N templates</text>
+
+  <path class="line" d="M 2210 910 L 2240 910 L 2240 1038 L 2210 1038" />
+  <text class="rel" x="2250" y="944">1:N items</text>
+
+  <path class="line" d="M 2210 910 L 2260 910 L 2260 1225 L 2210 1225" />
+  <text class="rel" x="2270" y="1080">1:N log</text>
+
+  <path class="line-soft" d="M 370 1015 L 420 1025" />
+  <path class="line-soft" d="M 760 1025 L 820 1245" />
+  <path class="line-soft" d="M 760 1245 L 820 1245" />
+
+  <!-- Notes -->
+  <g transform="translate(55 1385)">
+    <rect class="note" x="0" y="0" width="500" height="170" />
+    <text class="noteTitle" x="18" y="28">Owner portal</text>
+    <text class="noteText" x="18" y="58">- Access is controlled by USER_VEHICLE_ACCESS.</text>
+    <text class="noteText" x="18" y="82">- Legal role and portal visibility are separate concepts.</text>
+    <text class="noteText" x="18" y="106">- Documents visible to owners depend on DOCUMENTS.is_visible_to_owner.</text>
+    <text class="noteText" x="18" y="130">- Billing and debt tables must never be exposed to owners.</text>
+  </g>
+
+  <g transform="translate(600 1385)">
+    <rect class="note" x="0" y="0" width="530" height="170" />
+    <text class="noteTitle" x="18" y="28">Analytics layer</text>
+    <text class="noteText" x="18" y="58">- HISTORY tracks changes over time.</text>
+    <text class="noteText" x="18" y="82">- SNAPSHOT supports fast reporting and trends.</text>
+    <text class="noteText" x="18" y="106">- SESSIONS and CENTER_CAPACITY model real demand and saturation.</text>
+    <text class="noteText" x="18" y="130">- DATA_QUALITY_ISSUES captures reliability gaps for review.</text>
+  </g>
+
+  <g transform="translate(1230 1740)">
+    <rect class="note" x="0" y="0" width="640" height="82" />
+    <text class="noteTitle" x="18" y="28">Billing layer</text>
+    <text class="noteText" x="18" y="56">Charges start in SERVICE_ORDERS, become receivables, then payments and account movements keep the balance traceable.</text>
+  </g>
+
+  <g transform="translate(1910 1325)">
+    <rect class="note" x="0" y="0" width="620" height="125" />
+    <text class="noteTitle" x="18" y="28">Notification layer</text>
+    <text class="noteText" x="18" y="56">Rules + recipients + templates create batches.</text>
+    <text class="noteText" x="18" y="80">Batch items contain the vehicle-level payload to send.</text>
+    <text class="noteText" x="18" y="104">Notification log stores the delivery trace per channel.</text>
+  </g>
+</svg>

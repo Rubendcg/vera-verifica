@@ -56,23 +56,53 @@ Documentos principales:
 - [docs/02_tablas_y_relaciones.md](./docs/02_tablas_y_relaciones.md)
 - [docs/03_reportes_notificaciones_y_documentos.md](./docs/03_reportes_notificaciones_y_documentos.md)
 
+## Puesta en marcha local
+
+1. Instala dependencias:
+   `npm install`
+2. Crea tu archivo local a partir de [`.env.example`](./.env.example):
+   `copy .env.example .env`
+3. Ajusta las credenciales de PostgreSQL en `.env`.
+4. Ejecuta migraciones:
+   `npm run db:migration:run`
+5. Levanta el backend:
+   `npm run start:dev`
+
+## Scripts útiles
+
+- `npm run build`
+- `npm test`
+- `npm run db:migration:run`
+- `npm run db:migration:revert`
+- `npm run db:migration:show`
+- `npm run db:schema:log`
+
 ## Estado actual
 
-Hasta ahora el proyecto tiene definido el esquema lógico de base de datos para:
+Actualmente Vera ya tiene implementada la base de fase 1 con PostgreSQL y Nest para:
 
 - vehículos y relaciones jurídicas/operativas;
+- usuarios y control de acceso por vehículo;
 - verificaciones;
 - documentos PDF;
 - reportes por cliente;
 - notificaciones automáticas;
 - gestión y contabilidad.
 
-El siguiente paso natural es convertir este modelo en:
+Estado técnico actual:
 
-- migraciones reales de base de datos;
-- módulos Nest;
-- servicios de carga documental;
-- servicios de reportes y notificaciones.
+- módulos Nest base creados en `src/modules/`;
+- TypeORM configurado;
+- migración inicial de fase 1 aplicada;
+- conexión local validada contra PostgreSQL;
+- documentación técnica y bitácora de implementación en `docs/`.
+
+El siguiente paso natural es desarrollar:
+
+- DTOs y servicios reales sobre fase 1;
+- endpoints CRUD para `parties`, `users` y `vehicles`;
+- fase 2 de verificaciones;
+- carga documental y reglas de negocio.
 
 ## Módulos sugeridos
 
@@ -80,12 +110,15 @@ El siguiente paso natural es convertir este modelo en:
 - `users`
 - `parties`
 - `vehicles`
-- `vehicle-party-roles`
 - `verifications`
 - `documents`
 - `reports`
 - `notifications`
+- `analytics`
+- `capacity`
 - `service-orders`
+- `billing`
+- `collections`
 
 ## Regla de acceso
 

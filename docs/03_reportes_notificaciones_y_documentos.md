@@ -198,7 +198,7 @@ Esto evita enviar el mismo reporte dos veces el mismo día.
 
 ### 5. Enviar
 
-El backend debe:
+La plataforma debe:
 
 - tomar lotes `PENDIENTE`;
 - renderizar plantilla;

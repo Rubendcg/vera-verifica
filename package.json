@@ -7,6 +7,11 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
+    "db:cli": "typeorm-ts-node-commonjs -d src/database/data-source.ts",
+    "db:migration:run": "typeorm-ts-node-commonjs -d src/database/data-source.ts migration:run",
+    "db:migration:revert": "typeorm-ts-node-commonjs -d src/database/data-source.ts migration:revert",
+    "db:migration:show": "typeorm-ts-node-commonjs -d src/database/data-source.ts migration:show",
+    "db:schema:log": "typeorm-ts-node-commonjs -d src/database/data-source.ts schema:log",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -21,10 +26,15 @@
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.4",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/typeorm": "^11.0.1",
+    "dotenv": "^17.4.2",
+    "pg": "^8.20.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "typeorm": "^0.3.29"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

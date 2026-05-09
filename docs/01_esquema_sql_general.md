@@ -1,8 +1,8 @@
 # Esquema SQL General
 
-## Finalidad del backend
+## Finalidad del proyecto
 
-`vera-backend` debe servir como backend de control de verificaciones para autotransporte, con estas metas:
+`Vera` debe servir como plataforma de control de verificaciones para autotransporte, con estas metas:
 
 - centralizar el padrón de vehículos;
 - controlar verificaciones físico-mecánicas y emisiones;
@@ -121,6 +121,41 @@ Responsabilidad:
 - registrar remisiones o servicios;
 - separar importes y conceptos;
 - restringir esa información al administrador.
+
+### 8. Lineamientos estadísticos y analítica operativa
+
+Tablas sugeridas:
+
+- `vehicle_status_history`
+- `daily_vehicle_status_snapshot`
+- `verification_sessions`
+- `verification_center_capacity_daily`
+- `data_quality_issues`
+
+Responsabilidad:
+
+- conservar historia del estado por vehículo;
+- medir saturación y capacidad por centro;
+- soportar proyecciones de vencimiento;
+- distinguir dato observado, dato derivado y dato imputado;
+- mejorar la calidad estadística del modelo.
+
+### 9. Cuentas por cobrar y deuda por cliente
+
+Tablas sugeridas:
+
+- `client_accounts`
+- `receivable_documents`
+- `receivable_installments`
+- `payment_transactions`
+- `account_movements`
+
+Responsabilidad:
+
+- controlar deuda vigente por cliente;
+- separar cargos, abonos y saldos;
+- identificar antigüedad de deuda;
+- soportar cobranza administrativa sin exponerla a propietarios.
 
 ## Regla de visibilidad
 
