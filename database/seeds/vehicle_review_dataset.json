@@ -75,12 +75,16 @@
       "serialNiv": "NIVM001MX2026",
       "engineNumber": "MOTF001MX26",
       "scheduleRulePosition": 3,
-      "scheduleMarker": "A",
+      "scheduleMarker": "1",
       "requiresPhysical": true,
       "requiresEmissions": true,
       "ownerCode": "D01",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": "CVF-001"
+      "emissionsCenterCode": "CVF-001",
+      "physicalVerificationDate": "2025-05-12",
+      "physicalValidUntil": "2026-05-12",
+      "emissionsVerificationDate": "2025-11-14",
+      "emissionsValidUntil": "2026-05-14"
     },
     {
       "code": "M002",
@@ -91,12 +95,16 @@
       "serialNiv": "NIVM002MX2026",
       "engineNumber": "MOTF002MX26",
       "scheduleRulePosition": 3,
-      "scheduleMarker": "C",
+      "scheduleMarker": "2",
       "requiresPhysical": true,
       "requiresEmissions": true,
       "ownerCode": "D01",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": "CVF-002"
+      "emissionsCenterCode": "CVF-002",
+      "physicalVerificationDate": "2025-05-20",
+      "physicalValidUntil": "2026-05-20",
+      "emissionsVerificationDate": "2025-11-22",
+      "emissionsValidUntil": "2026-05-22"
     },
     {
       "code": "M003",
@@ -107,12 +115,16 @@
       "serialNiv": "NIVM003MX2026",
       "engineNumber": "MOTF003MX26",
       "scheduleRulePosition": 3,
-      "scheduleMarker": "E",
+      "scheduleMarker": "3",
       "requiresPhysical": true,
       "requiresEmissions": true,
       "ownerCode": "D02",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": "CVF-002"
+      "emissionsCenterCode": "CVF-002",
+      "physicalVerificationDate": "2025-05-28",
+      "physicalValidUntil": "2026-05-28",
+      "emissionsVerificationDate": "2025-11-30",
+      "emissionsValidUntil": "2026-05-30"
     },
     {
       "code": "M004",
@@ -123,12 +135,16 @@
       "serialNiv": "NIVM004MX2026",
       "engineNumber": "MOTF004MX26",
       "scheduleRulePosition": 3,
-      "scheduleMarker": "G",
+      "scheduleMarker": "4",
       "requiresPhysical": true,
       "requiresEmissions": true,
       "ownerCode": "D02",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": "CVF-001"
+      "emissionsCenterCode": "CVF-001",
+      "physicalVerificationDate": "2025-06-05",
+      "physicalValidUntil": "2026-06-05",
+      "emissionsVerificationDate": "2025-12-08",
+      "emissionsValidUntil": "2026-06-08"
     },
     {
       "code": "M005",
@@ -139,12 +155,16 @@
       "serialNiv": "NIVM005MX2026",
       "engineNumber": "MOTF005MX26",
       "scheduleRulePosition": 3,
-      "scheduleMarker": "J",
+      "scheduleMarker": "5",
       "requiresPhysical": true,
       "requiresEmissions": true,
       "ownerCode": "D03",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": "CVF-001"
+      "emissionsCenterCode": "CVF-001",
+      "physicalVerificationDate": "2025-06-13",
+      "physicalValidUntil": "2026-06-13",
+      "emissionsVerificationDate": "2025-12-16",
+      "emissionsValidUntil": "2026-06-16"
     },
     {
       "code": "M006",
@@ -155,12 +175,16 @@
       "serialNiv": "NIVM006MX2026",
       "engineNumber": "MOTF006MX26",
       "scheduleRulePosition": 3,
-      "scheduleMarker": "M",
+      "scheduleMarker": "6",
       "requiresPhysical": true,
       "requiresEmissions": true,
       "ownerCode": "D03",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": "CVF-002"
+      "emissionsCenterCode": "CVF-002",
+      "physicalVerificationDate": "2025-06-21",
+      "physicalValidUntil": "2026-06-21",
+      "emissionsVerificationDate": "2025-12-24",
+      "emissionsValidUntil": "2026-06-24"
     },
     {
       "code": "M007",
@@ -171,12 +195,16 @@
       "serialNiv": "NIVM007MX2026",
       "engineNumber": "MOTF007MX26",
       "scheduleRulePosition": 3,
-      "scheduleMarker": "Q",
+      "scheduleMarker": "7",
       "requiresPhysical": true,
       "requiresEmissions": true,
       "ownerCode": "D04",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": "CVF-002"
+      "emissionsCenterCode": "CVF-002",
+      "physicalVerificationDate": "2025-06-29",
+      "physicalValidUntil": "2026-06-29",
+      "emissionsVerificationDate": "2026-01-01",
+      "emissionsValidUntil": "2026-07-01"
     },
     {
       "code": "M008",
@@ -187,12 +215,16 @@
       "serialNiv": "NIVM008MX2026",
       "engineNumber": "MOTF008MX26",
       "scheduleRulePosition": 3,
-      "scheduleMarker": "T",
+      "scheduleMarker": "8",
       "requiresPhysical": true,
       "requiresEmissions": true,
       "ownerCode": "D04",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": "CVF-001"
+      "emissionsCenterCode": "CVF-001",
+      "physicalVerificationDate": "2025-07-07",
+      "physicalValidUntil": "2026-07-07",
+      "emissionsVerificationDate": "2026-01-09",
+      "emissionsValidUntil": "2026-07-09"
     },
     {
       "code": "M009",
@@ -203,12 +235,16 @@
       "serialNiv": "NIVM009MX2026",
       "engineNumber": "MOTF009MX26",
       "scheduleRulePosition": 3,
-      "scheduleMarker": "W",
+      "scheduleMarker": "9",
       "requiresPhysical": true,
       "requiresEmissions": true,
       "ownerCode": "D05",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": "CVF-001"
+      "emissionsCenterCode": "CVF-001",
+      "physicalVerificationDate": "2025-07-15",
+      "physicalValidUntil": "2026-07-15",
+      "emissionsVerificationDate": "2026-01-17",
+      "emissionsValidUntil": "2026-07-17"
     },
     {
       "code": "M010",
@@ -219,12 +255,16 @@
       "serialNiv": "NIVM010MX2026",
       "engineNumber": "MOTF010MX26",
       "scheduleRulePosition": 3,
-      "scheduleMarker": "Z",
+      "scheduleMarker": "1",
       "requiresPhysical": true,
       "requiresEmissions": true,
       "ownerCode": "D05",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": "CVF-002"
+      "emissionsCenterCode": "CVF-002",
+      "physicalVerificationDate": "2025-07-23",
+      "physicalValidUntil": "2026-07-23",
+      "emissionsVerificationDate": "2026-01-25",
+      "emissionsValidUntil": "2026-07-25"
     },
     {
       "code": "M011",
@@ -240,7 +280,11 @@
       "requiresEmissions": true,
       "ownerCode": "D01",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": "CVF-001"
+      "emissionsCenterCode": "CVF-001",
+      "physicalVerificationDate": "2025-07-31",
+      "physicalValidUntil": "2026-07-31",
+      "emissionsVerificationDate": "2026-02-02",
+      "emissionsValidUntil": "2026-08-02"
     },
     {
       "code": "M012",
@@ -256,7 +300,11 @@
       "requiresEmissions": true,
       "ownerCode": "D01",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": "CVF-002"
+      "emissionsCenterCode": "CVF-002",
+      "physicalVerificationDate": "2025-08-08",
+      "physicalValidUntil": "2026-08-08",
+      "emissionsVerificationDate": "2026-02-10",
+      "emissionsValidUntil": "2026-08-10"
     },
     {
       "code": "M013",
@@ -272,7 +320,11 @@
       "requiresEmissions": true,
       "ownerCode": "D02",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": "CVF-002"
+      "emissionsCenterCode": "CVF-002",
+      "physicalVerificationDate": "2025-08-16",
+      "physicalValidUntil": "2026-08-16",
+      "emissionsVerificationDate": "2026-02-18",
+      "emissionsValidUntil": "2026-08-18"
     },
     {
       "code": "M014",
@@ -288,7 +340,11 @@
       "requiresEmissions": true,
       "ownerCode": "D02",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": "CVF-001"
+      "emissionsCenterCode": "CVF-001",
+      "physicalVerificationDate": "2025-08-24",
+      "physicalValidUntil": "2026-08-24",
+      "emissionsVerificationDate": "2026-02-26",
+      "emissionsValidUntil": "2026-08-26"
     },
     {
       "code": "M015",
@@ -304,7 +360,11 @@
       "requiresEmissions": true,
       "ownerCode": "D03",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": "CVF-001"
+      "emissionsCenterCode": "CVF-001",
+      "physicalVerificationDate": "2025-09-01",
+      "physicalValidUntil": "2026-09-01",
+      "emissionsVerificationDate": "2026-03-06",
+      "emissionsValidUntil": "2026-09-06"
     },
     {
       "code": "M016",
@@ -320,7 +380,11 @@
       "requiresEmissions": true,
       "ownerCode": "D03",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": "CVF-002"
+      "emissionsCenterCode": "CVF-002",
+      "physicalVerificationDate": "2025-09-09",
+      "physicalValidUntil": "2026-09-09",
+      "emissionsVerificationDate": "2026-03-14",
+      "emissionsValidUntil": "2026-09-14"
     },
     {
       "code": "M017",
@@ -336,7 +400,11 @@
       "requiresEmissions": true,
       "ownerCode": "D04",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": "CVF-002"
+      "emissionsCenterCode": "CVF-002",
+      "physicalVerificationDate": "2025-09-17",
+      "physicalValidUntil": "2026-09-17",
+      "emissionsVerificationDate": "2026-03-22",
+      "emissionsValidUntil": "2026-09-22"
     },
     {
       "code": "M018",
@@ -352,7 +420,11 @@
       "requiresEmissions": true,
       "ownerCode": "D04",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": "CVF-001"
+      "emissionsCenterCode": "CVF-001",
+      "physicalVerificationDate": "2025-09-25",
+      "physicalValidUntil": "2026-09-25",
+      "emissionsVerificationDate": "2026-03-30",
+      "emissionsValidUntil": "2026-09-30"
     },
     {
       "code": "M019",
@@ -368,7 +440,11 @@
       "requiresEmissions": true,
       "ownerCode": "D05",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": "CVF-001"
+      "emissionsCenterCode": "CVF-001",
+      "physicalVerificationDate": "2025-10-03",
+      "physicalValidUntil": "2026-10-03",
+      "emissionsVerificationDate": "2026-04-07",
+      "emissionsValidUntil": "2026-10-07"
     },
     {
       "code": "M020",
@@ -384,7 +460,11 @@
       "requiresEmissions": true,
       "ownerCode": "D05",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": "CVF-002"
+      "emissionsCenterCode": "CVF-002",
+      "physicalVerificationDate": "2025-10-11",
+      "physicalValidUntil": "2026-10-11",
+      "emissionsVerificationDate": "2026-04-15",
+      "emissionsValidUntil": "2026-10-15"
     },
     {
       "code": "A001",
@@ -395,12 +475,16 @@
       "serialNiv": "NIVA001MX2026",
       "engineNumber": null,
       "scheduleRulePosition": 3,
-      "scheduleMarker": "B",
+      "scheduleMarker": "2",
       "requiresPhysical": true,
       "requiresEmissions": false,
       "ownerCode": "D01",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-05-18",
+      "physicalValidUntil": "2026-05-18",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A002",
@@ -411,12 +495,16 @@
       "serialNiv": "NIVA002MX2026",
       "engineNumber": null,
       "scheduleRulePosition": 3,
-      "scheduleMarker": "D",
+      "scheduleMarker": "3",
       "requiresPhysical": true,
       "requiresEmissions": false,
       "ownerCode": "D01",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-05-26",
+      "physicalValidUntil": "2026-05-26",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A003",
@@ -427,12 +515,16 @@
       "serialNiv": "NIVA003MX2026",
       "engineNumber": null,
       "scheduleRulePosition": 3,
-      "scheduleMarker": "F",
+      "scheduleMarker": "4",
       "requiresPhysical": true,
       "requiresEmissions": false,
       "ownerCode": "D02",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-06-03",
+      "physicalValidUntil": "2026-06-03",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A004",
@@ -443,12 +535,16 @@
       "serialNiv": "NIVA004MX2026",
       "engineNumber": null,
       "scheduleRulePosition": 3,
-      "scheduleMarker": "H",
+      "scheduleMarker": "5",
       "requiresPhysical": true,
       "requiresEmissions": false,
       "ownerCode": "D02",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-06-11",
+      "physicalValidUntil": "2026-06-11",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A005",
@@ -459,12 +555,16 @@
       "serialNiv": "NIVA005MX2026",
       "engineNumber": null,
       "scheduleRulePosition": 3,
-      "scheduleMarker": "K",
+      "scheduleMarker": "6",
       "requiresPhysical": true,
       "requiresEmissions": false,
       "ownerCode": "D03",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-06-19",
+      "physicalValidUntil": "2026-06-19",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A006",
@@ -475,12 +575,16 @@
       "serialNiv": "NIVA006MX2026",
       "engineNumber": null,
       "scheduleRulePosition": 3,
-      "scheduleMarker": "N",
+      "scheduleMarker": "7",
       "requiresPhysical": true,
       "requiresEmissions": false,
       "ownerCode": "D03",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-06-27",
+      "physicalValidUntil": "2026-06-27",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A007",
@@ -491,12 +595,16 @@
       "serialNiv": "NIVA007MX2026",
       "engineNumber": null,
       "scheduleRulePosition": 3,
-      "scheduleMarker": "R",
+      "scheduleMarker": "8",
       "requiresPhysical": true,
       "requiresEmissions": false,
       "ownerCode": "D04",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-07-05",
+      "physicalValidUntil": "2026-07-05",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A008",
@@ -507,12 +615,16 @@
       "serialNiv": "NIVA008MX2026",
       "engineNumber": null,
       "scheduleRulePosition": 3,
-      "scheduleMarker": "U",
+      "scheduleMarker": "9",
       "requiresPhysical": true,
       "requiresEmissions": false,
       "ownerCode": "D04",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-07-13",
+      "physicalValidUntil": "2026-07-13",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A009",
@@ -523,12 +635,16 @@
       "serialNiv": "NIVA009MX2026",
       "engineNumber": null,
       "scheduleRulePosition": 3,
-      "scheduleMarker": "X",
+      "scheduleMarker": "1",
       "requiresPhysical": true,
       "requiresEmissions": false,
       "ownerCode": "D05",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-07-21",
+      "physicalValidUntil": "2026-07-21",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A010",
@@ -539,12 +655,16 @@
       "serialNiv": "NIVA010MX2026",
       "engineNumber": null,
       "scheduleRulePosition": 3,
-      "scheduleMarker": "A",
+      "scheduleMarker": "2",
       "requiresPhysical": true,
       "requiresEmissions": false,
       "ownerCode": "D05",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-07-29",
+      "physicalValidUntil": "2026-07-29",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A011",
@@ -560,7 +680,11 @@
       "requiresEmissions": false,
       "ownerCode": "D01",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-08-06",
+      "physicalValidUntil": "2026-08-06",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A012",
@@ -576,7 +700,11 @@
       "requiresEmissions": false,
       "ownerCode": "D01",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-08-14",
+      "physicalValidUntil": "2026-08-14",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A013",
@@ -592,7 +720,11 @@
       "requiresEmissions": false,
       "ownerCode": "D02",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-08-22",
+      "physicalValidUntil": "2026-08-22",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A014",
@@ -608,7 +740,11 @@
       "requiresEmissions": false,
       "ownerCode": "D02",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-08-30",
+      "physicalValidUntil": "2026-08-30",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A015",
@@ -624,7 +760,11 @@
       "requiresEmissions": false,
       "ownerCode": "D03",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-09-07",
+      "physicalValidUntil": "2026-09-07",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A016",
@@ -640,7 +780,11 @@
       "requiresEmissions": false,
       "ownerCode": "D03",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-09-15",
+      "physicalValidUntil": "2026-09-15",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A017",
@@ -656,7 +800,11 @@
       "requiresEmissions": false,
       "ownerCode": "D04",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-09-23",
+      "physicalValidUntil": "2026-09-23",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A018",
@@ -672,7 +820,11 @@
       "requiresEmissions": false,
       "ownerCode": "D04",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-10-01",
+      "physicalValidUntil": "2026-10-01",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A019",
@@ -688,7 +840,11 @@
       "requiresEmissions": false,
       "ownerCode": "D05",
       "physicalCenterCode": "CVF-001",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-10-09",
+      "physicalValidUntil": "2026-10-09",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     },
     {
       "code": "A020",
@@ -704,7 +860,11 @@
       "requiresEmissions": false,
       "ownerCode": "D05",
       "physicalCenterCode": "CVF-002",
-      "emissionsCenterCode": null
+      "emissionsCenterCode": null,
+      "physicalVerificationDate": "2025-10-17",
+      "physicalValidUntil": "2026-10-17",
+      "emissionsVerificationDate": null,
+      "emissionsValidUntil": null
     }
   ]
 }

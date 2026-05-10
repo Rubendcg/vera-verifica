@@ -18,12 +18,16 @@ El script SQL inserta o actualiza directamente:
 - `parties`
 - `vehicles`
 - `vehicle_party_roles`
+- `verification_events`
 
 ## Comportamiento del seed SQL
 
 - usa `ON CONFLICT` para centros, partes y vehiculos;
 - elimina y recrea solo los roles de propiedad con la nota `SEED_REVIEW_2026_05_OWNER`;
-- no inserta usuarios, accesos, verificaciones, obligaciones ni documentos;
+- elimina y recrea solo los eventos de verificacion con la nota `SEED_REVIEW_2026_05_EVENT`;
+- inserta verificaciones fisico-mecanicas para los 40 vehiculos;
+- inserta verificaciones de emisiones para los 20 vehiculos con motor;
+- no inserta usuarios, accesos, obligaciones ni documentos;
 - no modifica otros registros ajenos al seed.
 
 ## Relacion con el JSON
