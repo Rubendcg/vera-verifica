@@ -7,6 +7,7 @@ Este diagrama resume la estructura final propuesta para **Vera**, integrando:
 - acceso y usuarios;
 - personas y relaciones con vehículos;
 - verificaciones y calendario;
+- confirmación del propietario sobre verificaciones pendientes;
 - documentos PDF;
 - reportes y notificaciones;
 - analítica operativa;
@@ -33,6 +34,8 @@ El modelo se organiza en cuatro capas:
 - `verification_centers`
 - `verification_events`
 - `verification_schedule_rules`
+- `verification_obligations`
+- `verification_obligation_history`
 - `documents`
 - `document_files`
 
@@ -77,12 +80,15 @@ erDiagram
     USERS ||--o{ USER_VEHICLE_ACCESS : "accede"
     USERS ||--o{ DOCUMENTS : "carga"
     USERS ||--o{ DOCUMENT_FILES : "sube"
+    USERS ||--o{ VERIFICATION_OBLIGATIONS : "responde_o_administra"
+    USERS ||--o{ VERIFICATION_OBLIGATION_HISTORY : "registra_cambio"
     USERS ||--o{ NOTIFICATION_BATCHES : "genera"
     USERS ||--o{ PAYMENT_TRANSACTIONS : "registra"
 
     VEHICLES ||--o{ VEHICLE_PARTY_ROLES : "relacionado_con"
     VEHICLES ||--o{ USER_VEHICLE_ACCESS : "visible_para"
     VEHICLES ||--o{ VERIFICATION_EVENTS : "registra"
+    VEHICLES ||--o{ VERIFICATION_OBLIGATIONS : "genera_obligacion"
     VEHICLES ||--o{ DOCUMENTS : "tiene"
     VEHICLES ||--o{ SERVICE_ORDERS : "genera"
     VEHICLES ||--o{ VEHICLE_STATUS_HISTORY : "historial"
@@ -91,8 +97,11 @@ erDiagram
     VEHICLES ||--o{ NOTIFICATION_BATCH_ITEMS : "notificado_en"
 
     VERIFICATION_CENTERS ||--o{ VERIFICATION_EVENTS : "respalda"
+    VERIFICATION_CENTERS ||--o{ VERIFICATION_OBLIGATIONS : "programa"
     VERIFICATION_CENTERS ||--o{ VERIFICATION_SESSIONS : "atiende"
     VERIFICATION_CENTERS ||--o{ VERIFICATION_CENTER_CAPACITY_DAILY : "capacidad"
+    VERIFICATION_EVENTS ||--o| VERIFICATION_OBLIGATIONS : "cumple"
+    VERIFICATION_OBLIGATIONS ||--o{ VERIFICATION_OBLIGATION_HISTORY : "historial"
 
     DOCUMENTS ||--o{ DOCUMENT_FILES : "versiones"
     DOCUMENTS ||--o{ VERIFICATION_EVENTS : "respalda_evento"
@@ -195,6 +204,32 @@ erDiagram
         int schedule_position
         string schedule_marker
         string verification_type
+    }
+
+    VERIFICATION_OBLIGATIONS {
+        bigint id PK
+        bigint vehicle_id FK
+        string verification_type
+        date due_date
+        date window_start_date
+        date window_end_date
+        string status
+        string owner_response
+        bigint owner_user_id FK
+        bigint admin_user_id FK
+        bigint scheduled_center_id FK
+        bigint verification_event_id FK
+    }
+
+    VERIFICATION_OBLIGATION_HISTORY {
+        bigint id PK
+        bigint obligation_id FK
+        bigint changed_by_user_id FK
+        string action_type
+        string previous_status
+        string new_status
+        string previous_owner_response
+        string new_owner_response
     }
 
     DOCUMENTS {
@@ -449,3 +484,13 @@ Se recomienda operar con:
 - `verification_center_capacity_daily`
 
 para reportes históricos, proyección y saturación.
+
+### Seguimiento del propietario
+
+La intención del propietario de realizar una verificación no debe confundirse con cumplimiento real.
+
+Por eso se separa:
+
+- `verification_obligations`: lo pendiente, confirmado, programado o vencido;
+- `verification_events`: lo efectivamente realizado;
+- `verification_obligation_history`: la bitácora de cambios y decisiones.

@@ -7,9 +7,16 @@ export class VerificationsService {
     return {
       key: 'verifications',
       route: '/verifications',
-      phase: 1,
-      purpose: 'Controla eventos de verificacion, calendario por regimen y estado regulatorio.',
-      tables: ['verification_events', 'verification_schedule_rules', 'verification_centers'],
+      phase: 2,
+      purpose:
+        'Controla eventos de verificacion, calendario por regimen, obligaciones pendientes y estado regulatorio.',
+      tables: [
+        'verification_events',
+        'verification_schedule_rules',
+        'verification_centers',
+        'verification_obligations',
+        'verification_obligation_history',
+      ],
     };
   }
 }

@@ -10,6 +10,8 @@ import {
 } from 'typeorm';
 import { Party } from '../../parties/entities/party.entity';
 import { UserVehicleAccess } from '../../vehicles/entities/user-vehicle-access.entity';
+import { VerificationObligationHistory } from '../../verifications/entities/verification-obligation-history.entity';
+import { VerificationObligation } from '../../verifications/entities/verification-obligation.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -52,4 +54,13 @@ export class User {
 
   @OneToMany(() => UserVehicleAccess, (access) => access.grantedByUser)
   grantedVehicleAccesses!: UserVehicleAccess[];
+
+  @OneToMany(() => VerificationObligation, (obligation) => obligation.ownerUser)
+  ownerVerificationResponses!: VerificationObligation[];
+
+  @OneToMany(() => VerificationObligation, (obligation) => obligation.adminUser)
+  adminVerificationUpdates!: VerificationObligation[];
+
+  @OneToMany(() => VerificationObligationHistory, (history) => history.changedByUser)
+  verificationObligationHistoryEntries!: VerificationObligationHistory[];
 }
