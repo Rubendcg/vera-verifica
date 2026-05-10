@@ -8,6 +8,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Document } from '../../documents/entities/document.entity';
+import { DocumentFile } from '../../documents/entities/document-file.entity';
 import { Party } from '../../parties/entities/party.entity';
 import { UserVehicleAccess } from '../../vehicles/entities/user-vehicle-access.entity';
 import { VerificationObligationHistory } from '../../verifications/entities/verification-obligation-history.entity';
@@ -63,4 +65,10 @@ export class User {
 
   @OneToMany(() => VerificationObligationHistory, (history) => history.changedByUser)
   verificationObligationHistoryEntries!: VerificationObligationHistory[];
+
+  @OneToMany(() => Document, (document) => document.uploadedByUser)
+  uploadedDocuments!: Document[];
+
+  @OneToMany(() => DocumentFile, (documentFile) => documentFile.uploadedByUser)
+  uploadedDocumentFiles!: DocumentFile[];
 }

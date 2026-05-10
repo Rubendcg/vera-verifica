@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Document } from '../../documents/entities/document.entity';
 import { Vehicle } from '../../vehicles/entities/vehicle.entity';
 import { VerificationCenter } from './verification-center.entity';
 import { VerificationObligation } from './verification-obligation.entity';
@@ -34,6 +35,13 @@ export class VerificationEvent {
   })
   @JoinColumn({ name: 'center_id' })
   center!: VerificationCenter | null;
+
+  @ManyToOne(() => Document, (document) => document.sourceVerificationEvents, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({ name: 'source_document_id' })
+  sourceDocument!: Document | null;
 
   @Column({
     name: 'verification_type',

@@ -1,0 +1,20 @@
+export enum DocumentStatus {
+  ACTIVE = 'ACTIVE',
+  EXPIRED = 'EXPIRED',
+  CANCELLED = 'CANCELLED',
+  ARCHIVED = 'ARCHIVED',
+  PENDING_REVIEW = 'PENDING_REVIEW',
+}
+
+export enum DocumentStorageKind {
+  LOCAL_PATH = 'LOCAL_PATH',
+  OBJECT_STORAGE = 'OBJECT_STORAGE',
+  DATABASE = 'DATABASE',
+}
+
+export enum DocumentOcrStatus {
+  NOT_REQUESTED = 'NOT_REQUESTED',
+  PENDING = 'PENDING',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
+}

@@ -1,3 +1,5 @@
+import { DocumentFile } from '../modules/documents/entities/document-file.entity';
+import { Document } from '../modules/documents/entities/document.entity';
 import { Party } from '../modules/parties/entities/party.entity';
 import { User } from '../modules/users/entities/user.entity';
 import { UserVehicleAccess } from '../modules/vehicles/entities/user-vehicle-access.entity';
@@ -15,6 +17,8 @@ export const typeOrmEntities = [
   Vehicle,
   VehiclePartyRole,
   UserVehicleAccess,
+  Document,
+  DocumentFile,
   VerificationCenter,
   VerificationEvent,
   VerificationObligation,

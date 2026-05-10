@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Document } from '../../documents/entities/document.entity';
 import { UserVehicleAccess } from './user-vehicle-access.entity';
 import { VehiclePartyRole } from './vehicle-party-role.entity';
 import { VerificationEvent } from '../../verifications/entities/verification-event.entity';
@@ -77,4 +78,7 @@ export class Vehicle {
 
   @OneToMany(() => VerificationObligation, (obligation) => obligation.vehicle)
   verificationObligations!: VerificationObligation[];
+
+  @OneToMany(() => Document, (document) => document.vehicle)
+  documents!: Document[];
 }

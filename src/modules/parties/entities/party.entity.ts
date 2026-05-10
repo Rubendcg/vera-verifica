@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Document } from '../../documents/entities/document.entity';
 import { User } from '../../users/entities/user.entity';
 import { VehiclePartyRole } from '../../vehicles/entities/vehicle-party-role.entity';
 
@@ -58,4 +59,7 @@ export class Party {
 
   @OneToMany(() => VehiclePartyRole, (role) => role.party)
   vehicleRoles!: VehiclePartyRole[];
+
+  @OneToMany(() => Document, (document) => document.relatedParty)
+  documents!: Document[];
 }
