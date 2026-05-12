@@ -31,6 +31,7 @@ Documentar el modelo de datos que soporta:
 - [14_bitacora_implementacion_fase_3.md](./14_bitacora_implementacion_fase_3.md)
 - [15_datos_prueba_vehiculos_revision.md](./15_datos_prueba_vehiculos_revision.md)
 - [16_seeds_datos_prueba.md](./16_seeds_datos_prueba.md)
+- [17_referencia_vin_niv_y_anos_modelo.md](./17_referencia_vin_niv_y_anos_modelo.md)
 
 ## Scripts SQL base
 
