@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="1850" viewBox="0 0 2600 1850">
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="2160" viewBox="0 0 2600 2160">
   <defs>
     <style>
       .bg { fill: #f6f8fb; }
@@ -25,9 +25,9 @@
     </marker>
   </defs>
 
-  <rect class="bg" x="0" y="0" width="2600" height="1850" />
+  <rect class="bg" x="0" y="0" width="2600" height="2160" />
   <text class="title" x="50" y="55">Vera - Final Database Diagram</text>
-  <text class="subtitle" x="50" y="84">Core, compliance, documents, analytics, notifications and billing</text>
+  <text class="subtitle" x="50" y="84">Core, compliance, owner follow-up, documents, analytics, notifications and billing</text>
 
   <!-- Lanes -->
   <rect class="lane" x="30" y="110" width="730" height="720" fill="#d9f0ff" stroke="#6baed6" />
@@ -44,6 +44,9 @@
 
   <rect class="lane" x="1880" y="110" width="690" height="1680" fill="#ece7ff" stroke="#8f7aea" />
   <text class="lane-title" x="1905" y="145" fill="#5a46c8">5. Notifications</text>
+
+  <rect class="lane" x="30" y="1840" width="2540" height="280" fill="#e7f7f7" stroke="#5ea3a3" />
+  <text class="lane-title" x="55" y="1875" fill="#1f6f78">6. Owner Follow-up and Obligations</text>
 
   <!-- Core -->
   <g transform="translate(50 180)">
@@ -388,6 +391,32 @@
     <text class="field" x="16" y="138">movement_date</text>
   </g>
 
+  <!-- Owner follow-up -->
+  <g transform="translate(70 1910)">
+    <rect class="entity" x="0" y="0" width="360" height="180" />
+    <rect class="entity head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="18" y="22">VERIFICATION_OBLIGATIONS</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK vehicle_id</text>
+    <text class="field" x="16" y="98">verification_type, due_date</text>
+    <text class="field" x="16" y="118">window_start_date, window_end_date</text>
+    <text class="field" x="16" y="138">status, owner_response</text>
+    <text class="field" x="16" y="158">owner_user_id, admin_user_id</text>
+    <text class="field" x="16" y="178">scheduled_center_id, verification_event_id</text>
+  </g>
+
+  <g transform="translate(500 1915)">
+    <rect class="entity" x="0" y="0" width="350" height="170" />
+    <rect class="entity head" x="0" y="0" width="350" height="34" />
+    <text class="headText" x="18" y="22">VERIFICATION_OBLIGATION_HISTORY</text>
+    <text class="field" x="16" y="58">PK id</text>
+    <text class="field" x="16" y="78">FK obligation_id</text>
+    <text class="field" x="16" y="98">FK changed_by_user_id</text>
+    <text class="field" x="16" y="118">action_type</text>
+    <text class="field" x="16" y="138">previous_status, new_status</text>
+    <text class="field" x="16" y="158">previous_owner_response, new_owner_response</text>
+  </g>
+
   <!-- Relationship lines -->
   <path class="line" d="M 340 255 L 365 255 L 365 475 L 390 475" />
   <text class="rel" x="372" y="360">1:N party roles</text>
@@ -473,18 +502,22 @@
   <path class="line" d="M 2210 910 L 2260 910 L 2260 1225 L 2210 1225" />
   <text class="rel" x="2270" y="1080">1:N log</text>
 
+  <path class="line" d="M 430 2000 L 500 2000" />
+  <text class="rel" x="442" y="1988">1:N history</text>
+
   <path class="line-soft" d="M 370 1015 L 420 1025" />
   <path class="line-soft" d="M 760 1025 L 820 1245" />
   <path class="line-soft" d="M 760 1245 L 820 1245" />
 
   <!-- Notes -->
   <g transform="translate(55 1385)">
-    <rect class="note" x="0" y="0" width="500" height="170" />
+    <rect class="note" x="0" y="0" width="500" height="190" />
     <text class="noteTitle" x="18" y="28">Owner portal</text>
     <text class="noteText" x="18" y="58">- Access is controlled by USER_VEHICLE_ACCESS.</text>
     <text class="noteText" x="18" y="82">- Legal role and portal visibility are separate concepts.</text>
-    <text class="noteText" x="18" y="106">- Documents visible to owners depend on DOCUMENTS.is_visible_to_owner.</text>
-    <text class="noteText" x="18" y="130">- Billing and debt tables must never be exposed to owners.</text>
+    <text class="noteText" x="18" y="106">- Owners can confirm or decline pending obligations without closing compliance.</text>
+    <text class="noteText" x="18" y="130">- Documents visible to owners depend on DOCUMENTS.is_visible_to_owner.</text>
+    <text class="noteText" x="18" y="154">- Billing and debt tables must never be exposed to owners.</text>
   </g>
 
   <g transform="translate(600 1385)">
@@ -508,5 +541,14 @@
     <text class="noteText" x="18" y="56">Rules + recipients + templates create batches.</text>
     <text class="noteText" x="18" y="80">Batch items contain the vehicle-level payload to send.</text>
     <text class="noteText" x="18" y="104">Notification log stores the delivery trace per channel.</text>
+  </g>
+
+  <g transform="translate(910 1910)">
+    <rect class="note" x="0" y="0" width="1600" height="170" />
+    <text class="noteTitle" x="18" y="28">Follow-up layer</text>
+    <text class="noteText" x="18" y="58">- VERIFICATION_OBLIGATIONS models what is pending, confirmed, scheduled, overdue or completed.</text>
+    <text class="noteText" x="18" y="82">- Owner decisions are visible to administration on the same record, without duplicating capture.</text>
+    <text class="noteText" x="18" y="106">- VERIFICATION_EVENTS remains the source of truth for a verification that was actually performed.</text>
+    <text class="noteText" x="18" y="130">- The model links obligations to VEHICLES, USERS, VERIFICATION_CENTERS and optionally the final VERIFICATION_EVENT.</text>
   </g>
 </svg>

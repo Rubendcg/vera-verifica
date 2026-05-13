@@ -7,7 +7,7 @@ export class DocumentsService {
     return {
       key: 'documents',
       route: '/documents',
-      phase: 1,
+      phase: 3,
       purpose: 'Administra tarjetas, constancias y archivos PDF asociados al expediente vehicular.',
       tables: ['documents', 'document_files'],
     };

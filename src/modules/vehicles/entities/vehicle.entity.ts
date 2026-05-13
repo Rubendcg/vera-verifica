@@ -6,8 +6,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Document } from '../../documents/entities/document.entity';
 import { UserVehicleAccess } from './user-vehicle-access.entity';
 import { VehiclePartyRole } from './vehicle-party-role.entity';
+import { VerificationEvent } from '../../verifications/entities/verification-event.entity';
+import { VerificationObligation } from '../../verifications/entities/verification-obligation.entity';
 
 export enum VehicleRegime {
   FEDERAL = 'FEDERAL',
@@ -69,4 +72,13 @@ export class Vehicle {
 
   @OneToMany(() => UserVehicleAccess, (access) => access.vehicle)
   userAccesses!: UserVehicleAccess[];
+
+  @OneToMany(() => VerificationEvent, (event) => event.vehicle)
+  verificationEvents!: VerificationEvent[];
+
+  @OneToMany(() => VerificationObligation, (obligation) => obligation.vehicle)
+  verificationObligations!: VerificationObligation[];
+
+  @OneToMany(() => Document, (document) => document.vehicle)
+  documents!: Document[];
 }
