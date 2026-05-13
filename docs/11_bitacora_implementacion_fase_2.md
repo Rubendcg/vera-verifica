@@ -527,3 +527,83 @@ Cubrir con pruebas de integracion ejecutables el flujo principal que aun faltaba
 
 - llevar el mismo esquema de autenticacion y autorizacion al resto de modulos;
 - decidir si fase 2 pasa a estado de cierre formal o si se deja abierta por el tema de `overrides` temporales de calendario.
+
+### 2026-05-13 - Decision de cierre sobre `overrides` temporales de calendario
+
+#### Objetivo
+
+Resolver si las prorrogas y periodos extraordinarios de calendario deben bloquear el cierre de fase 2 o salir como alcance posterior.
+
+#### Decision tomada
+
+Los `overrides` temporales de calendario quedan **fuera del alcance de cierre de fase 2**.
+
+Fase 2 pasa a estado de **cierre formal** porque ya cumple su criterio funcional: consultar y operar el estado regulatorio vigente de un vehiculo con reglas base, obligaciones, seguridad y pruebas e2e del flujo principal.
+
+#### Razon tecnica
+
+- el criterio de cierre vigente de fase 2 pide operar el estado regulatorio vigente, no modelar todas las excepciones extraordinarias de calendario;
+- las reglas maestras ya quedaron sembradas y alineadas para `FEDERAL` y `ESTATAL`;
+- las prorrogas o periodos extraordinarios no son regla permanente y no deben contaminar `verification_schedule_rules`;
+- implementarlas ahora abriria un submodelo nuevo de vigencia excepcional, prioridad, aplicacion por periodo y trazabilidad normativa.
+
+#### Implicacion de alcance
+
+- fase 2 no queda reabierta por no tener `overrides`;
+- los `overrides` se registran como extension posterior del calendario regulatorio;
+- cualquier prorroga futura debe tratarse como requerimiento nuevo con su propio diseno de datos y validacion.
+
+#### Archivos involucrados
+
+- `docs/10_hoja_de_ruta_base_de_datos.md`
+- `docs/11_bitacora_implementacion_fase_2.md`
+- `docs/19_reglas_reales_verification_schedule_rules.md`
+
+#### Validacion aplicada para sostener la decision
+
+- reglas base reales sembradas y alineadas en PostgreSQL;
+- generacion automatica validada con corrida real e idempotencia;
+- autenticacion, autorizacion y validacion formal activas;
+- pruebas e2e del flujo principal de obligaciones ejecutadas correctamente.
+
+#### Pendientes inmediatos
+
+- cerrar administrativamente la fase 2 como `En cierre formal` hasta completar el checklist final;
+- abrir, cuando haga falta, una extension especifica para `overrides` temporales de calendario.
+
+### 2026-05-13 - Cierre formal completado de fase 2
+
+#### Objetivo
+
+Completar administrativamente el cierre de fase 2 despues de validar alcance, evidencia funcional y deuda controlada.
+
+#### Cambios realizados
+
+- se actualizo la hoja de ruta para marcar la fase 2 como `Completada`;
+- se redacto un acta breve de cierre formal de fase 2;
+- se ajustaron referencias globales para indicar que el siguiente foco pasa a fase 3.
+
+#### Archivos involucrados
+
+- `docs/10_hoja_de_ruta_base_de_datos.md`
+- `docs/11_bitacora_implementacion_fase_2.md`
+- `docs/13_endpoints_verifications_fase_2.md`
+- `docs/19_reglas_reales_verification_schedule_rules.md`
+- `docs/21_cierre_formal_fase_2.md`
+- `docs/README.md`
+
+#### Impacto funcional
+
+- el proyecto ya no presenta la fase 2 como abierta;
+- queda documentado que los `overrides` temporales no bloquean este cierre;
+- la prioridad documental y tecnica se mueve a fase 3.
+
+#### Validacion aplicada
+
+- consistencia de criterio entre hoja de ruta, bitacora y referencia de reglas;
+- evidencia previa ya documentada de migraciones, calculo regulatorio, generacion automatica, seguridad y pruebas e2e.
+
+#### Pendientes posteriores al cierre
+
+- continuar con endpoints y carga segura de `documents`;
+- disenar `overrides` temporales solo como extension posterior del calendario regulatorio.

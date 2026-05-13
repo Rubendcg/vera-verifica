@@ -14,7 +14,7 @@ La **fase 1** ya quedo implementada y validada en PostgreSQL:
 - `vehicle_party_roles`
 - `user_vehicle_access`
 
-La **fase 2** ya quedo implementada a nivel estructural y con API base:
+La **fase 2** ya quedo implementada y cerrada formalmente:
 
 - `verification_centers`
 - `verification_events`
@@ -34,7 +34,7 @@ La ruta restante debe construirse sobre esa base, sin mezclar fases ni abrir mas
 | Fase | Estado | Objetivo | Tablas principales | Que falta construir | Dependencias | Validacion minima | Criterio de cierre |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1. Nucleo operativo | Completada | Tener identidad, padron y control de acceso por vehiculo. | `parties`, `users`, `vehicles`, `vehicle_party_roles`, `user_vehicle_access` | DTOs, servicios, repositorios y endpoints CRUD reales. | Ninguna previa. | `build`, `test`, migracion aplicada, conexion validada. | Poder crear usuarios, partes, vehiculos y accesos desde el backend. |
-| 2. Cumplimiento regulatorio | En implementacion | Registrar verificaciones, vigencias y reglas de calendario. | `verification_centers`, `verification_events`, `verification_schedule_rules`, `verification_obligations`, `verification_obligation_history` | Permisos, autenticacion, validacion formal, pruebas de integracion y manejo de excepciones temporales al calendario. | Fase 1 estable. | Migraciones correctas, casos de calculo por regimen federal y estatal. | Consultar y operar el estado regulatorio vigente de un vehiculo. |
+| 2. Cumplimiento regulatorio | Completada | Registrar verificaciones, vigencias y reglas de calendario. | `verification_centers`, `verification_events`, `verification_schedule_rules`, `verification_obligations`, `verification_obligation_history` | Sin bloqueadores para cierre. Los `overrides` temporales de calendario quedan fuera del alcance de fase 2 y se difieren como extension posterior del modelo regulatorio. | Fase 1 estable. | Migraciones correctas, casos de calculo por regimen federal y estatal, autenticacion, autorizacion y pruebas e2e del flujo principal. | Consultar y operar el estado regulatorio vigente de un vehiculo. |
 | 3. Expediente documental | En implementacion | Soportar PDFs y su vinculo con vehiculo y verificacion. | `documents`, `document_files` | Endpoints, carga segura, versionado vigente y consulta para propietario. | Fases 1 y 2. | Subida, lectura y consulta de PDFs vigentes. | Poder consultar tarjeta y constancias desde el expediente. |
 | 4. Reportes y notificaciones | Pendiente | Preparar pendientes por cliente y avisos automaticos. | `party_contacts`, `report_recipients`, `message_templates`, `notification_rules`, `notification_batches`, `notification_batch_items`, `notification_log` | Reglas, plantillas, candidatos de envio, bitacora y control de duplicados. | Fases 1, 2 y 3. | Consultas por vencer, simulacion de envio y trazabilidad. | Generar y registrar reportes automaticos por canal. |
 | 5. Analitica operativa | Pendiente | Medir historial, snapshots, capacidad y calidad del dato. | `vehicle_status_history`, `daily_vehicle_status_snapshot`, `verification_sessions`, `verification_center_capacity_daily`, `calendar_business_days`, `data_quality_issues` | Snapshots, calidad del dato, demanda diaria, saturacion y capacidad por centro. | Operacion estable en fases 1 a 4. | Jobs de snapshot, consultas de tendencia y metricas de saturacion. | Poder proyectar carga, vencimientos y backlog. |
@@ -69,5 +69,5 @@ El siguiente paso correcto para terminar la base de datos no es abrir mas tablas
 Lo correcto es:
 
 1. cerrar la **fase 1 funcional** con DTOs, servicios y endpoints;
-2. terminar la **fase 2 funcional** con autenticacion, permisos y reglas de vigencia;
-3. cerrar la **fase 3** con carga y consulta controlada de PDFs antes de abrir notificaciones.
+2. cerrar la **fase 3** con carga y consulta controlada de PDFs antes de abrir notificaciones;
+3. abrir una extension puntual para `overrides` temporales de calendario solo cuando exista requerimiento real de negocio.

@@ -133,7 +133,8 @@ Motivo:
 
 - son excepciones temporales;
 - no deben reemplazar el calendario base;
-- Vera debe modelarlas despues como `overrides` o periodos extraordinarios.
+- quedan fuera del cierre de fase 2;
+- Vera debe modelarlas despues como `overrides` o periodos extraordinarios en una extension puntual del calendario regulatorio.
 
 ### Calendarios estatales alternos por publicacion local
 

@@ -201,5 +201,5 @@ Regla operativa actual:
 La siguiente iteracion natural sobre estos endpoints es:
 
 - extender las reglas de acceso al resto de los modulos;
-- agregar pruebas de integracion sobre respuesta del propietario y programacion administrativa con datos reales;
-- cerrar la fase 2 con criterios formales de completitud.
+- mantener cobertura de regresion sobre el flujo principal de obligaciones;
+- tomar estos endpoints como base cerrada de fase 2 y mover el foco a fase 3.

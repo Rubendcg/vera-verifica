@@ -34,6 +34,8 @@ Documentar el modelo de datos que soporta:
 - [17_referencia_vin_niv_y_anos_modelo.md](./17_referencia_vin_niv_y_anos_modelo.md)
 - [18_generacion_automatica_obligaciones_fase_2.md](./18_generacion_automatica_obligaciones_fase_2.md)
 - [19_reglas_reales_verification_schedule_rules.md](./19_reglas_reales_verification_schedule_rules.md)
+- [20_glosario_base_de_datos.md](./20_glosario_base_de_datos.md)
+- [21_cierre_formal_fase_2.md](./21_cierre_formal_fase_2.md)
 
 ## Scripts SQL base
 
@@ -44,7 +46,7 @@ Los scripts fuente que respaldan esta documentacion estan actualmente en el work
 
 ## Alcance actual
 
-La documentacion cubre el esquema logico definido hasta ahora, la implementacion completa de fase 1 y la base funcional de fase 2.
+La documentacion cubre el esquema logico definido hasta ahora, la implementacion completa de fase 1, el cierre formal de fase 2 y la base estructural de fase 3.
 
 Estado actual:
 
@@ -58,11 +60,12 @@ Estado actual:
 - estructura de reglas de calendario ampliada para soportar ventanas reales semestrales;
 - autenticacion `Bearer`, autorizacion por `user_vehicle_access` y validacion formal de DTOs activadas en `verifications`;
 - pruebas e2e agregadas para `auth` y flujo protegido de `verifications`;
+- cierre formal de fase 2 documentado con deuda controlada de `overrides` temporales;
 - bitacora de implementacion disponible en esta carpeta.
 
 El siguiente paso natural es:
 
 - desarrollar DTOs y servicios reales sobre fase 1;
-- extender fase 2 con mas pruebas de integracion y criterios de cierre;
 - cerrar fase 3 con carga, consulta y visibilidad de PDFs vigentes;
+- abrir `overrides` temporales de calendario solo cuando exista requerimiento real de negocio;
 - seguir registrando cambios en la bitacora antes de cada subida a Git.
