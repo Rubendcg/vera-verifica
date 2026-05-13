@@ -1,29 +1,34 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
 import request from 'supertest';
-import { App } from 'supertest/types';
-import { AppModule } from './../src/app.module';
+import { AppController } from '../src/app.controller';
+import { AppService } from '../src/app.service';
 
-describe('AppController (e2e)', () => {
-  let app: INestApplication<App>;
+describe('App overview (e2e)', () => {
+  let app: INestApplication;
 
   beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+    const moduleRef = await Test.createTestingModule({
+      controllers: [AppController],
+      providers: [AppService],
     }).compile();
 
-    app = moduleFixture.createNestApplication();
+    app = moduleRef.createNestApplication();
     await app.init();
-  });
-
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
   });
 
   afterEach(async () => {
     await app.close();
+  });
+
+  it('GET / returns the Vera platform overview', async () => {
+    const response = await request(app.getHttpServer()).get('/').expect(200);
+
+    expect(response.body).toMatchObject({
+      name: 'Vera',
+      type: 'platform',
+      status: 'scaffolded',
+    });
+    expect(response.body.modules).toContain('verifications');
   });
 });

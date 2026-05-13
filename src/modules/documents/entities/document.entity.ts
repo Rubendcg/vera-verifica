@@ -13,7 +13,7 @@ import { User } from '../../users/entities/user.entity';
 import { Vehicle } from '../../vehicles/entities/vehicle.entity';
 import { VerificationEvent } from '../../verifications/entities/verification-event.entity';
 import { VerificationType } from '../../verifications/entities/verifications.enums';
-import { DocumentStatus } from './documents.enums';
+import { DocumentStatus, DocumentType } from './documents.enums';
 import { DocumentFile } from './document-file.entity';
 
 @Entity({ name: 'documents' })
@@ -42,8 +42,12 @@ export class Document {
   @JoinColumn({ name: 'uploaded_by_user_id' })
   uploadedByUser!: User | null;
 
-  @Column({ name: 'document_type', type: 'varchar', length: 100 })
-  documentType!: string;
+  @Column({
+    name: 'document_type',
+    type: 'enum',
+    enum: DocumentType,
+  })
+  documentType!: DocumentType;
 
   @Column({
     name: 'verification_type',

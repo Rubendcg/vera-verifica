@@ -442,3 +442,88 @@ Validar `POST /verifications/obligations/generate` contra reglas federales y est
 - formalizar validacion de DTOs;
 - crear pruebas de integracion del flujo regulatorio;
 - decidir si esta validacion se automatiza despues como seed de pruebas controladas.
+
+### 2026-05-12 - Seguridad, validacion formal y pruebas e2e de fase 2
+
+#### Objetivo
+
+Cerrar el bloque base de seguridad del modulo `verifications` con autenticacion real, autorizacion por acceso vehicular y pruebas de integracion ejecutables sin depender de la base productiva.
+
+#### Cambios realizados
+
+- se agrego `POST /auth/login` para emision de token `Bearer`;
+- se agrego `GET /auth/me` para recuperar el usuario autenticado;
+- se incorporo `JwtAuthGuard` y `AdminGuard`;
+- se activo `ValidationPipe` global en `main.ts`;
+- se decoraron formalmente los DTOs de `verifications`;
+- se restringieron las rutas administrativas de `verifications` a usuarios `isAdmin = true`;
+- se filtro el acceso de consulta y respuesta sobre vehiculos mediante `user_vehicle_access`;
+- se agregaron pruebas e2e para `app`, `auth` y `verifications`.
+
+#### Archivos involucrados
+
+- `src/main.ts`
+- `src/modules/auth/*`
+- `src/modules/verifications/verifications.controller.ts`
+- `src/modules/verifications/verifications.module.ts`
+- `src/modules/verifications/verifications.service.ts`
+- `src/modules/verifications/dto/*`
+- `test/app.e2e-spec.ts`
+- `test/auth.e2e-spec.ts`
+- `test/verifications.e2e-spec.ts`
+- `docs/13_endpoints_verifications_fase_2.md`
+
+#### Impacto funcional
+
+- Vera ya exige autenticacion para operar `verifications`;
+- un propietario o usuario autorizado solo puede consultar y responder sobre unidades asignadas;
+- las altas de reglas, eventos, obligaciones y la generacion automatica quedan bloqueadas para no-admin;
+- los DTOs ya rechazan payloads mal formados antes de tocar la capa de servicio.
+
+#### Validacion prevista
+
+- instalar dependencias de autenticacion y validacion;
+- ejecutar `npm run build`;
+- ejecutar `npm test`;
+- ejecutar `npm run test:e2e`.
+
+#### Pendientes inmediatos
+
+- llevar el mismo esquema de autenticacion y autorizacion al resto de modulos;
+- ampliar cobertura e2e sobre respuesta del propietario y programacion administrativa con fixtures reales;
+- decidir si fase 2 ya puede entrar a criterios formales de cierre despues de estas validaciones.
+
+### 2026-05-12 - Cobertura e2e del flujo operativo de obligaciones
+
+#### Objetivo
+
+Cubrir con pruebas de integracion ejecutables el flujo principal que aun faltaba de fase 2: respuesta del propietario, programacion administrativa y cierre al registrar el evento.
+
+#### Cambios realizados
+
+- se rehizo la suite `test/verifications.e2e-spec.ts` con repositorios en memoria mas completos;
+- se agrego una prueba del flujo `respond -> schedule -> create event -> completed`;
+- se agrego una prueba para impedir que un propietario responda en nombre de otro usuario;
+- se mantuvo cobertura de autenticacion, acceso por vehiculo y restriccion admin.
+
+#### Archivos involucrados
+
+- `test/verifications.e2e-spec.ts`
+- `docs/11_bitacora_implementacion_fase_2.md`
+
+#### Impacto funcional
+
+- Vera ya tiene una validacion automatizada del ciclo principal de una obligacion de verificacion;
+- el cambio reduce riesgo de regresion en transiciones `OWNER_CONFIRMED`, `SCHEDULED` y `COMPLETED`;
+- la cobertura e2e de fase 2 ya no se limita a seguridad basica.
+
+#### Validacion prevista
+
+- ejecutar `npm run build`;
+- ejecutar `npx jest --config ./test/jest-e2e.json --runInBand`;
+- ejecutar `npx jest --runInBand`.
+
+#### Pendientes inmediatos
+
+- llevar el mismo esquema de autenticacion y autorizacion al resto de modulos;
+- decidir si fase 2 pasa a estado de cierre formal o si se deja abierta por el tema de `overrides` temporales de calendario.

@@ -79,3 +79,44 @@ Agregar la base estructural del expediente documental para soportar PDFs escanea
 - definir estrategia final de almacenamiento de PDF;
 - decidir si el PDF se guardara en ruta local, object storage o `bytea`;
 - agregar reglas de negocio para una sola version vigente por documento.
+
+### 2026-05-12 - Formalizacion de tipos documentales del expediente PDF
+
+#### Objetivo
+
+Dejar explicito en el modelo que el expediente documental soporta la subida de PDFs de tarjeta de circulacion, constancia fisico-mecanica y constancia de emisiones.
+
+#### Cambios realizados
+
+- se agrego el enum `DocumentType` en TypeORM;
+- se formalizo `documents.document_type` como enum en lugar de texto libre;
+- se preparo una migracion para convertir valores existentes a tipos controlados;
+- se actualizo la documentacion funcional del expediente PDF.
+
+#### Archivos involucrados
+
+- `src/modules/documents/entities/documents.enums.ts`
+- `src/modules/documents/entities/document.entity.ts`
+- `src/database/migrations/20260512213000-formalize-document-types.ts`
+- `docs/03_reportes_notificaciones_y_documentos.md`
+- `docs/14_bitacora_implementacion_fase_3.md`
+
+#### Impacto funcional
+
+- el modelo ya deja explicito que puede recibir PDFs de tarjeta de circulacion;
+- el modelo ya deja explicito que puede recibir PDFs de constancia fisico-mecanica;
+- el modelo ya deja explicito que puede recibir PDFs de constancia de emisiones;
+- se reduce la ambiguedad de `document_type` para futuras cargas y endpoints.
+
+#### Validacion prevista
+
+- ejecutar `npm run build`;
+- ejecutar `npm test`;
+- validar que la migracion convierta correctamente valores documentales existentes.
+
+#### Pendientes inmediatos
+
+- implementar endpoints reales de `documents`;
+- definir estrategia final de almacenamiento de PDF;
+- decidir si el PDF se guardara en ruta local, object storage o `bytea`;
+- agregar reglas de negocio para una sola version vigente por documento.

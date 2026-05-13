@@ -1,14 +1,19 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 import { ModuleSummary } from '../../common/module-summary.interface';
+import { AuthenticatedUser } from '../auth/interfaces/authenticated-user.interface';
 import { User } from '../users/entities/user.entity';
 import { Vehicle, VehicleRegime } from '../vehicles/entities/vehicle.entity';
-import { UserVehicleAccessType } from '../vehicles/entities/user-vehicle-access.entity';
+import {
+  UserVehicleAccess,
+  UserVehicleAccessType,
+} from '../vehicles/entities/user-vehicle-access.entity';
 import { CreateVerificationCenterDto } from './dto/create-verification-center.dto';
 import { CreateVerificationEventDto } from './dto/create-verification-event.dto';
 import { CreateVerificationObligationDto } from './dto/create-verification-obligation.dto';
@@ -52,6 +57,8 @@ export class VerificationsService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Vehicle)
     private readonly vehicleRepository: Repository<Vehicle>,
+    @InjectRepository(UserVehicleAccess)
+    private readonly userVehicleAccessRepository: Repository<UserVehicleAccess>,
     @InjectRepository(VerificationCenter)
     private readonly centerRepository: Repository<VerificationCenter>,
     @InjectRepository(VerificationEvent)
@@ -92,7 +99,10 @@ export class VerificationsService {
     };
   }
 
-  async getVehicleRegulatoryStatus(vehicleId: string) {
+  async getVehicleRegulatoryStatus(
+    vehicleId: string,
+    currentUser: AuthenticatedUser,
+  ) {
     const vehicle = await this.vehicleRepository.findOne({
       where: { id: this.normalizeId(vehicleId, 'vehicleId') },
       relations: {
@@ -123,6 +133,8 @@ export class VerificationsService {
     if (!vehicle) {
       throw new NotFoundException('No se encontro el vehiculo indicado.');
     }
+
+    await this.assertVehicleAccess(currentUser, vehicle.id);
 
     const scheduleRulePosition = this.getScheduleRulePosition(vehicle.regime);
     const referenceDate = this.getCurrentLocalDate();
@@ -339,11 +351,23 @@ export class VerificationsService {
     }
   }
 
-  async listEvents(query: QueryVerificationEventsDto) {
+  async listEvents(
+    query: QueryVerificationEventsDto,
+    currentUser: AuthenticatedUser,
+  ) {
     const qb = this.eventRepository
       .createQueryBuilder('event')
       .leftJoinAndSelect('event.vehicle', 'vehicle')
       .leftJoinAndSelect('event.center', 'center');
+
+    if (!currentUser.isAdmin) {
+      qb.innerJoin(
+        'vehicle.userAccesses',
+        'viewerAccess',
+        'viewerAccess.user_id = :viewerUserId AND viewerAccess.is_active = true',
+        { viewerUserId: currentUser.id },
+      );
+    }
 
     if (query.vehicleId) {
       qb.andWhere('vehicle.id = :vehicleId', {
@@ -391,7 +415,7 @@ export class VerificationsService {
     };
   }
 
-  async getEventById(id: string) {
+  async getEventById(id: string, currentUser: AuthenticatedUser) {
     const event = await this.eventRepository.findOne({
       where: { id: this.normalizeId(id, 'id') },
       relations: {
@@ -403,6 +427,8 @@ export class VerificationsService {
     if (!event) {
       throw new NotFoundException('No se encontro el evento de verificacion.');
     }
+
+    await this.assertVehicleAccess(currentUser, event.vehicle.id);
 
     return this.mapEvent(event);
   }
@@ -557,7 +583,10 @@ export class VerificationsService {
     });
   }
 
-  async listObligations(query: QueryVerificationObligationsDto) {
+  async listObligations(
+    query: QueryVerificationObligationsDto,
+    currentUser: AuthenticatedUser,
+  ) {
     const includeHistory = this.parseOptionalBoolean(
       query.includeHistory,
       'includeHistory',
@@ -575,6 +604,15 @@ export class VerificationsService {
       qb.leftJoinAndSelect('obligation.historyEntries', 'history').leftJoinAndSelect(
         'history.changedByUser',
         'historyChangedByUser',
+      );
+    }
+
+    if (!currentUser.isAdmin) {
+      qb.innerJoin(
+        'vehicle.userAccesses',
+        'viewerAccess',
+        'viewerAccess.user_id = :viewerUserId AND viewerAccess.is_active = true',
+        { viewerUserId: currentUser.id },
       );
     }
 
@@ -642,7 +680,7 @@ export class VerificationsService {
     };
   }
 
-  async getObligationById(id: string) {
+  async getObligationById(id: string, currentUser: AuthenticatedUser) {
     const obligation = await this.obligationRepository.findOne({
       where: { id: this.normalizeId(id, 'id') },
       relations: {
@@ -667,6 +705,8 @@ export class VerificationsService {
     if (!obligation) {
       throw new NotFoundException('No se encontro la obligacion de verificacion.');
     }
+
+    await this.assertVehicleAccess(currentUser, obligation.vehicle.id);
 
     return this.mapObligation(obligation, true);
   }
@@ -1126,11 +1166,29 @@ export class VerificationsService {
     );
   }
 
-  async respondToObligation(id: string, dto: RespondVerificationObligationDto) {
+  async respondToObligation(
+    id: string,
+    dto: RespondVerificationObligationDto,
+    currentUser: AuthenticatedUser,
+  ) {
     const obligation = await this.findObligationOrFail(id);
     this.ensureObligationCanBeUpdated(obligation);
+    await this.assertVehicleAccess(currentUser, obligation.vehicle.id);
 
-    const ownerUser = await this.findUserOrFail(dto.ownerUserId, 'ownerUserId');
+    if (
+      !currentUser.isAdmin &&
+      dto.ownerUserId &&
+      this.normalizeId(dto.ownerUserId, 'ownerUserId') !== currentUser.id
+    ) {
+      throw new ForbiddenException(
+        'No puedes responder una obligacion en nombre de otro usuario.',
+      );
+    }
+
+    const responseUserId = currentUser.isAdmin
+      ? dto.ownerUserId ?? currentUser.id
+      : currentUser.id;
+    const ownerUser = await this.findUserOrFail(responseUserId, 'ownerUserId');
     const ownerResponse = this.ensureEnumValue(
       dto.ownerResponse,
       VerificationOwnerResponse,
@@ -1161,7 +1219,7 @@ export class VerificationsService {
 
     await this.obligationHistoryRepository.save(historyEntry);
 
-    return this.getObligationById(obligation.id);
+    return this.getObligationById(obligation.id, currentUser);
   }
 
   async scheduleObligation(id: string, dto: ScheduleVerificationObligationDto) {
@@ -1199,7 +1257,7 @@ export class VerificationsService {
 
     await this.obligationHistoryRepository.save(historyEntry);
 
-    return this.getObligationById(obligation.id);
+    return this.mapObligation(await this.findObligationOrFail(obligation.id), true);
   }
 
   private getScheduleRuleKey(rule: VerificationScheduleRule) {
@@ -2038,9 +2096,40 @@ export class VerificationsService {
     return parsed;
   }
 
-  private parseOptionalBoolean(value: string | undefined, fieldName: string) {
+  // Applies the owner/admin boundary using the existing user_vehicle_access table.
+  private async assertVehicleAccess(
+    currentUser: AuthenticatedUser,
+    vehicleId: string,
+  ) {
+    if (currentUser.isAdmin) {
+      return;
+    }
+
+    const activeAccessCount = await this.userVehicleAccessRepository.count({
+      where: {
+        user: { id: currentUser.id },
+        vehicle: { id: vehicleId },
+        isActive: true,
+      },
+    });
+
+    if (activeAccessCount === 0) {
+      throw new ForbiddenException(
+        'El usuario autenticado no tiene acceso al vehiculo solicitado.',
+      );
+    }
+  }
+
+  private parseOptionalBoolean(
+    value: boolean | string | undefined,
+    fieldName: string,
+  ) {
     if (value === undefined) {
       return undefined;
+    }
+
+    if (typeof value === 'boolean') {
+      return value;
     }
 
     const normalized = value.trim().toLowerCase();

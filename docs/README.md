@@ -56,11 +56,13 @@ Estado actual:
 - endpoints base de fase 2 implementados para centros, reglas, eventos y obligaciones;
 - generacion automatica de obligaciones de fase 2 implementada con modo simulacion;
 - estructura de reglas de calendario ampliada para soportar ventanas reales semestrales;
+- autenticacion `Bearer`, autorizacion por `user_vehicle_access` y validacion formal de DTOs activadas en `verifications`;
+- pruebas e2e agregadas para `auth` y flujo protegido de `verifications`;
 - bitacora de implementacion disponible en esta carpeta.
 
 El siguiente paso natural es:
 
 - desarrollar DTOs y servicios reales sobre fase 1;
-- extender fase 2 con permisos, autenticacion y generacion automatica de obligaciones;
+- extender fase 2 con mas pruebas de integracion y criterios de cierre;
 - cerrar fase 3 con carga, consulta y visibilidad de PDFs vigentes;
 - seguir registrando cambios en la bitacora antes de cada subida a Git.

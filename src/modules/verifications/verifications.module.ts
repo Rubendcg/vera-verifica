@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from '../auth/auth.module';
 import { User } from '../users/entities/user.entity';
+import { UserVehicleAccess } from '../vehicles/entities/user-vehicle-access.entity';
 import { Vehicle } from '../vehicles/entities/vehicle.entity';
 import { VerificationCenter } from './entities/verification-center.entity';
 import { VerificationEvent } from './entities/verification-event.entity';
@@ -12,9 +14,11 @@ import { VerificationsService } from './verifications.service';
 
 @Module({
   imports: [
+    AuthModule,
     TypeOrmModule.forFeature([
       User,
       Vehicle,
+      UserVehicleAccess,
       VerificationCenter,
       VerificationEvent,
       VerificationObligation,
