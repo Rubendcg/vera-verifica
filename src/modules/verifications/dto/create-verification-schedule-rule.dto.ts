@@ -6,6 +6,7 @@ export class CreateVerificationScheduleRuleDto {
   schedulePosition!: number;
   scheduleMarker!: string;
   verificationType!: VerificationType;
+  windowSequence?: number;
   windowStartMonth!: number;
   windowEndMonth!: number;
   windowLabel!: string;

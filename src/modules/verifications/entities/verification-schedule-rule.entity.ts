@@ -16,10 +16,12 @@ import { VerificationType } from './verifications.enums';
   'schedulePosition',
   'scheduleMarker',
   'verificationType',
+  'windowSequence',
 ])
 @Check('CHK_verification_schedule_rules_window_start_month', '"window_start_month" BETWEEN 1 AND 12')
 @Check('CHK_verification_schedule_rules_window_end_month', '"window_end_month" BETWEEN 1 AND 12')
 @Check('CHK_verification_schedule_rules_schedule_position', '"schedule_position" BETWEEN 1 AND 10')
+@Check('CHK_verification_schedule_rules_window_sequence', '"window_sequence" BETWEEN 1 AND 12')
 export class VerificationScheduleRule {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id!: string;
@@ -42,6 +44,9 @@ export class VerificationScheduleRule {
     enum: VerificationType,
   })
   verificationType!: VerificationType;
+
+  @Column({ name: 'window_sequence', type: 'smallint', default: 1 })
+  windowSequence!: number;
 
   @Column({ name: 'window_start_month', type: 'smallint' })
   windowStartMonth!: number;

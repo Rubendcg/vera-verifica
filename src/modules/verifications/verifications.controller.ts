@@ -10,6 +10,7 @@ import { CreateVerificationCenterDto } from './dto/create-verification-center.dt
 import { CreateVerificationEventDto } from './dto/create-verification-event.dto';
 import { CreateVerificationObligationDto } from './dto/create-verification-obligation.dto';
 import { CreateVerificationScheduleRuleDto } from './dto/create-verification-schedule-rule.dto';
+import { GenerateVerificationObligationsDto } from './dto/generate-verification-obligations.dto';
 import { QueryVerificationCentersDto } from './dto/query-verification-centers.dto';
 import { QueryVerificationEventsDto } from './dto/query-verification-events.dto';
 import { QueryVerificationObligationsDto } from './dto/query-verification-obligations.dto';
@@ -85,6 +86,11 @@ export class VerificationsController {
   @Post('obligations')
   createObligation(@Body() dto: CreateVerificationObligationDto) {
     return this.verificationsService.createObligation(dto);
+  }
+
+  @Post('obligations/generate')
+  generateObligations(@Body() dto: GenerateVerificationObligationsDto) {
+    return this.verificationsService.generateObligations(dto);
   }
 
   @Post('obligations/:id/respond')

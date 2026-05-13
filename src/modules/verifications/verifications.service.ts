@@ -8,10 +8,12 @@ import { QueryFailedError, Repository } from 'typeorm';
 import { ModuleSummary } from '../../common/module-summary.interface';
 import { User } from '../users/entities/user.entity';
 import { Vehicle, VehicleRegime } from '../vehicles/entities/vehicle.entity';
+import { UserVehicleAccessType } from '../vehicles/entities/user-vehicle-access.entity';
 import { CreateVerificationCenterDto } from './dto/create-verification-center.dto';
 import { CreateVerificationEventDto } from './dto/create-verification-event.dto';
 import { CreateVerificationObligationDto } from './dto/create-verification-obligation.dto';
 import { CreateVerificationScheduleRuleDto } from './dto/create-verification-schedule-rule.dto';
+import { GenerateVerificationObligationsDto } from './dto/generate-verification-obligations.dto';
 import { QueryVerificationCentersDto } from './dto/query-verification-centers.dto';
 import { QueryVerificationEventsDto } from './dto/query-verification-events.dto';
 import { QueryVerificationObligationsDto } from './dto/query-verification-obligations.dto';
@@ -40,6 +42,8 @@ type VehicleRegulatoryStatusCode =
   | 'SIN_REGISTRO'
   | 'NO_APLICA'
   | 'INACTIVO';
+
+type ScheduleWindowStatus = 'BEFORE_WINDOW' | 'IN_WINDOW' | 'AFTER_WINDOW';
 
 @Injectable()
 export class VerificationsService {
@@ -121,18 +125,21 @@ export class VerificationsService {
     }
 
     const scheduleRulePosition = this.getScheduleRulePosition(vehicle.regime);
+    const referenceDate = this.getCurrentLocalDate();
     const [physicalScheduleRule, emissionsScheduleRule] = await Promise.all([
-      this.findActiveScheduleRule(
+      this.findApplicableScheduleRule(
         vehicle.regime,
         vehicle.scheduleMarkerEffective,
         scheduleRulePosition,
         VerificationType.PHYSICAL_MECHANICAL,
+        referenceDate,
       ),
-      this.findActiveScheduleRule(
+      this.findApplicableScheduleRule(
         vehicle.regime,
         vehicle.scheduleMarkerEffective,
         scheduleRulePosition,
         VerificationType.EMISSIONS,
+        referenceDate,
       ),
     ]);
 
@@ -257,6 +264,12 @@ export class VerificationsService {
       });
     }
 
+    if (query.windowSequence) {
+      qb.andWhere('rule.windowSequence = :windowSequence', {
+        windowSequence: this.parseSmallInt(query.windowSequence, 'windowSequence', 1, 12),
+      });
+    }
+
     const isActive = this.parseOptionalBoolean(query.isActive, 'isActive');
     if (isActive !== undefined) {
       qb.andWhere('rule.isActive = :isActive', { isActive });
@@ -265,7 +278,8 @@ export class VerificationsService {
     qb.orderBy('rule.regime', 'ASC')
       .addOrderBy('rule.verificationType', 'ASC')
       .addOrderBy('rule.schedulePosition', 'ASC')
-      .addOrderBy('rule.scheduleMarker', 'ASC');
+      .addOrderBy('rule.scheduleMarker', 'ASC')
+      .addOrderBy('rule.windowSequence', 'ASC');
 
     const [items, total] = await qb.getManyAndCount();
 
@@ -294,6 +308,12 @@ export class VerificationsService {
           10,
         ),
         scheduleMarker: this.normalizeMarker(dto.scheduleMarker, 'scheduleMarker'),
+        windowSequence: this.parseSmallInt(
+          dto.windowSequence ?? 1,
+          'windowSequence',
+          1,
+          12,
+        ),
         windowStartMonth: this.parseSmallInt(
           dto.windowStartMonth,
           'windowStartMonth',
@@ -730,6 +750,382 @@ export class VerificationsService {
     }
   }
 
+  // Builds pending work from calendar rules without duplicating open obligations for the same window.
+  async generateObligations(dto: GenerateVerificationObligationsDto) {
+    const referenceDate = dto.referenceDate
+      ? this.parseDateOnly(dto.referenceDate, 'referenceDate')
+      : this.formatDateOnly(this.getCurrentLocalDate());
+    const referenceDateValue = this.parseDateOnlyToDate(referenceDate);
+    const previewOnly =
+      this.parseOptionalBooleanLike(dto.previewOnly, 'previewOnly') ?? false;
+    const includeUpcomingWindow =
+      this.parseOptionalBooleanLike(
+        dto.includeUpcomingWindow,
+        'includeUpcomingWindow',
+      ) ?? false;
+    const vehicleId = dto.vehicleId
+      ? this.normalizeId(dto.vehicleId, 'vehicleId')
+      : null;
+    const regime = dto.regime
+      ? this.ensureEnumValue(dto.regime, VehicleRegime, 'regime')
+      : null;
+    const verificationType = dto.verificationType
+      ? this.ensureEnumValue(
+          dto.verificationType,
+          VerificationType,
+          'verificationType',
+        )
+      : null;
+    const adminUser = dto.adminUserId
+      ? await this.findUserOrFail(dto.adminUserId, 'adminUserId')
+      : null;
+
+    const vehiclesQuery = this.vehicleRepository
+      .createQueryBuilder('vehicle')
+      .leftJoinAndSelect('vehicle.verificationEvents', 'verificationEvents')
+      .leftJoinAndSelect('vehicle.verificationObligations', 'verificationObligations')
+      .leftJoinAndSelect(
+        'vehicle.userAccesses',
+        'userAccesses',
+        'userAccesses.isActive = :activeAccess',
+        { activeAccess: true },
+      )
+      .leftJoinAndSelect(
+        'userAccesses.user',
+        'accessUsers',
+        'accessUsers.isActive = :activeUser',
+        { activeUser: true },
+      )
+      .orderBy('vehicle.id', 'ASC');
+
+    if (vehicleId) {
+      vehiclesQuery.andWhere('vehicle.id = :vehicleId', { vehicleId });
+    }
+
+    if (regime) {
+      vehiclesQuery.andWhere('vehicle.regime = :regime', { regime });
+    }
+
+    const vehicles = await vehiclesQuery.getMany();
+
+    const scheduleRuleWhere: {
+      isActive: boolean;
+      regime?: VehicleRegime;
+      verificationType?: VerificationType;
+    } = {
+      isActive: true,
+    };
+    if (regime) {
+      scheduleRuleWhere.regime = regime;
+    }
+    if (verificationType) {
+      scheduleRuleWhere.verificationType = verificationType;
+    }
+
+    const scheduleRules = await this.scheduleRuleRepository.find({
+      where: scheduleRuleWhere,
+      order: {
+        regime: 'ASC',
+        verificationType: 'ASC',
+        schedulePosition: 'ASC',
+        scheduleMarker: 'ASC',
+        windowSequence: 'ASC',
+      },
+    });
+
+    // Group rules by scope because one type can now have multiple windows per year.
+    const scheduleRuleMap = this.groupScheduleRulesByScope(scheduleRules);
+
+    const execute = async (
+      obligationRepository: Repository<VerificationObligation>,
+      historyRepository: Repository<VerificationObligationHistory>,
+    ) => {
+      const items: Array<Record<string, unknown>> = [];
+      let created = 0;
+      let updated = 0;
+      let skipped = 0;
+
+      for (const vehicle of vehicles) {
+        const verificationTypes = verificationType
+          ? [verificationType]
+          : [VerificationType.PHYSICAL_MECHANICAL, VerificationType.EMISSIONS];
+
+        for (const currentVerificationType of verificationTypes) {
+          if (
+            currentVerificationType === VerificationType.EMISSIONS &&
+            !this.requiresEmissions(vehicle)
+          ) {
+            skipped += 1;
+            items.push(
+              this.mapGeneratedObligationItem({
+                vehicle,
+                verificationType: currentVerificationType,
+                outcome: 'SKIPPED',
+                reason: 'NOT_REQUIRED',
+                note:
+                  'La unidad no requiere verificacion de emisiones por su tipo de arrastre.',
+              }),
+            );
+            continue;
+          }
+
+          if (!vehicle.isActive) {
+            skipped += 1;
+            items.push(
+              this.mapGeneratedObligationItem({
+                vehicle,
+                verificationType: currentVerificationType,
+                outcome: 'SKIPPED',
+                reason: 'VEHICLE_INACTIVE',
+                note: 'La unidad se encuentra inactiva y no se generaron obligaciones.',
+              }),
+            );
+            continue;
+          }
+
+          const applicableRules =
+            scheduleRuleMap.get(
+              this.getScheduleRuleLookupKey(
+                vehicle.regime,
+                vehicle.scheduleMarkerEffective,
+                this.getScheduleRulePosition(vehicle.regime),
+                currentVerificationType,
+              ),
+            ) ?? [];
+          const scheduleRule = this.selectApplicableScheduleRule(
+            applicableRules,
+            referenceDateValue,
+          );
+
+          if (!scheduleRule) {
+            skipped += 1;
+            items.push(
+              this.mapGeneratedObligationItem({
+                vehicle,
+                verificationType: currentVerificationType,
+                outcome: 'SKIPPED',
+                reason: 'MISSING_RULE',
+                note:
+                  'No existe una regla activa de calendario para el regimen y marcador del vehiculo.',
+              }),
+            );
+            continue;
+          }
+
+          const scheduleWindow = this.resolveScheduleWindowForReferenceDate(
+            scheduleRule,
+            referenceDateValue,
+          );
+
+          if (
+            scheduleWindow.windowStatus === 'BEFORE_WINDOW' &&
+            !includeUpcomingWindow
+          ) {
+            skipped += 1;
+            items.push(
+              this.mapGeneratedObligationItem({
+                vehicle,
+                verificationType: currentVerificationType,
+                scheduleRule,
+                scheduleWindow,
+                outcome: 'SKIPPED',
+                reason: 'WINDOW_NOT_OPEN',
+                note:
+                  'La ventana de cumplimiento todavia no abre para la fecha de referencia enviada.',
+              }),
+            );
+            continue;
+          }
+
+          const lastCompliantEvent = this.findLastCompliantEvent(
+            vehicle,
+            currentVerificationType,
+          );
+
+          if (
+            lastCompliantEvent &&
+            this.compareDateLike(lastCompliantEvent.validUntil, scheduleWindow.dueDate) >= 0
+          ) {
+            skipped += 1;
+            items.push(
+              this.mapGeneratedObligationItem({
+                vehicle,
+                verificationType: currentVerificationType,
+                scheduleRule,
+                scheduleWindow,
+                lastCompliantEvent,
+                outcome: 'SKIPPED',
+                reason: 'ALREADY_COMPLIANT',
+                note:
+                  'La unidad ya cuenta con un evento vigente que cubre la fecha de vencimiento de la ventana calculada.',
+              }),
+            );
+            continue;
+          }
+
+          const existingObligation = this.findOpenObligationForDueDate(
+            vehicle,
+            currentVerificationType,
+            scheduleWindow.dueDate,
+          );
+
+          if (existingObligation) {
+            const shouldMarkOverdue =
+              this.compareDateLike(existingObligation.dueDate, referenceDate) < 0 &&
+              existingObligation.status !== VerificationObligationStatus.OVERDUE;
+
+            if (shouldMarkOverdue) {
+              const previousStatus = existingObligation.status;
+              existingObligation.status = VerificationObligationStatus.OVERDUE;
+              existingObligation.adminUser = adminUser ?? existingObligation.adminUser;
+              existingObligation.notes = this.mergeNotes(
+                existingObligation.notes,
+                'Actualizacion automatica: la obligacion paso a OVERDUE por fecha de vencimiento.',
+              );
+
+              if (!previewOnly) {
+                await obligationRepository.save(existingObligation);
+
+                const historyEntry = historyRepository.create({
+                  obligation: existingObligation,
+                  changedByUser: adminUser,
+                  actionType: VerificationObligationHistoryAction.SYSTEM_UPDATED,
+                  previousStatus,
+                  newStatus: existingObligation.status,
+                  previousOwnerResponse: existingObligation.ownerResponse,
+                  newOwnerResponse: existingObligation.ownerResponse,
+                  notes:
+                    'Actualizacion automatica del generador de obligaciones por vencimiento.',
+                });
+
+                await historyRepository.save(historyEntry);
+              }
+
+              updated += 1;
+              items.push(
+                this.mapGeneratedObligationItem({
+                  vehicle,
+                  verificationType: currentVerificationType,
+                  scheduleRule,
+                  scheduleWindow,
+                  lastCompliantEvent,
+                  obligation: existingObligation,
+                  outcome: 'UPDATED',
+                  reason: 'MARKED_OVERDUE',
+                  note:
+                    'La obligacion ya existia y se marco automaticamente como OVERDUE.',
+                }),
+              );
+              continue;
+            }
+
+            skipped += 1;
+            items.push(
+              this.mapGeneratedObligationItem({
+                vehicle,
+                verificationType: currentVerificationType,
+                scheduleRule,
+                scheduleWindow,
+                lastCompliantEvent,
+                obligation: existingObligation,
+                outcome: 'SKIPPED',
+                reason: 'ACTIVE_OBLIGATION_EXISTS',
+                note:
+                  'Ya existe una obligacion activa para la misma ventana y no requirio cambios.',
+              }),
+            );
+            continue;
+          }
+
+          const ownerUser = this.resolveDefaultOwnerUser(vehicle);
+          const initialStatus =
+            this.compareDateLike(scheduleWindow.dueDate, referenceDate) < 0
+              ? VerificationObligationStatus.OVERDUE
+              : VerificationObligationStatus.PENDING;
+
+          const generatedObligation = obligationRepository.create({
+            vehicle,
+            verificationType: currentVerificationType,
+            dueDate: scheduleWindow.dueDate,
+            windowStartDate: scheduleWindow.windowStartDate,
+            windowEndDate: scheduleWindow.windowEndDate,
+            status: initialStatus,
+            ownerUser,
+            adminUser,
+            notes: this.buildGeneratedObligationNote(
+              scheduleRule,
+              scheduleWindow.windowStatus,
+            ),
+          });
+
+          if (!previewOnly) {
+            await obligationRepository.save(generatedObligation);
+
+            const historyEntry = historyRepository.create({
+              obligation: generatedObligation,
+              changedByUser: adminUser,
+              actionType: VerificationObligationHistoryAction.CREATED,
+              previousStatus: null,
+              newStatus: generatedObligation.status,
+              previousOwnerResponse: null,
+              newOwnerResponse: generatedObligation.ownerResponse,
+              notes:
+                'Obligacion generada automaticamente a partir de la regla activa de calendario.',
+            });
+
+            await historyRepository.save(historyEntry);
+          }
+
+          created += 1;
+          items.push(
+            this.mapGeneratedObligationItem({
+              vehicle,
+              verificationType: currentVerificationType,
+              scheduleRule,
+              scheduleWindow,
+              lastCompliantEvent,
+              obligation: generatedObligation,
+              outcome: 'CREATED',
+              reason: 'CREATED_FROM_RULE',
+              note:
+                'Se genero una nueva obligacion a partir de la regla de calendario aplicable.',
+            }),
+          );
+        }
+      }
+
+      return {
+        referenceDate,
+        previewOnly,
+        includeUpcomingWindow,
+        filters: {
+          vehicleId,
+          regime,
+          verificationType,
+          adminUserId: adminUser?.id ?? null,
+        },
+        totals: {
+          vehiclesEvaluated: vehicles.length,
+          created,
+          updated,
+          skipped,
+        },
+        items,
+      };
+    };
+
+    if (previewOnly) {
+      return execute(this.obligationRepository, this.obligationHistoryRepository);
+    }
+
+    return this.obligationRepository.manager.transaction(async (manager) =>
+      execute(
+        manager.getRepository(VerificationObligation),
+        manager.getRepository(VerificationObligationHistory),
+      ),
+    );
+  }
+
   async respondToObligation(id: string, dto: RespondVerificationObligationDto) {
     const obligation = await this.findObligationOrFail(id);
     this.ensureObligationCanBeUpdated(obligation);
@@ -806,13 +1202,199 @@ export class VerificationsService {
     return this.getObligationById(obligation.id);
   }
 
-  private async findActiveScheduleRule(
+  private getScheduleRuleKey(rule: VerificationScheduleRule) {
+    return this.getScheduleRuleLookupKey(
+      rule.regime,
+      rule.scheduleMarker,
+      rule.schedulePosition,
+      rule.verificationType,
+    );
+  }
+
+  private getScheduleRuleLookupKey(
     regime: VehicleRegime,
     scheduleMarker: string,
     schedulePosition: number,
     verificationType: VerificationType,
   ) {
-    return this.scheduleRuleRepository.findOne({
+    return `${regime}|${schedulePosition}|${scheduleMarker}|${verificationType}`;
+  }
+
+  // Resolves the effective window dates for a rule using the local reference date.
+  private resolveScheduleWindowForReferenceDate(
+    scheduleRule: VerificationScheduleRule,
+    referenceDate: Date,
+  ) {
+    const referenceYear = referenceDate.getFullYear();
+    const referenceMonth = referenceDate.getMonth() + 1;
+    const { windowStartMonth, windowEndMonth } = scheduleRule;
+
+    let windowStartYear = referenceYear;
+    let windowEndYear = referenceYear;
+    let windowStatus: ScheduleWindowStatus;
+
+    if (windowStartMonth <= windowEndMonth) {
+      windowStatus =
+        referenceMonth < windowStartMonth
+          ? 'BEFORE_WINDOW'
+          : referenceMonth > windowEndMonth
+            ? 'AFTER_WINDOW'
+            : 'IN_WINDOW';
+    } else if (referenceMonth >= windowStartMonth) {
+      windowEndYear = referenceYear + 1;
+      windowStatus = 'IN_WINDOW';
+    } else if (referenceMonth <= windowEndMonth) {
+      windowStartYear = referenceYear - 1;
+      windowStatus = 'IN_WINDOW';
+    } else {
+      windowStartYear = referenceYear - 1;
+      windowStatus = 'AFTER_WINDOW';
+    }
+
+    const windowStartDate = this.formatDateOnly(
+      new Date(windowStartYear, windowStartMonth - 1, 1),
+    );
+    const windowEndDate = this.formatDateOnly(
+      new Date(windowEndYear, windowEndMonth, 0),
+    );
+
+    return {
+      windowStartDate,
+      windowEndDate,
+      dueDate: windowEndDate,
+      windowStatus,
+    };
+  }
+
+  private findLastCompliantEvent(
+    vehicle: Vehicle,
+    verificationType: VerificationType,
+  ) {
+    return vehicle.verificationEvents
+      .filter(
+        (event) =>
+          event.verificationType === verificationType &&
+          [VerificationResultStatus.PASSED, VerificationResultStatus.CONDITIONAL].includes(
+            event.resultStatus,
+          ),
+      )
+      .sort((left, right) =>
+        this.compareDateLike(right.eventDate, left.eventDate) ||
+        this.compareDateLike(right.createdAt, left.createdAt),
+      )[0] ?? null;
+  }
+
+  private findOpenObligationForDueDate(
+    vehicle: Vehicle,
+    verificationType: VerificationType,
+    dueDate: string,
+  ) {
+    return (
+      vehicle.verificationObligations.find(
+        (obligation) =>
+          obligation.verificationType === verificationType &&
+          obligation.dueDate === dueDate &&
+          ![
+            VerificationObligationStatus.COMPLETED,
+            VerificationObligationStatus.CANCELLED,
+          ].includes(obligation.status),
+      ) ?? null
+    );
+  }
+
+  private resolveDefaultOwnerUser(vehicle: Vehicle) {
+    const activeAccesses = (vehicle.userAccesses ?? []).filter(
+      (access) => access.isActive && access.user?.isActive,
+    );
+
+    const accessOrder = [
+      UserVehicleAccessType.OWNER_PORTAL,
+      UserVehicleAccessType.AUTHORIZED_PORTAL,
+      UserVehicleAccessType.ADMIN_ASSIGNED,
+    ];
+
+    activeAccesses.sort(
+      (left, right) =>
+        accessOrder.indexOf(left.accessType) - accessOrder.indexOf(right.accessType) ||
+        left.grantedAt.getTime() - right.grantedAt.getTime(),
+    );
+
+    return activeAccesses[0]?.user ?? null;
+  }
+
+  private buildGeneratedObligationNote(
+    scheduleRule: VerificationScheduleRule,
+    windowStatus: ScheduleWindowStatus,
+  ) {
+    return [
+      'Generada automaticamente por Vera.',
+      `Regla: ${scheduleRule.windowLabel}.`,
+      `Marcador: ${scheduleRule.scheduleMarker}.`,
+      `Estado de ventana: ${windowStatus}.`,
+    ].join(' ');
+  }
+
+  private mapGeneratedObligationItem(params: {
+    vehicle: Vehicle;
+    verificationType: VerificationType;
+    outcome: 'CREATED' | 'UPDATED' | 'SKIPPED';
+    reason: string;
+    note: string;
+    scheduleRule?: VerificationScheduleRule | null;
+    scheduleWindow?: {
+      windowStartDate: string;
+      windowEndDate: string;
+      dueDate: string;
+      windowStatus: ScheduleWindowStatus;
+    } | null;
+    lastCompliantEvent?: VerificationEvent | null;
+    obligation?: VerificationObligation | null;
+  }) {
+    return {
+      outcome: params.outcome,
+      reason: params.reason,
+      note: params.note,
+      vehicle: {
+        id: params.vehicle.id,
+        plate: params.vehicle.plate,
+        regime: params.vehicle.regime,
+        unitType: params.vehicle.unitType,
+        scheduleMarkerEffective: params.vehicle.scheduleMarkerEffective,
+      },
+      verificationType: params.verificationType,
+      scheduleRule: params.scheduleRule ? this.mapScheduleRule(params.scheduleRule) : null,
+      scheduleWindow: params.scheduleWindow ?? null,
+      lastCompliantEvent: params.lastCompliantEvent
+        ? this.mapEvent(params.lastCompliantEvent)
+        : null,
+      obligation: params.obligation
+        ? this.mapObligationSummary(params.obligation)
+        : null,
+    };
+  }
+
+  private groupScheduleRulesByScope(rules: VerificationScheduleRule[]) {
+    const groupedRules = new Map<string, VerificationScheduleRule[]>();
+
+    for (const rule of rules) {
+      const key = this.getScheduleRuleKey(rule);
+      const currentItems = groupedRules.get(key) ?? [];
+      currentItems.push(rule);
+      groupedRules.set(key, currentItems);
+    }
+
+    return groupedRules;
+  }
+
+  // Picks the most relevant active rule for the given date when a type has multiple windows.
+  private async findApplicableScheduleRule(
+    regime: VehicleRegime,
+    scheduleMarker: string,
+    schedulePosition: number,
+    verificationType: VerificationType,
+    referenceDate: Date,
+  ) {
+    const rules = await this.scheduleRuleRepository.find({
       where: {
         regime,
         scheduleMarker,
@@ -821,9 +1403,49 @@ export class VerificationsService {
         isActive: true,
       },
       order: {
+        windowSequence: 'ASC',
         updatedAt: 'DESC',
       },
     });
+
+    return this.selectApplicableScheduleRule(rules, referenceDate);
+  }
+
+  private selectApplicableScheduleRule(
+    rules: VerificationScheduleRule[],
+    referenceDate: Date,
+  ) {
+    if (rules.length === 0) {
+      return null;
+    }
+
+    const resolvedRules = rules.map((rule) => ({
+      rule,
+      window: this.resolveScheduleWindowForReferenceDate(rule, referenceDate),
+    }));
+
+    const inWindowRule = resolvedRules.find(
+      (entry) => entry.window.windowStatus === 'IN_WINDOW',
+    );
+    if (inWindowRule) {
+      return inWindowRule.rule;
+    }
+
+    const upcomingRule = resolvedRules
+      .filter((entry) => entry.window.windowStatus === 'BEFORE_WINDOW')
+      .sort((left, right) =>
+        this.compareDateLike(
+          left.window.windowStartDate,
+          right.window.windowStartDate,
+        ),
+      )[0];
+    if (upcomingRule) {
+      return upcomingRule.rule;
+    }
+
+    return resolvedRules.sort((left, right) =>
+      this.compareDateLike(right.window.dueDate, left.window.dueDate),
+    )[0].rule;
   }
 
   private buildVerificationStatusSnapshot(
@@ -1020,6 +1642,14 @@ export class VerificationsService {
     return new Date(now.getFullYear(), now.getMonth(), now.getDate());
   }
 
+  private formatDateOnly(date: Date) {
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, '0');
+    const day = `${date.getDate()}`.padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
   private parseDateOnlyToDate(dateValue: string) {
     const [year, month, day] = dateValue.split('-').map((value) => Number(value));
     return new Date(year, month - 1, day);
@@ -1035,17 +1665,19 @@ export class VerificationsService {
   }
 
   private enrichScheduleRule(scheduleRule: VerificationScheduleRule) {
-    const currentMonth = this.getCurrentLocalDate().getMonth() + 1;
-    const isCurrentMonthInWindow =
-      scheduleRule.windowStartMonth <= scheduleRule.windowEndMonth
-        ? currentMonth >= scheduleRule.windowStartMonth &&
-          currentMonth <= scheduleRule.windowEndMonth
-        : currentMonth >= scheduleRule.windowStartMonth ||
-          currentMonth <= scheduleRule.windowEndMonth;
+    const referenceDate = this.getCurrentLocalDate();
+    const resolvedWindow = this.resolveScheduleWindowForReferenceDate(
+      scheduleRule,
+      referenceDate,
+    );
 
     return {
       ...this.mapScheduleRule(scheduleRule),
-      isCurrentMonthInWindow,
+      isCurrentMonthInWindow: resolvedWindow.windowStatus === 'IN_WINDOW',
+      currentWindowStatus: resolvedWindow.windowStatus,
+      currentWindowStartDate: resolvedWindow.windowStartDate,
+      currentWindowEndDate: resolvedWindow.windowEndDate,
+      currentDueDate: resolvedWindow.dueDate,
     };
   }
 
@@ -1195,6 +1827,7 @@ export class VerificationsService {
       schedulePosition: rule.schedulePosition,
       scheduleMarker: rule.scheduleMarker,
       verificationType: rule.verificationType,
+      windowSequence: rule.windowSequence,
       windowStartMonth: rule.windowStartMonth,
       windowEndMonth: rule.windowEndMonth,
       windowLabel: rule.windowLabel,
@@ -1423,6 +2056,21 @@ export class VerificationsService {
     throw new BadRequestException(
       `El campo ${fieldName} debe ser true o false cuando se envie.`,
     );
+  }
+
+  private parseOptionalBooleanLike(
+    value: boolean | string | undefined,
+    fieldName: string,
+  ) {
+    if (value === undefined || value === null || value === '') {
+      return undefined;
+    }
+
+    if (typeof value === 'boolean') {
+      return value;
+    }
+
+    return this.parseOptionalBoolean(value, fieldName);
   }
 
   private mergeNotes(existing: string | null, incoming: string | undefined) {

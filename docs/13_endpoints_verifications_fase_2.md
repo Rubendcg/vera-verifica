@@ -39,6 +39,7 @@ La semantica ya esta preparada para separar accion del propietario y accion admi
 | `GET` | `/verifications/obligations` | Listado de obligaciones con filtros |
 | `GET` | `/verifications/obligations/:id` | Detalle de una obligacion con historial |
 | `POST` | `/verifications/obligations` | Alta manual de obligacion |
+| `POST` | `/verifications/obligations/generate` | Generacion automatica o simulada de obligaciones desde reglas |
 | `POST` | `/verifications/obligations/:id/respond` | Respuesta del propietario |
 | `POST` | `/verifications/obligations/:id/schedule` | Programacion administrativa |
 
@@ -56,6 +57,7 @@ La semantica ya esta preparada para separar accion del propietario y accion admi
 - `regime`
 - `verificationType`
 - `scheduleMarker`
+- `windowSequence`
 - `isActive`
 
 ### `GET /verifications/events`
@@ -101,6 +103,34 @@ Solo actualiza:
 - `owner_response_at`
 - `status`
 - historial en `verification_obligation_history`
+
+### Generacion automatica de obligaciones
+
+El endpoint:
+
+- `POST /verifications/obligations/generate`
+
+evalua los vehiculos filtrados por:
+
+- `vehicleId`
+- `regime`
+- `verificationType`
+
+y toma como referencia:
+
+- `referenceDate`
+- `includeUpcomingWindow`
+- `previewOnly`
+
+Comportamiento principal:
+
+- detecta la regla activa por regimen, posicion y marcador;
+- calcula la ventana regulatoria aplicable para la fecha de referencia;
+- omite unidades inactivas o verificaciones no requeridas;
+- omite casos ya cubiertos por un evento vigente;
+- crea la obligacion si no existe una activa para la misma fecha de vencimiento;
+- actualiza a `OVERDUE` una obligacion activa cuando ya vencio y todavia no estaba marcada asi;
+- puede trabajar en modo simulacion cuando `previewOnly = true`.
 
 ### Cierre de obligacion
 
@@ -152,5 +182,4 @@ La siguiente iteracion natural sobre estos endpoints es:
 
 - autenticacion y autorizacion por rol;
 - validacion formal de DTOs;
-- generacion automatica de obligaciones segun calendario;
 - pruebas de integracion para flujos de propietario y administrador.
