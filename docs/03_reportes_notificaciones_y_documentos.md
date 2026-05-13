@@ -99,6 +99,15 @@ Ejemplos:
 - permiso;
 - contrato de arrendamiento.
 
+Tipos formales en el modelo:
+
+- `TARJETA_CIRCULACION`
+- `CONSTANCIA_FISICO_MECANICA`
+- `CONSTANCIA_EMISIONES`
+- `PERMISO`
+- `CONTRATO_ARRENDAMIENTO`
+- `OTRO`
+
 Campos funcionales:
 
 - `document_type`

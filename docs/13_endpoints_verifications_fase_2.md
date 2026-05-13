@@ -18,9 +18,13 @@ Estos endpoints cubren:
 
 ## Nota operativa
 
-En esta etapa los endpoints todavia no aplican autenticacion ni autorizacion por rol.
+En esta etapa los endpoints ya aplican autenticacion con `Bearer token`, validacion formal de DTOs y autorizacion basica por rol/acceso vehicular.
 
-La semantica ya esta preparada para separar accion del propietario y accion administrativa, pero el control de acceso se implementara en una fase posterior.
+Reglas activas:
+
+- administracion entra con usuarios `isAdmin = true`;
+- propietarios y usuarios autorizados solo pueden consultar vehiculos asignados en `user_vehicle_access`;
+- las operaciones administrativas de alta, generacion y programacion quedan restringidas a admin.
 
 ## Tabla de endpoints
 
@@ -39,8 +43,25 @@ La semantica ya esta preparada para separar accion del propietario y accion admi
 | `GET` | `/verifications/obligations` | Listado de obligaciones con filtros |
 | `GET` | `/verifications/obligations/:id` | Detalle de una obligacion con historial |
 | `POST` | `/verifications/obligations` | Alta manual de obligacion |
+| `POST` | `/verifications/obligations/generate` | Generacion automatica o simulada de obligaciones desde reglas |
 | `POST` | `/verifications/obligations/:id/respond` | Respuesta del propietario |
 | `POST` | `/verifications/obligations/:id/schedule` | Programacion administrativa |
+
+## Reglas de acceso
+
+- `GET /verifications`, `GET /verifications/catalogs`, `GET /verifications/centers` y `GET /verifications/schedule-rules`: cualquier usuario autenticado;
+- `GET /verifications/vehicles/:vehicleId/status`, `GET /verifications/events`, `GET /verifications/events/:id`, `GET /verifications/obligations`, `GET /verifications/obligations/:id` y `POST /verifications/obligations/:id/respond`: admin o usuario con acceso activo al vehiculo;
+- `POST /verifications/centers`, `POST /verifications/schedule-rules`, `POST /verifications/events`, `POST /verifications/obligations`, `POST /verifications/obligations/generate` y `POST /verifications/obligations/:id/schedule`: solo admin.
+
+## Encabezado requerido
+
+Los endpoints protegidos esperan:
+
+- `Authorization: Bearer <token>`
+
+Token de entrada:
+
+- `POST /auth/login`
 
 ## Filtros disponibles
 
@@ -56,6 +77,7 @@ La semantica ya esta preparada para separar accion del propietario y accion admi
 - `regime`
 - `verificationType`
 - `scheduleMarker`
+- `windowSequence`
 - `isActive`
 
 ### `GET /verifications/events`
@@ -101,6 +123,34 @@ Solo actualiza:
 - `owner_response_at`
 - `status`
 - historial en `verification_obligation_history`
+
+### Generacion automatica de obligaciones
+
+El endpoint:
+
+- `POST /verifications/obligations/generate`
+
+evalua los vehiculos filtrados por:
+
+- `vehicleId`
+- `regime`
+- `verificationType`
+
+y toma como referencia:
+
+- `referenceDate`
+- `includeUpcomingWindow`
+- `previewOnly`
+
+Comportamiento principal:
+
+- detecta la regla activa por regimen, posicion y marcador;
+- calcula la ventana regulatoria aplicable para la fecha de referencia;
+- omite unidades inactivas o verificaciones no requeridas;
+- omite casos ya cubiertos por un evento vigente;
+- crea la obligacion si no existe una activa para la misma fecha de vencimiento;
+- actualiza a `OVERDUE` una obligacion activa cuando ya vencio y todavia no estaba marcada asi;
+- puede trabajar en modo simulacion cuando `previewOnly = true`.
 
 ### Cierre de obligacion
 
@@ -150,7 +200,6 @@ Regla operativa actual:
 
 La siguiente iteracion natural sobre estos endpoints es:
 
-- autenticacion y autorizacion por rol;
-- validacion formal de DTOs;
-- generacion automatica de obligaciones segun calendario;
-- pruebas de integracion para flujos de propietario y administrador.
+- extender las reglas de acceso al resto de los modulos;
+- agregar pruebas de integracion sobre respuesta del propietario y programacion administrativa con datos reales;
+- cerrar la fase 2 con criterios formales de completitud.

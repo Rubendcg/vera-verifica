@@ -32,6 +32,8 @@ Documentar el modelo de datos que soporta:
 - [15_datos_prueba_vehiculos_revision.md](./15_datos_prueba_vehiculos_revision.md)
 - [16_seeds_datos_prueba.md](./16_seeds_datos_prueba.md)
 - [17_referencia_vin_niv_y_anos_modelo.md](./17_referencia_vin_niv_y_anos_modelo.md)
+- [18_generacion_automatica_obligaciones_fase_2.md](./18_generacion_automatica_obligaciones_fase_2.md)
+- [19_reglas_reales_verification_schedule_rules.md](./19_reglas_reales_verification_schedule_rules.md)
 
 ## Scripts SQL base
 
@@ -52,11 +54,15 @@ Estado actual:
 - migracion de fase 2 creada y aplicada para verificaciones;
 - migracion de fase 3 creada y aplicada para expediente documental;
 - endpoints base de fase 2 implementados para centros, reglas, eventos y obligaciones;
+- generacion automatica de obligaciones de fase 2 implementada con modo simulacion;
+- estructura de reglas de calendario ampliada para soportar ventanas reales semestrales;
+- autenticacion `Bearer`, autorizacion por `user_vehicle_access` y validacion formal de DTOs activadas en `verifications`;
+- pruebas e2e agregadas para `auth` y flujo protegido de `verifications`;
 - bitacora de implementacion disponible en esta carpeta.
 
 El siguiente paso natural es:
 
 - desarrollar DTOs y servicios reales sobre fase 1;
-- extender fase 2 con permisos, autenticacion y generacion automatica de obligaciones;
+- extender fase 2 con mas pruebas de integracion y criterios de cierre;
 - cerrar fase 3 con carga, consulta y visibilidad de PDFs vigentes;
 - seguir registrando cambios en la bitacora antes de cada subida a Git.

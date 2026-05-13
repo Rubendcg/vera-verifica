@@ -2,22 +2,30 @@ import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsEnum,
-  IsInt,
   IsOptional,
   IsString,
   Matches,
-  Max,
-  Min,
 } from 'class-validator';
 import {
   toBooleanLike,
-  toNumberLike,
-  toUppercaseTrimmedString,
+  toOptionalTrimmedString,
 } from '../../../common/dto/transform.helpers';
 import { VehicleRegime } from '../../vehicles/entities/vehicle.entity';
 import { VerificationType } from '../entities/verifications.enums';
 
-export class QueryVerificationScheduleRulesDto {
+export class GenerateVerificationObligationsDto {
+  @Transform(toOptionalTrimmedString)
+  @IsOptional()
+  @IsString()
+  @Matches(/^\d{4}-\d{2}-\d{2}$/)
+  referenceDate?: string;
+
+  @Transform(toOptionalTrimmedString)
+  @IsOptional()
+  @IsString()
+  @Matches(/^\d+$/)
+  vehicleId?: string;
+
   @IsOptional()
   @IsEnum(VehicleRegime)
   regime?: VehicleRegime;
@@ -26,21 +34,19 @@ export class QueryVerificationScheduleRulesDto {
   @IsEnum(VerificationType)
   verificationType?: VerificationType;
 
-  @Transform(toUppercaseTrimmedString)
+  @Transform(toOptionalTrimmedString)
   @IsOptional()
   @IsString()
-  @Matches(/^[A-Z0-9]$/)
-  scheduleMarker?: string;
-
-  @Transform(toNumberLike)
-  @IsOptional()
-  @IsInt()
-  @Min(1)
-  @Max(12)
-  windowSequence?: string;
+  @Matches(/^\d+$/)
+  adminUserId?: string;
 
   @Transform(toBooleanLike)
   @IsOptional()
   @IsBoolean()
-  isActive?: string;
+  previewOnly?: boolean | string;
+
+  @Transform(toBooleanLike)
+  @IsOptional()
+  @IsBoolean()
+  includeUpcomingWindow?: boolean | string;
 }

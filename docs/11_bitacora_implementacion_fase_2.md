@@ -222,3 +222,308 @@ Cerrar la brecha principal de fase 2 exponiendo un calculo consolidado del estad
 - agregar autenticacion y autorizacion por rol;
 - formalizar validacion de DTOs;
 - crear pruebas de integracion para el endpoint de estado regulatorio.
+
+### 2026-05-12 - Generacion automatica de obligaciones
+
+#### Objetivo
+
+Agregar una operacion sistemica que permita generar obligaciones pendientes a partir de las reglas de calendario ya modeladas en Vera.
+
+#### Cambios realizados
+
+- se agrego el endpoint `POST /verifications/obligations/generate`;
+- se implemento soporte para `previewOnly` y `includeUpcomingWindow`;
+- se calcula la ventana de cumplimiento aplicable segun la fecha de referencia;
+- se omiten verificaciones no requeridas o vehiculos inactivos;
+- se detecta cumplimiento previo por evento vigente antes de generar una nueva obligacion;
+- se reutiliza una obligacion activa si ya existe para la misma fecha de vencimiento;
+- se marca una obligacion activa como `OVERDUE` cuando corresponde;
+- se documento el flujo operativo de generacion automatica.
+
+#### Archivos involucrados
+
+- `src/modules/verifications/dto/generate-verification-obligations.dto.ts`
+- `src/modules/verifications/verifications.controller.ts`
+- `src/modules/verifications/verifications.service.ts`
+- `docs/13_endpoints_verifications_fase_2.md`
+- `docs/18_generacion_automatica_obligaciones_fase_2.md`
+
+#### Impacto funcional
+
+- Vera ya puede construir obligaciones operativas desde la parametrizacion del calendario sin capturarlas una por una;
+- administracion puede ejecutar una corrida real o una simulacion antes de crear pendientes;
+- la fase 2 ya conecta reglas, estado regulatorio y obligaciones en un solo flujo.
+
+#### Validacion ejecutada
+
+- cambios copiados al proyecto real;
+- `npm run build`: correcto;
+- `npm test`: correcto.
+
+#### Pendientes inmediatos
+
+- cargar reglas base reales en `verification_schedule_rules`;
+- agregar autenticacion y autorizacion por rol;
+- formalizar validacion de DTOs;
+- probar `POST /verifications/obligations/generate` con datos y reglas reales;
+- crear pruebas de integracion para el flujo de generacion automatica.
+
+### 2026-05-12 - Carga de reglas reales en `verification_schedule_rules`
+
+#### Objetivo
+
+Cargar una base realista y documentada de reglas de calendario para que Vera pueda operar ventanas anuales y semestrales sin hardcodearlas en el servicio.
+
+#### Cambios realizados
+
+- se amplio `verification_schedule_rules` con `windowSequence`;
+- se ajusto la unicidad para soportar multiples ventanas por marcador y tipo;
+- se adapto el servicio para seleccionar la regla aplicable segun la fecha de referencia;
+- se preparo una migracion con la carga base de reglas federales y estatales;
+- se documento por separado que reglas entraron y cuales quedaron fuera.
+
+#### Archivos involucrados
+
+- `src/modules/verifications/entities/verification-schedule-rule.entity.ts`
+- `src/modules/verifications/dto/create-verification-schedule-rule.dto.ts`
+- `src/modules/verifications/dto/query-verification-schedule-rules.dto.ts`
+- `src/modules/verifications/verifications.service.ts`
+- `src/database/migrations/20260512193000-seed-real-verification-schedule-rules.ts`
+- `docs/19_reglas_reales_verification_schedule_rules.md`
+- `docs/10_hoja_de_ruta_base_de_datos.md`
+- `docs/13_endpoints_verifications_fase_2.md`
+
+#### Impacto funcional
+
+- Vera ya puede modelar reglas semestrales sin perder las anuales;
+- la fase 2 ya tiene una base legal sembrable para `PHYSICAL_MECHANICAL` federal y `EMISSIONS` federal/estatal;
+- el motor de estado regulatorio y el generador de obligaciones ya no dependen de una sola ventana por regla.
+
+#### Validacion ejecutada
+
+- cambios copiados al proyecto real;
+- `npm run build`: correcto;
+- `npm test`: correcto;
+- `npm run db:migration:run`: correcto;
+- reglas cargadas en PostgreSQL:
+  - `FEDERAL` + `PHYSICAL_MECHANICAL`: `10`
+  - `FEDERAL` + `EMISSIONS`: `20`
+  - `ESTATAL` + `EMISSIONS`: `20`
+
+#### Pendientes inmediatos
+
+- probar `POST /verifications/obligations/generate` con estas reglas;
+- agregar autenticacion y autorizacion por rol;
+- formalizar validacion de DTOs;
+- crear pruebas de integracion del flujo regulatorio.
+
+### 2026-05-12 - Correccion documental del criterio estatal
+
+#### Objetivo
+
+Corregir la documentacion para reflejar el criterio confirmado del proyecto sobre reglas estatales.
+
+#### Cambios realizados
+
+- se actualizo la referencia documental de `verification_schedule_rules`;
+- se dejo asentado que `ESTATAL` usa las mismas ventanas que `FEDERAL`;
+- se preciso que la unica diferencia aceptada es `schedulePosition = 4`.
+
+#### Archivos involucrados
+
+- `docs/19_reglas_reales_verification_schedule_rules.md`
+- `docs/11_bitacora_implementacion_fase_2.md`
+
+#### Impacto funcional
+
+- la documentacion del proyecto ya no presenta a `ESTATAL` como un calendario distinto por meses;
+- queda claro que la diferencia vigente es solo el digito verificador tomado de la placa.
+
+#### Pendientes inmediatos
+
+- alinear el seed y los datos tecnicos sembrados en la base a este criterio documental;
+- volver a validar conteos una vez aplicado ese ajuste.
+
+### 2026-05-12 - Alineacion tecnica del criterio estatal
+
+#### Objetivo
+
+Corregir el seed y la base ya sembrada para que `ESTATAL` replique las mismas ventanas que `FEDERAL`, cambiando solo `schedulePosition`.
+
+#### Cambios realizados
+
+- se actualizo la migracion base del seed para futuras bases nuevas;
+- se agrego una migracion correctiva para la base ya sembrada;
+- se incorporaron reglas estatales de `PHYSICAL_MECHANICAL`;
+- se ajustaron las reglas estatales de `EMISSIONS` para usar Enero-Junio y Julio-Diciembre.
+
+#### Archivos involucrados
+
+- `src/database/migrations/20260512193000-seed-real-verification-schedule-rules.ts`
+- `src/database/migrations/20260512201500-align-state-schedule-rules.ts`
+- `docs/11_bitacora_implementacion_fase_2.md`
+- `docs/19_reglas_reales_verification_schedule_rules.md`
+
+#### Impacto funcional
+
+- las bases nuevas ya nacen con el criterio estatal correcto;
+- la base real ya no conserva una version distinta del calendario estatal;
+- Vera ya tiene consistencia entre documentacion, seed y datos cargados.
+
+#### Validacion ejecutada
+
+- cambios copiados al proyecto real;
+- `npm run build`: correcto;
+- `npm test`: correcto;
+- `npm run db:migration:run`: correcto;
+- conteos finales en PostgreSQL:
+  - `FEDERAL` + `PHYSICAL_MECHANICAL`: `10`
+  - `FEDERAL` + `EMISSIONS`: `20`
+  - `ESTATAL` + `PHYSICAL_MECHANICAL`: `10`
+  - `ESTATAL` + `EMISSIONS`: `20`
+  - total de reglas: `60`
+
+#### Pendientes inmediatos
+
+- probar `POST /verifications/obligations/generate` con estas reglas ya alineadas;
+- agregar autenticacion y autorizacion por rol;
+- formalizar validacion de DTOs;
+- crear pruebas de integracion del flujo regulatorio.
+
+### 2026-05-12 - Prueba real de generacion automatica y limpieza de fixtures
+
+#### Objetivo
+
+Validar `POST /verifications/obligations/generate` contra reglas federales y estatales ya alineadas, y limpiar los datos temporales usados en la prueba.
+
+#### Cambios realizados
+
+- se levanto Vera localmente en `http://127.0.0.1:3100`;
+- se cargo un fixture minimo identificado como `TEST_PHASE2_GENERATE_20260512`;
+- se probaron tres vehiculos de control:
+  - `55AB5C` `FEDERAL` `TRACTOCAMION`;
+  - `TA4707A` `ESTATAL` `REMOLQUE`;
+  - `TB4101B` `ESTATAL` `CAMION UNITARIO`;
+- se ejecuto una corrida de simulacion con `previewOnly = true`;
+- se ejecuto una primera corrida real para crear obligaciones;
+- se ejecuto una segunda corrida real para validar idempotencia;
+- se eliminaron los fixtures de `users`, `vehicles`, `user_vehicle_access`, `verification_obligations` y `verification_obligation_history`.
+
+#### Archivos involucrados
+
+- `docs/11_bitacora_implementacion_fase_2.md`
+
+#### Impacto funcional
+
+- Vera ya quedo validada con reglas estatales y federales sobre una corrida real del generador;
+- se confirmo que el flujo no duplica obligaciones al repetir la misma referencia;
+- se confirmo que las unidades de arrastre omiten emisiones y que las ventanas futuras no generan pendientes antes de abrirse.
+
+#### Validacion ejecutada
+
+- `previewOnly = true`: `created = 4`, `updated = 0`, `skipped = 2`;
+- primera corrida real: `created = 4`, `updated = 0`, `skipped = 2`;
+- segunda corrida real: `created = 0`, `updated = 0`, `skipped = 6`;
+- casos validados:
+  - `55AB5C`: `PHYSICAL_MECHANICAL` `OVERDUE` con vencimiento `2026-04-30`; `EMISSIONS` `PENDING` con vencimiento `2026-06-30`;
+  - `TA4707A`: `PHYSICAL_MECHANICAL` `PENDING` con vencimiento `2026-06-30`; `EMISSIONS` omitida como `NOT_REQUIRED`;
+  - `TB4101B`: `PHYSICAL_MECHANICAL` omitida como `WINDOW_NOT_OPEN`; `EMISSIONS` `PENDING` con vencimiento `2026-06-30`;
+- limpieza ejecutada:
+  - `verification_obligation_history`: `4` registros eliminados;
+  - `verification_obligations`: `4` registros eliminados;
+  - `user_vehicle_access`: `3` registros eliminados;
+  - `vehicles`: `3` registros eliminados;
+  - `users`: `3` registros eliminados;
+- verificacion posterior a la limpieza: conteos `0` para fixtures, obligaciones, historial, accesos y usuarios temporales.
+
+#### Pendientes inmediatos
+
+- agregar autenticacion y autorizacion por rol;
+- formalizar validacion de DTOs;
+- crear pruebas de integracion del flujo regulatorio;
+- decidir si esta validacion se automatiza despues como seed de pruebas controladas.
+
+### 2026-05-12 - Seguridad, validacion formal y pruebas e2e de fase 2
+
+#### Objetivo
+
+Cerrar el bloque base de seguridad del modulo `verifications` con autenticacion real, autorizacion por acceso vehicular y pruebas de integracion ejecutables sin depender de la base productiva.
+
+#### Cambios realizados
+
+- se agrego `POST /auth/login` para emision de token `Bearer`;
+- se agrego `GET /auth/me` para recuperar el usuario autenticado;
+- se incorporo `JwtAuthGuard` y `AdminGuard`;
+- se activo `ValidationPipe` global en `main.ts`;
+- se decoraron formalmente los DTOs de `verifications`;
+- se restringieron las rutas administrativas de `verifications` a usuarios `isAdmin = true`;
+- se filtro el acceso de consulta y respuesta sobre vehiculos mediante `user_vehicle_access`;
+- se agregaron pruebas e2e para `app`, `auth` y `verifications`.
+
+#### Archivos involucrados
+
+- `src/main.ts`
+- `src/modules/auth/*`
+- `src/modules/verifications/verifications.controller.ts`
+- `src/modules/verifications/verifications.module.ts`
+- `src/modules/verifications/verifications.service.ts`
+- `src/modules/verifications/dto/*`
+- `test/app.e2e-spec.ts`
+- `test/auth.e2e-spec.ts`
+- `test/verifications.e2e-spec.ts`
+- `docs/13_endpoints_verifications_fase_2.md`
+
+#### Impacto funcional
+
+- Vera ya exige autenticacion para operar `verifications`;
+- un propietario o usuario autorizado solo puede consultar y responder sobre unidades asignadas;
+- las altas de reglas, eventos, obligaciones y la generacion automatica quedan bloqueadas para no-admin;
+- los DTOs ya rechazan payloads mal formados antes de tocar la capa de servicio.
+
+#### Validacion prevista
+
+- instalar dependencias de autenticacion y validacion;
+- ejecutar `npm run build`;
+- ejecutar `npm test`;
+- ejecutar `npm run test:e2e`.
+
+#### Pendientes inmediatos
+
+- llevar el mismo esquema de autenticacion y autorizacion al resto de modulos;
+- ampliar cobertura e2e sobre respuesta del propietario y programacion administrativa con fixtures reales;
+- decidir si fase 2 ya puede entrar a criterios formales de cierre despues de estas validaciones.
+
+### 2026-05-12 - Cobertura e2e del flujo operativo de obligaciones
+
+#### Objetivo
+
+Cubrir con pruebas de integracion ejecutables el flujo principal que aun faltaba de fase 2: respuesta del propietario, programacion administrativa y cierre al registrar el evento.
+
+#### Cambios realizados
+
+- se rehizo la suite `test/verifications.e2e-spec.ts` con repositorios en memoria mas completos;
+- se agrego una prueba del flujo `respond -> schedule -> create event -> completed`;
+- se agrego una prueba para impedir que un propietario responda en nombre de otro usuario;
+- se mantuvo cobertura de autenticacion, acceso por vehiculo y restriccion admin.
+
+#### Archivos involucrados
+
+- `test/verifications.e2e-spec.ts`
+- `docs/11_bitacora_implementacion_fase_2.md`
+
+#### Impacto funcional
+
+- Vera ya tiene una validacion automatizada del ciclo principal de una obligacion de verificacion;
+- el cambio reduce riesgo de regresion en transiciones `OWNER_CONFIRMED`, `SCHEDULED` y `COMPLETED`;
+- la cobertura e2e de fase 2 ya no se limita a seguridad basica.
+
+#### Validacion prevista
+
+- ejecutar `npm run build`;
+- ejecutar `npx jest --config ./test/jest-e2e.json --runInBand`;
+- ejecutar `npx jest --runInBand`.
+
+#### Pendientes inmediatos
+
+- llevar el mismo esquema de autenticacion y autorizacion al resto de modulos;
+- decidir si fase 2 pasa a estado de cierre formal o si se deja abierta por el tema de `overrides` temporales de calendario.
