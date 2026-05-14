@@ -149,26 +149,39 @@
   </g>
 
   <g transform="translate(1180 180)">
-    <rect class="entity" x="0" y="0" width="320" height="165" />
+    <rect class="entity" x="0" y="0" width="320" height="185" />
     <rect class="entity head" x="0" y="0" width="320" height="34" />
     <text class="headText" x="18" y="22">DOCUMENTS</text>
     <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK vehicle_id</text>
-    <text class="field" x="16" y="98">related_party_id</text>
-    <text class="field" x="16" y="118">document_type</text>
-    <text class="field" x="16" y="138">valid_until, document_status</text>
-    <text class="field" x="16" y="158">is_visible_to_owner</text>
+    <text class="field" x="16" y="78">FK vehicle_id, FK related_party_id</text>
+    <text class="field" x="16" y="98">FK uploaded_by_user_id</text>
+    <text class="field" x="16" y="118">document_type, verification_type</text>
+    <text class="field" x="16" y="138">document_number, issue_date</text>
+    <text class="field" x="16" y="158">valid_until, document_status</text>
+    <text class="field" x="16" y="178">is_visible_to_owner, notes</text>
   </g>
 
   <g transform="translate(1180 400)">
-    <rect class="entity" x="0" y="0" width="320" height="150" />
+    <rect class="entity" x="0" y="0" width="320" height="205" />
     <rect class="entity head" x="0" y="0" width="320" height="34" />
     <text class="headText" x="18" y="22">DOCUMENT_FILES</text>
     <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK document_id</text>
+    <text class="field" x="16" y="78">FK document_id, FK uploaded_by_user_id</text>
     <text class="field" x="16" y="98">version_no, mime_type</text>
-    <text class="field" x="16" y="118">storage_kind, storage_path</text>
-    <text class="field" x="16" y="138">is_current</text>
+    <text class="field" x="16" y="118">original_file_name</text>
+    <text class="field" x="16" y="138">storage_kind, storage_path</text>
+    <text class="field" x="16" y="158">content_bytea, file_size_bytes</text>
+    <text class="field" x="16" y="178">sha256_hex, page_count, scanned_at</text>
+    <text class="field" x="16" y="198">ocr_status, is_current</text>
+  </g>
+
+  <g transform="translate(1180 640)">
+    <rect class="note" x="0" y="0" width="320" height="145" />
+    <text class="noteTitle" x="18" y="28">Document layer</text>
+    <text class="noteText" x="18" y="56">- DOCUMENTS stores type, status and owner visibility.</text>
+    <text class="noteText" x="18" y="80">- related_party_id links the relevant party when needed.</text>
+    <text class="noteText" x="18" y="104">- storage_kind supports LOCAL_PATH, OBJECT_STORAGE and DATABASE.</text>
+    <text class="noteText" x="18" y="128">- source_document_id links the event with its evidence PDF.</text>
   </g>
 
   <!-- Analytics -->
@@ -426,6 +439,9 @@
 
   <path class="line" d="M 340 460 L 365 460 L 365 660 L 390 660" />
   <text class="rel" x="372" y="570">1:N access</text>
+
+  <path class="line" d="M 340 235 L 360 235 L 360 155 L 1145 155 L 1145 285 L 1180 285" />
+  <text class="rel" x="600" y="148">1:N related docs</text>
 
   <path class="line" d="M 340 652 L 365 652 L 365 780 L 1860 780 L 1860 250 L 1910 250" />
   <text class="rel" x="995" y="772">contacts for notifications</text>

@@ -76,6 +76,7 @@ erDiagram
     PARTIES ||--o{ SERVICE_ORDERS : "es_cliente"
     PARTIES ||--|| CLIENT_ACCOUNTS : "tiene_cuenta"
     PARTIES ||--o{ REPORT_RECIPIENTS : "recibe_reportes"
+    PARTIES ||--o{ DOCUMENTS : "relaciona_documento"
 
     USERS ||--o{ USER_VEHICLE_ACCESS : "accede"
     USERS ||--o{ DOCUMENTS : "carga"
@@ -236,19 +237,31 @@ erDiagram
         bigint id PK
         bigint vehicle_id FK
         bigint related_party_id FK
+        bigint uploaded_by_user_id FK
         string document_type
         string verification_type
+        string document_number
+        date issue_date
         date valid_until
+        string document_status
         boolean is_visible_to_owner
     }
 
     DOCUMENT_FILES {
         bigint id PK
         bigint document_id FK
+        bigint uploaded_by_user_id FK
         int version_no
         string mime_type
+        string original_file_name
         string storage_kind
         string storage_path
+        bytea content_bytea
+        bigint file_size_bytes
+        string sha256_hex
+        int page_count
+        timestamptz scanned_at
+        string ocr_status
         boolean is_current
     }
 
@@ -459,6 +472,20 @@ No todos los documentos deben mostrarse al propietario.
 La visibilidad se controla en:
 
 - `documents.is_visible_to_owner`
+
+### Expediente documental
+
+El expediente documental ya distingue entre:
+
+- `documents`: expediente logico, tipo documental, estado, vigencia y visibilidad;
+- `document_files`: version fisica del PDF, backend de almacenamiento, hash y OCR.
+
+Ademas:
+
+- `documents.related_party_id` vincula el soporte con la parte relevante cuando aplica;
+- `documents.document_type` ya opera como enum controlado;
+- `document_files.storage_kind` soporta `LOCAL_PATH`, `OBJECT_STORAGE` y `DATABASE`;
+- `verification_events.source_document_id` conecta el evento con su evidencia documental.
 
 ### Cobranza separada
 
