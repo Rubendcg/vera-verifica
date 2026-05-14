@@ -53,65 +53,65 @@
     <rect class="entity" x="0" y="0" width="290" height="155" />
     <rect class="entity head" x="0" y="0" width="290" height="34" />
     <text class="headText" x="18" y="22">PARTIES</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">party_type</text>
-    <text class="field" x="16" y="98">rfc</text>
-    <text class="field" x="16" y="118">legal_name</text>
-    <text class="field" x="16" y="138">display_name, phone, email</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">string party_type</text>
+    <text class="field" x="16" y="98">string rfc</text>
+    <text class="field" x="16" y="118">string legal_name</text>
+    <text class="field" x="16" y="138">string display_name, phone, email</text>
   </g>
 
   <g transform="translate(50 390)">
     <rect class="entity" x="0" y="0" width="290" height="140" />
     <rect class="entity head" x="0" y="0" width="290" height="34" />
     <text class="headText" x="18" y="22">USERS</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK party_id</text>
-    <text class="field" x="16" y="98">email, password_hash</text>
-    <text class="field" x="16" y="118">full_name, is_admin</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint party_id FK</text>
+    <text class="field" x="16" y="98">string email, password_hash</text>
+    <text class="field" x="16" y="118">string full_name, boolean is_admin</text>
   </g>
 
   <g transform="translate(50 580)">
     <rect class="entity" x="0" y="0" width="290" height="145" />
     <rect class="entity head" x="0" y="0" width="290" height="34" />
     <text class="headText" x="18" y="22">PARTY_CONTACTS</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK party_id</text>
-    <text class="field" x="16" y="98">contact_name</text>
-    <text class="field" x="16" y="118">email, whatsapp_phone</text>
-    <text class="field" x="16" y="138">receives_reports</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint party_id FK</text>
+    <text class="field" x="16" y="98">string contact_name</text>
+    <text class="field" x="16" y="118">string email, whatsapp_phone</text>
+    <text class="field" x="16" y="138">boolean receives_reports</text>
   </g>
 
   <g transform="translate(390 180)">
     <rect class="entity" x="0" y="0" width="320" height="165" />
     <rect class="entity head" x="0" y="0" width="320" height="34" />
     <text class="headText" x="18" y="22">VEHICLES</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">plate, serial_niv</text>
-    <text class="field" x="16" y="98">engine_number</text>
-    <text class="field" x="16" y="118">unit_type, regime</text>
-    <text class="field" x="16" y="138">schedule_marker_effective</text>
-    <text class="field" x="16" y="158">is_active</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">string plate, serial_niv</text>
+    <text class="field" x="16" y="98">string engine_number</text>
+    <text class="field" x="16" y="118">string unit_type, regime</text>
+    <text class="field" x="16" y="138">string schedule_marker_effective</text>
+    <text class="field" x="16" y="158">boolean is_active</text>
   </g>
 
   <g transform="translate(390 400)">
     <rect class="entity" x="0" y="0" width="320" height="150" />
     <rect class="entity head" x="0" y="0" width="320" height="34" />
     <text class="headText" x="18" y="22">VEHICLE_PARTY_ROLES</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK vehicle_id</text>
-    <text class="field" x="16" y="98">FK party_id</text>
-    <text class="field" x="16" y="118">role_type</text>
-    <text class="field" x="16" y="138">is_current</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint vehicle_id FK</text>
+    <text class="field" x="16" y="98">bigint party_id FK</text>
+    <text class="field" x="16" y="118">string role_type</text>
+    <text class="field" x="16" y="138">boolean is_current</text>
   </g>
 
   <g transform="translate(390 595)">
     <rect class="entity" x="0" y="0" width="320" height="130" />
     <rect class="entity head" x="0" y="0" width="320" height="34" />
     <text class="headText" x="18" y="22">USER_VEHICLE_ACCESS</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK user_id, FK vehicle_id</text>
-    <text class="field" x="16" y="98">access_type, is_active</text>
-    <text class="field" x="16" y="118">granted_by_user_id</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint user_id FK, vehicle_id FK</text>
+    <text class="field" x="16" y="98">string access_type, boolean is_active</text>
+    <text class="field" x="16" y="118">bigint granted_by_user_id FK</text>
   </g>
 
   <!-- Compliance -->
@@ -119,63 +119,64 @@
     <rect class="entity" x="0" y="0" width="300" height="140" />
     <rect class="entity head" x="0" y="0" width="300" height="34" />
     <text class="headText" x="18" y="22">VERIFICATION_CENTERS</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">center_type</text>
-    <text class="field" x="16" y="98">code, name</text>
-    <text class="field" x="16" y="118">contact_name</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">string center_type</text>
+    <text class="field" x="16" y="98">string code, name</text>
+    <text class="field" x="16" y="118">string contact_name</text>
   </g>
 
   <g transform="translate(820 370)">
     <rect class="entity" x="0" y="0" width="300" height="170" />
     <rect class="entity head" x="0" y="0" width="300" height="34" />
     <text class="headText" x="18" y="22">VERIFICATION_EVENTS</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK vehicle_id</text>
-    <text class="field" x="16" y="98">FK center_id</text>
-    <text class="field" x="16" y="118">FK source_document_id</text>
-    <text class="field" x="16" y="138">verification_type</text>
-    <text class="field" x="16" y="158">event_date, valid_until</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint vehicle_id FK</text>
+    <text class="field" x="16" y="98">bigint center_id FK</text>
+    <text class="field" x="16" y="118">bigint source_document_id FK</text>
+    <text class="field" x="16" y="138">string verification_type</text>
+    <text class="field" x="16" y="158">date event_date, valid_until</text>
   </g>
 
   <g transform="translate(820 590)">
     <rect class="entity" x="0" y="0" width="300" height="150" />
     <rect class="entity head" x="0" y="0" width="300" height="34" />
     <text class="headText" x="18" y="22">VERIFICATION_SCHEDULE_RULES</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">regime, schedule_position</text>
-    <text class="field" x="16" y="98">schedule_marker</text>
-    <text class="field" x="16" y="118">verification_type</text>
-    <text class="field" x="16" y="138">window_label</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">string regime, int schedule_position</text>
+    <text class="field" x="16" y="98">string schedule_marker</text>
+    <text class="field" x="16" y="118">string verification_type</text>
+    <text class="field" x="16" y="138">string window_label</text>
   </g>
 
   <g transform="translate(1180 180)">
     <rect class="entity" x="0" y="0" width="320" height="185" />
     <rect class="entity head" x="0" y="0" width="320" height="34" />
     <text class="headText" x="18" y="22">DOCUMENTS</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK vehicle_id, FK related_party_id</text>
-    <text class="field" x="16" y="98">FK uploaded_by_user_id</text>
-    <text class="field" x="16" y="118">document_type, verification_type</text>
-    <text class="field" x="16" y="138">document_number, issue_date</text>
-    <text class="field" x="16" y="158">valid_until, document_status</text>
-    <text class="field" x="16" y="178">is_visible_to_owner, notes</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint vehicle_id FK, related_party_id FK</text>
+    <text class="field" x="16" y="98">bigint uploaded_by_user_id FK</text>
+    <text class="field" x="16" y="118">string document_type, verification_type</text>
+    <text class="field" x="16" y="138">string document_number, date issue_date</text>
+    <text class="field" x="16" y="158">date valid_until, string document_status</text>
+    <text class="field" x="16" y="178">boolean is_visible_to_owner, text notes</text>
   </g>
 
   <g transform="translate(1180 400)">
-    <rect class="entity" x="0" y="0" width="320" height="205" />
+    <rect class="entity" x="0" y="0" width="320" height="225" />
     <rect class="entity head" x="0" y="0" width="320" height="34" />
     <text class="headText" x="18" y="22">DOCUMENT_FILES</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK document_id, FK uploaded_by_user_id</text>
-    <text class="field" x="16" y="98">version_no, mime_type</text>
-    <text class="field" x="16" y="118">original_file_name</text>
-    <text class="field" x="16" y="138">storage_kind, storage_path</text>
-    <text class="field" x="16" y="158">content_bytea, file_size_bytes</text>
-    <text class="field" x="16" y="178">sha256_hex, page_count, scanned_at</text>
-    <text class="field" x="16" y="198">ocr_status, is_current</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint document_id FK, uploaded_by_user_id FK</text>
+    <text class="field" x="16" y="98">int version_no, string mime_type</text>
+    <text class="field" x="16" y="118">string original_file_name</text>
+    <text class="field" x="16" y="138">string storage_kind, storage_path</text>
+    <text class="field" x="16" y="158">bytea content_bytea, bigint file_size_bytes</text>
+    <text class="field" x="16" y="178">string sha256_hex, int page_count</text>
+    <text class="field" x="16" y="198">timestamptz scanned_at, string ocr_status</text>
+    <text class="field" x="16" y="218">boolean is_current</text>
   </g>
 
-  <g transform="translate(1180 640)">
+  <g transform="translate(1180 660)">
     <rect class="note" x="0" y="0" width="320" height="145" />
     <text class="noteTitle" x="18" y="28">Document layer</text>
     <text class="noteText" x="18" y="56">- DOCUMENTS stores type, status and owner visibility.</text>
@@ -189,67 +190,67 @@
     <rect class="entity" x="0" y="0" width="320" height="150" />
     <rect class="entity head" x="0" y="0" width="320" height="34" />
     <text class="headText" x="18" y="22">VEHICLE_STATUS_HISTORY</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK vehicle_id</text>
-    <text class="field" x="16" y="98">status_date</text>
-    <text class="field" x="16" y="118">physical_status</text>
-    <text class="field" x="16" y="138">emissions_status</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint vehicle_id FK</text>
+    <text class="field" x="16" y="98">date status_date</text>
+    <text class="field" x="16" y="118">string physical_status</text>
+    <text class="field" x="16" y="138">string emissions_status</text>
   </g>
 
   <g transform="translate(420 940)">
     <rect class="entity" x="0" y="0" width="340" height="170" />
     <rect class="entity head" x="0" y="0" width="340" height="34" />
     <text class="headText" x="18" y="22">DAILY_VEHICLE_STATUS_SNAPSHOT</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">snapshot_date</text>
-    <text class="field" x="16" y="98">FK vehicle_id</text>
-    <text class="field" x="16" y="118">FK client_party_id</text>
-    <text class="field" x="16" y="138">regime, unit_type</text>
-    <text class="field" x="16" y="158">schedule_marker_effective</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">date snapshot_date</text>
+    <text class="field" x="16" y="98">bigint vehicle_id FK</text>
+    <text class="field" x="16" y="118">bigint client_party_id FK</text>
+    <text class="field" x="16" y="138">string regime, unit_type</text>
+    <text class="field" x="16" y="158">string schedule_marker_effective</text>
   </g>
 
   <g transform="translate(820 940)">
     <rect class="entity" x="0" y="0" width="300" height="170" />
     <rect class="entity head" x="0" y="0" width="300" height="34" />
     <text class="headText" x="18" y="22">VERIFICATION_SESSIONS</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK vehicle_id</text>
-    <text class="field" x="16" y="98">FK center_id</text>
-    <text class="field" x="16" y="118">verification_type</text>
-    <text class="field" x="16" y="138">scheduled_at, finished_at</text>
-    <text class="field" x="16" y="158">duration_minutes, session_result</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint vehicle_id FK</text>
+    <text class="field" x="16" y="98">bigint center_id FK</text>
+    <text class="field" x="16" y="118">string verification_type</text>
+    <text class="field" x="16" y="138">datetime scheduled_at, finished_at</text>
+    <text class="field" x="16" y="158">int duration_minutes, string session_result</text>
   </g>
 
   <g transform="translate(820 1170)">
     <rect class="entity" x="0" y="0" width="300" height="155" />
     <rect class="entity head" x="0" y="0" width="300" height="34" />
     <text class="headText" x="18" y="22">VERIFICATION_CENTER_CAPACITY_DAILY</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK center_id</text>
-    <text class="field" x="16" y="98">capacity_date</text>
-    <text class="field" x="16" y="118">lines_available, hours_open</text>
-    <text class="field" x="16" y="138">capacity_operational</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint center_id FK</text>
+    <text class="field" x="16" y="98">date capacity_date</text>
+    <text class="field" x="16" y="118">int lines_available, numeric hours_open</text>
+    <text class="field" x="16" y="138">int capacity_operational</text>
   </g>
 
   <g transform="translate(420 1185)">
     <rect class="entity" x="0" y="0" width="340" height="140" />
     <rect class="entity head" x="0" y="0" width="340" height="34" />
     <text class="headText" x="18" y="22">CALENDAR_BUSINESS_DAYS</text>
-    <text class="field" x="16" y="58">PK calendar_date</text>
-    <text class="field" x="16" y="78">is_business_day</text>
-    <text class="field" x="16" y="98">is_holiday</text>
-    <text class="field" x="16" y="118">holiday_name</text>
+    <text class="field" x="16" y="58">date calendar_date PK</text>
+    <text class="field" x="16" y="78">boolean is_business_day</text>
+    <text class="field" x="16" y="98">boolean is_holiday</text>
+    <text class="field" x="16" y="118">string holiday_name</text>
   </g>
 
   <g transform="translate(50 1165)">
     <rect class="entity" x="0" y="0" width="320" height="160" />
     <rect class="entity head" x="0" y="0" width="320" height="34" />
     <text class="headText" x="18" y="22">DATA_QUALITY_ISSUES</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">entity_type, entity_id</text>
-    <text class="field" x="16" y="98">issue_type</text>
-    <text class="field" x="16" y="118">severity, status</text>
-    <text class="field" x="16" y="138">detected_at, resolved_at</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">string entity_type, bigint entity_id</text>
+    <text class="field" x="16" y="98">string issue_type</text>
+    <text class="field" x="16" y="118">string severity, status</text>
+    <text class="field" x="16" y="138">datetime detected_at, resolved_at</text>
   </g>
 
   <!-- Billing -->
@@ -257,43 +258,43 @@
     <rect class="entity" x="0" y="0" width="300" height="145" />
     <rect class="entity head" x="0" y="0" width="300" height="34" />
     <text class="headText" x="18" y="22">SERVICE_ORDERS</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">folio</text>
-    <text class="field" x="16" y="98">FK vehicle_id, FK client_party_id</text>
-    <text class="field" x="16" y="118">service_date, service_type</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">string folio</text>
+    <text class="field" x="16" y="98">bigint vehicle_id FK, client_party_id FK</text>
+    <text class="field" x="16" y="118">date service_date, string service_type</text>
   </g>
 
   <g transform="translate(1230 1140)">
     <rect class="entity" x="0" y="0" width="300" height="130" />
     <rect class="entity head" x="0" y="0" width="300" height="34" />
     <text class="headText" x="18" y="22">SERVICE_ORDER_ITEMS</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK service_order_id</text>
-    <text class="field" x="16" y="98">concept, amount</text>
-    <text class="field" x="16" y="118">currency</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint service_order_id FK</text>
+    <text class="field" x="16" y="98">string concept, decimal amount</text>
+    <text class="field" x="16" y="118">string currency</text>
   </g>
 
   <g transform="translate(1230 1320)">
     <rect class="entity" x="0" y="0" width="300" height="150" />
     <rect class="entity head" x="0" y="0" width="300" height="34" />
     <text class="headText" x="18" y="22">CLIENT_ACCOUNTS</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK client_party_id</text>
-    <text class="field" x="16" y="98">account_status</text>
-    <text class="field" x="16" y="118">credit_limit, credit_days</text>
-    <text class="field" x="16" y="138">billing_email</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint client_party_id FK</text>
+    <text class="field" x="16" y="98">string account_status</text>
+    <text class="field" x="16" y="118">decimal credit_limit, int credit_days</text>
+    <text class="field" x="16" y="138">string billing_email</text>
   </g>
 
   <g transform="translate(1230 1525)">
     <rect class="entity" x="0" y="0" width="300" height="170" />
     <rect class="entity head" x="0" y="0" width="300" height="34" />
     <text class="headText" x="18" y="22">RECEIVABLE_DOCUMENTS</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK client_account_id</text>
-    <text class="field" x="16" y="98">FK service_order_id</text>
-    <text class="field" x="16" y="118">folio, issue_date, due_date</text>
-    <text class="field" x="16" y="138">total_amount, balance_amount</text>
-    <text class="field" x="16" y="158">receivable_status</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint client_account_id FK</text>
+    <text class="field" x="16" y="98">bigint service_order_id FK</text>
+    <text class="field" x="16" y="118">string folio, date issue_date, due_date</text>
+    <text class="field" x="16" y="138">decimal total_amount, balance_amount</text>
+    <text class="field" x="16" y="158">string receivable_status</text>
   </g>
 
   <!-- Notifications / right side includes billing details -->
@@ -301,107 +302,107 @@
     <rect class="entity" x="0" y="0" width="300" height="140" />
     <rect class="entity head" x="0" y="0" width="300" height="34" />
     <text class="headText" x="18" y="22">REPORT_RECIPIENTS</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK client_party_id</text>
-    <text class="field" x="16" y="98">FK party_contact_id</text>
-    <text class="field" x="16" y="118">channel, report_type</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint client_party_id FK</text>
+    <text class="field" x="16" y="98">bigint party_contact_id FK</text>
+    <text class="field" x="16" y="118">string channel, report_type</text>
   </g>
 
   <g transform="translate(1910 360)">
     <rect class="entity" x="0" y="0" width="300" height="150" />
     <rect class="entity head" x="0" y="0" width="300" height="34" />
     <text class="headText" x="18" y="22">NOTIFICATION_RULES</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">rule_code</text>
-    <text class="field" x="16" y="98">report_type</text>
-    <text class="field" x="16" y="118">trigger_status</text>
-    <text class="field" x="16" y="138">trigger_offset_days</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">string rule_code</text>
+    <text class="field" x="16" y="98">string report_type</text>
+    <text class="field" x="16" y="118">string trigger_status</text>
+    <text class="field" x="16" y="138">int trigger_offset_days</text>
   </g>
 
   <g transform="translate(1910 560)">
     <rect class="entity" x="0" y="0" width="300" height="130" />
     <rect class="entity head" x="0" y="0" width="300" height="34" />
     <text class="headText" x="18" y="22">MESSAGE_TEMPLATES</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">template_code</text>
-    <text class="field" x="16" y="98">channel, template_name</text>
-    <text class="field" x="16" y="118">subject, body</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">string template_code</text>
+    <text class="field" x="16" y="98">string channel, template_name</text>
+    <text class="field" x="16" y="118">string subject, body</text>
   </g>
 
   <g transform="translate(1910 740)">
     <rect class="entity" x="0" y="0" width="300" height="170" />
     <rect class="entity head" x="0" y="0" width="300" height="34" />
     <text class="headText" x="18" y="22">NOTIFICATION_BATCHES</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK report_recipient_id</text>
-    <text class="field" x="16" y="98">FK party_contact_id</text>
-    <text class="field" x="16" y="118">FK rule_id, FK template_id</text>
-    <text class="field" x="16" y="138">scheduled_for, status</text>
-    <text class="field" x="16" y="158">dedupe_key</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint report_recipient_id FK</text>
+    <text class="field" x="16" y="98">bigint party_contact_id FK</text>
+    <text class="field" x="16" y="118">bigint rule_id FK, template_id FK</text>
+    <text class="field" x="16" y="138">datetime scheduled_for, string status</text>
+    <text class="field" x="16" y="158">string dedupe_key</text>
   </g>
 
   <g transform="translate(1910 965)">
     <rect class="entity" x="0" y="0" width="300" height="145" />
     <rect class="entity head" x="0" y="0" width="300" height="34" />
     <text class="headText" x="18" y="22">NOTIFICATION_BATCH_ITEMS</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK batch_id</text>
-    <text class="field" x="16" y="98">FK vehicle_id</text>
-    <text class="field" x="16" y="118">verification_type</text>
-    <text class="field" x="16" y="138">due_status, due_date</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint batch_id FK</text>
+    <text class="field" x="16" y="98">bigint vehicle_id FK</text>
+    <text class="field" x="16" y="118">string verification_type</text>
+    <text class="field" x="16" y="138">string due_status, date due_date</text>
   </g>
 
   <g transform="translate(1910 1160)">
     <rect class="entity" x="0" y="0" width="300" height="130" />
     <rect class="entity head" x="0" y="0" width="300" height="34" />
     <text class="headText" x="18" y="22">NOTIFICATION_LOG</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK batch_id</text>
-    <text class="field" x="16" y="98">channel, destination</text>
-    <text class="field" x="16" y="118">delivery_status, sent_at</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint batch_id FK</text>
+    <text class="field" x="16" y="98">string channel, destination</text>
+    <text class="field" x="16" y="118">string delivery_status, datetime sent_at</text>
   </g>
 
   <g transform="translate(2250 950)">
     <rect class="entity" x="0" y="0" width="280" height="150" />
     <rect class="entity head" x="0" y="0" width="280" height="34" />
     <text class="headText" x="18" y="22">RECEIVABLE_INSTALLMENTS</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK receivable_document_id</text>
-    <text class="field" x="16" y="98">installment_no, due_date</text>
-    <text class="field" x="16" y="118">amount_due, amount_paid</text>
-    <text class="field" x="16" y="138">installment_status</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint receivable_document_id FK</text>
+    <text class="field" x="16" y="98">int installment_no, date due_date</text>
+    <text class="field" x="16" y="118">decimal amount_due, amount_paid</text>
+    <text class="field" x="16" y="138">string installment_status</text>
   </g>
 
   <g transform="translate(2250 1145)">
     <rect class="entity" x="0" y="0" width="280" height="150" />
     <rect class="entity head" x="0" y="0" width="280" height="34" />
     <text class="headText" x="18" y="22">PAYMENT_TRANSACTIONS</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK client_account_id</text>
-    <text class="field" x="16" y="98">payment_date, payment_method</text>
-    <text class="field" x="16" y="118">amount, status</text>
-    <text class="field" x="16" y="138">reference</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint client_account_id FK</text>
+    <text class="field" x="16" y="98">date payment_date, string payment_method</text>
+    <text class="field" x="16" y="118">decimal amount, string status</text>
+    <text class="field" x="16" y="138">string reference</text>
   </g>
 
   <g transform="translate(2250 1340)">
     <rect class="entity" x="0" y="0" width="280" height="140" />
     <rect class="entity head" x="0" y="0" width="280" height="34" />
     <text class="headText" x="18" y="22">PAYMENT_APPLICATIONS</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK payment_transaction_id</text>
-    <text class="field" x="16" y="98">FK receivable_document_id</text>
-    <text class="field" x="16" y="118">applied_amount</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint payment_transaction_id FK</text>
+    <text class="field" x="16" y="98">bigint receivable_document_id FK</text>
+    <text class="field" x="16" y="118">decimal applied_amount</text>
   </g>
 
   <g transform="translate(2250 1530)">
     <rect class="entity" x="0" y="0" width="280" height="145" />
     <rect class="entity head" x="0" y="0" width="280" height="34" />
     <text class="headText" x="18" y="22">ACCOUNT_MOVEMENTS</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK client_account_id</text>
-    <text class="field" x="16" y="98">movement_type</text>
-    <text class="field" x="16" y="118">debit, credit, balance_after</text>
-    <text class="field" x="16" y="138">movement_date</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint client_account_id FK</text>
+    <text class="field" x="16" y="98">string movement_type</text>
+    <text class="field" x="16" y="118">decimal debit, credit, balance_after</text>
+    <text class="field" x="16" y="138">datetime movement_date</text>
   </g>
 
   <!-- Owner follow-up -->
@@ -409,25 +410,25 @@
     <rect class="entity" x="0" y="0" width="360" height="180" />
     <rect class="entity head" x="0" y="0" width="360" height="34" />
     <text class="headText" x="18" y="22">VERIFICATION_OBLIGATIONS</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK vehicle_id</text>
-    <text class="field" x="16" y="98">verification_type, due_date</text>
-    <text class="field" x="16" y="118">window_start_date, window_end_date</text>
-    <text class="field" x="16" y="138">status, owner_response</text>
-    <text class="field" x="16" y="158">owner_user_id, admin_user_id</text>
-    <text class="field" x="16" y="178">scheduled_center_id, verification_event_id</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint vehicle_id FK</text>
+    <text class="field" x="16" y="98">string verification_type, date due_date</text>
+    <text class="field" x="16" y="118">date window_start_date, window_end_date</text>
+    <text class="field" x="16" y="138">string status, owner_response</text>
+    <text class="field" x="16" y="158">bigint owner_user_id FK, admin_user_id FK</text>
+    <text class="field" x="16" y="178">bigint scheduled_center_id FK, verification_event_id FK</text>
   </g>
 
   <g transform="translate(500 1915)">
     <rect class="entity" x="0" y="0" width="350" height="170" />
     <rect class="entity head" x="0" y="0" width="350" height="34" />
     <text class="headText" x="18" y="22">VERIFICATION_OBLIGATION_HISTORY</text>
-    <text class="field" x="16" y="58">PK id</text>
-    <text class="field" x="16" y="78">FK obligation_id</text>
-    <text class="field" x="16" y="98">FK changed_by_user_id</text>
-    <text class="field" x="16" y="118">action_type</text>
-    <text class="field" x="16" y="138">previous_status, new_status</text>
-    <text class="field" x="16" y="158">previous_owner_response, new_owner_response</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint obligation_id FK</text>
+    <text class="field" x="16" y="98">bigint changed_by_user_id FK</text>
+    <text class="field" x="16" y="118">string action_type</text>
+    <text class="field" x="16" y="138">string previous_status, new_status</text>
+    <text class="field" x="16" y="158">string previous_owner_response, new_owner_response</text>
   </g>
 
   <!-- Relationship lines -->
