@@ -1,22 +1,22 @@
-# Módulos Nest Alineados con la Base de Datos
+# Modulos Nest Alineados con la Base de Datos
 
 ## Objetivo
 
-Definir la estructura recomendada de módulos en Nest para **Vera**, alineada con la base de datos y con las fases de implementación del proyecto.
+Definir la estructura recomendada de modulos en Nest para **Vera**, alineada con la base de datos y con las fases de implementacion del proyecto.
 
 La meta es evitar dos errores comunes:
 
-- crear módulos solo por tabla, sin criterio de negocio;
-- mezclar responsabilidades operativas, documentales, analíticas y contables en un mismo módulo.
+- crear modulos solo por tabla, sin criterio de negocio;
+- mezclar responsabilidades operativas, documentales, analiticas y contables en un mismo modulo.
 
-## Principio de diseño
+## Principio de diseno
 
-En Vera, los módulos deben agruparse por **capacidad del negocio** y no solo por entidad.
+En Vera, los modulos deben agruparse por **capacidad del negocio** y no solo por entidad.
 
 Ejemplo:
 
-- `documents` sí puede ser módulo propio porque concentra subida, almacenamiento, visibilidad y versionado;
-- `vehicle-party-roles` no conviene como producto aislado si su lógica está absorbida por `vehicles` y `parties`.
+- `documents` si puede ser modulo propio porque concentra subida, almacenamiento, visibilidad y versionado;
+- `vehicle-party-roles` no conviene como producto aislado si su logica esta absorbida por `vehicles` y `parties`.
 
 ## Estructura recomendada
 
@@ -24,15 +24,19 @@ Ejemplo:
 
 ### Responsabilidad
 
-- autenticación;
-- emisión y validación de tokens;
+- autenticacion;
+- emision y validacion de tokens;
 - login;
-- control de sesión;
+- control de sesion;
 - guardas de acceso.
 
 ### Tablas asociadas
 
 - `users`
+- `internal_roles`
+- `internal_permissions`
+- `internal_role_permissions`
+- `user_internal_roles`
 
 ### Funciones principales
 
@@ -41,6 +45,7 @@ Ejemplo:
 - `password reset`
 - `guards`
 - `roles/claims`
+- resolucion de permisos internos
 
 ### Dependencias
 
@@ -50,20 +55,22 @@ Ejemplo:
 
 ### Responsabilidad
 
-- gestión de cuentas internas y externas;
-- asociación de usuario con persona/empresa;
-- activación o bloqueo de cuenta.
+- gestion de cuentas internas y externas;
+- asociacion de usuario con persona o empresa;
+- activacion o bloqueo de cuenta.
 
 ### Tablas asociadas
 
 - `users`
 - `user_vehicle_access`
+- `user_internal_roles`
 
 ### Funciones principales
 
-- alta y edición de usuarios;
-- asignación de acceso a vehículos;
-- activación/desactivación.
+- alta y edicion de usuarios;
+- asignacion de acceso a vehiculos;
+- asignacion de roles internos;
+- activacion o desactivacion.
 
 ### Dependencias
 
@@ -74,51 +81,58 @@ Ejemplo:
 
 ### Responsabilidad
 
-- catálogo de personas físicas y morales;
+- catalogo de personas fisicas y morales;
 - propietarios;
-- permisionarios;
 - poseedores legales;
 - clientes de consulta;
+- estado administrativo del propietario;
 - datos fiscales y de contacto general.
 
 ### Tablas asociadas
 
 - `parties`
+- `party_owner_status_history`
 - `party_contacts`
 
 ### Funciones principales
 
-- CRUD de clientes/partes;
-- identificación por RFC;
+- CRUD de clientes y partes;
+- identificacion por RFC;
+- suspension o baja administrativa de propietario por intermediario;
 - contactos principales;
 - datos para reportes y cobranza.
 
 ### Dependencias
 
-- base para casi todos los demás módulos
+- base para casi todos los demas modulos
 
 ## 4. `vehicles`
 
 ### Responsabilidad
 
-- padrón vehicular;
-- identificación de unidades;
-- régimen federal/estatal;
-- relaciones entre vehículo y partes;
-- visibilidad de la unidad para usuarios.
+- padron vehicular;
+- identidad maestra por serie o NIV;
+- regimen federal o estatal;
+- relaciones entre vehiculo y partes;
+- visibilidad de la unidad para usuarios;
+- estado de vida administrativo.
 
 ### Tablas asociadas
 
 - `vehicles`
 - `vehicle_party_roles`
+- `vehicle_lifecycle_events`
+- `vehicle_change_requests`
+- `vehicle_change_request_history`
 - `user_vehicle_access`
 
 ### Funciones principales
 
-- alta de vehículo;
-- asignación de propietario, cliente, permisionario y titular;
+- alta de vehiculo;
+- asignacion de propietario, cliente y poseedor legal;
 - consulta consolidada por unidad;
-- lógica del tercer/cuarto dígito.
+- logica del tercer o cuarto digito;
+- gestion de cambios administrativos del vehiculo.
 
 ### Dependencias
 
@@ -130,21 +144,29 @@ Ejemplo:
 ### Responsabilidad
 
 - control de verificaciones;
+- perfil de aplicabilidad por vehiculo;
 - vigencias;
 - centros;
-- historial regulatorio del vehículo;
+- historial regulatorio del vehiculo;
 - estado actual.
 
 ### Tablas asociadas
 
+- `vehicle_verification_profile`
+- `vehicle_verification_profile_history`
 - `verification_centers`
+- `verification_center_contacts`
 - `verification_events`
 - `verification_schedule_rules`
+- `verification_obligations`
+- `verification_obligation_history`
 
 ### Funciones principales
 
-- registrar verificación;
+- resolver si una verificacion aplica a una unidad;
+- registrar verificacion;
 - calcular vigencia;
+- resolver la sede y el contacto primario operativo del centro;
 - marcar pendiente, vigente o vencida;
 - segmentar por calendario.
 
@@ -161,20 +183,22 @@ Ejemplo:
 - carga de PDFs escaneados;
 - versionado de archivos;
 - control de visibilidad al propietario;
-- vínculo entre documento y verificación.
+- vinculo entre documento y verificacion.
 
 ### Tablas asociadas
 
 - `documents`
 - `document_files`
+- `document_access_log`
 
 ### Funciones principales
 
 - subir PDF;
-- crear registro lógico del documento;
+- crear registro logico del documento;
 - almacenar versiones;
 - marcar documento vigente;
-- exponer documentos visibles al propietario.
+- exponer documentos visibles al propietario;
+- registrar auditoria operativa de acceso, descarga, upload y migracion.
 
 ### Dependencias
 
@@ -186,7 +210,7 @@ Ejemplo:
 
 ### Responsabilidad
 
-- generación de reportes funcionales;
+- generacion de reportes funcionales;
 - consultas por cliente;
 - pendientes por vencer;
 - reportes por marcador de placa;
@@ -194,7 +218,10 @@ Ejemplo:
 
 ### Tablas y vistas asociadas
 
+- `vw_current_owner_by_vehicle`
 - `vw_current_client_by_vehicle`
+- `vw_current_legal_possessor_by_vehicle`
+- `vw_current_operational_contacts_by_vehicle`
 - `vw_vehicle_verification_status`
 - `vw_pending_verifications_by_client`
 - `vw_owner_vehicle_status`
@@ -203,9 +230,10 @@ Ejemplo:
 ### Funciones principales
 
 - reportes por cliente;
-- reportes por régimen;
+- reportes por regimen;
 - reportes por vencimiento;
-- reportes para exportación.
+- reportes operativos hacia centros de verificacion;
+- reportes para exportacion.
 
 ### Dependencias
 
@@ -217,12 +245,12 @@ Ejemplo:
 
 ### Responsabilidad
 
-- automatización de envío;
-- reglas de notificación;
+- automatizacion de envio;
+- reglas de notificacion;
 - plantillas;
-- cola de envío;
-- integración con correo y WhatsApp;
-- bitácora.
+- cola de envio;
+- integracion con correo y WhatsApp;
+- bitacora.
 
 ### Tablas asociadas
 
@@ -236,10 +264,10 @@ Ejemplo:
 ### Funciones principales
 
 - detectar candidatos;
-- agrupar por cliente/canal;
+- agrupar por cliente y canal;
 - renderizar plantillas;
 - registrar lotes;
-- registrar resultado de envío.
+- registrar resultado de envio.
 
 ### Dependencias
 
@@ -254,7 +282,7 @@ Ejemplo:
 - snapshots;
 - historia del estado;
 - calidad del dato;
-- métricas de backlog;
+- metricas de backlog;
 - tendencias de vencimiento.
 
 ### Tablas asociadas
@@ -266,9 +294,9 @@ Ejemplo:
 
 ### Funciones principales
 
-- generación de snapshots diarios;
-- revisión de calidad del dato;
-- métricas de tendencia;
+- generacion de snapshots diarios;
+- revision de calidad del dato;
+- metricas de tendencia;
 - proyecciones de carga.
 
 ### Dependencias
@@ -281,9 +309,9 @@ Ejemplo:
 ### Responsabilidad
 
 - capacidad operativa de centros;
-- sesiones de atención;
-- duración real de verificaciones;
-- saturación y ocupación.
+- sesiones de atencion;
+- duracion real de verificaciones;
+- saturacion y ocupacion.
 
 ### Tablas asociadas
 
@@ -292,9 +320,9 @@ Ejemplo:
 
 ### Funciones principales
 
-- registrar sesión;
+- registrar sesion;
 - medir tiempos reales;
-- calcular saturación;
+- calcular saturacion;
 - proyectar capacidad diaria.
 
 ### Dependencias
@@ -306,10 +334,10 @@ Ejemplo:
 
 ### Responsabilidad
 
-- gestión administrativa de servicios;
+- gestion administrativa de servicios;
 - remisiones;
 - detalle de conceptos;
-- vínculo entre servicio y operación.
+- vinculo entre servicio y operacion.
 
 ### Tablas asociadas
 
@@ -318,8 +346,8 @@ Ejemplo:
 
 ### Funciones principales
 
-- crear servicio o remisión;
-- relacionar servicio con vehículo y cliente;
+- crear servicio o remision;
+- relacionar servicio con vehiculo y cliente;
 - desglosar conceptos.
 
 ### Dependencias
@@ -347,7 +375,7 @@ Ejemplo:
 - generar documento por cobrar;
 - calcular saldo;
 - clasificar estado del documento;
-- generar antigüedad de cartera.
+- generar antiguedad de cartera.
 
 ### Dependencias
 
@@ -359,7 +387,7 @@ Ejemplo:
 ### Responsabilidad
 
 - pagos;
-- aplicación de pagos;
+- aplicacion de pagos;
 - movimientos de cuenta;
 - estado de cuenta;
 - seguimiento de deuda.
@@ -381,7 +409,7 @@ Ejemplo:
 
 - depende de `billing`
 
-## Dependencias entre módulos
+## Dependencias entre modulos
 
 ```text
 auth -> users
@@ -398,7 +426,7 @@ billing -> parties, service-orders
 collections -> billing
 ```
 
-## Orden recomendado de implementación
+## Orden recomendado de implementacion
 
 ### Fase 1
 
@@ -453,9 +481,9 @@ src/
   config/
 ```
 
-## Convención recomendada por módulo
+## Convencion recomendada por modulo
 
-Cada módulo debería tener como mínimo:
+Cada modulo deberia tener como minimo:
 
 - `controller`
 - `service`
@@ -476,25 +504,25 @@ vehicles/
   repositories/
 ```
 
-## Recomendación arquitectónica
+## Recomendacion arquitectonica
 
 No exponer toda la base de datos directamente como CRUD plano.
 
-Vera necesita módulos con lógica de negocio, por ejemplo:
+Vera necesita modulos con logica de negocio, por ejemplo:
 
-- `verifications` no solo crea registros, también calcula vigencias;
-- `documents` no solo guarda archivos, también controla versión y visibilidad;
-- `notifications` no solo guarda logs, también arma lotes y evita duplicados;
-- `billing` no solo guarda facturas, también mantiene saldo;
-- `collections` no solo registra pagos, también los aplica.
+- `verifications` no solo crea registros, tambien calcula vigencias;
+- `documents` no solo guarda archivos, tambien controla version y visibilidad;
+- `notifications` no solo guarda logs, tambien arma lotes y evita duplicados;
+- `billing` no solo guarda facturas, tambien mantiene saldo;
+- `collections` no solo registra pagos, tambien los aplica.
 
-## Conclusión
+## Conclusion
 
-La estructura modular de Nest debe seguir el modelo de datos, pero no copiarlo mecánicamente.
+La estructura modular de Nest debe seguir el modelo de datos, pero no copiarlo mecanicamente.
 
-La mejor alineación para Vera es:
+La mejor alineacion para Vera es:
 
-- módulos por capacidad de negocio;
+- modulos por capacidad de negocio;
 - dependencias claras;
-- implementación por fases;
-- separación estricta entre operación, documentos, analítica y cobranza.
+- implementacion por fases;
+- separacion estricta entre operacion, documentos, analitica y cobranza.

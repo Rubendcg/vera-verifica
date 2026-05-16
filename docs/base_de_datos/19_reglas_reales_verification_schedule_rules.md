@@ -8,6 +8,12 @@ Dejar documentado el criterio vigente de **Vera** para las reglas de calendario 
 - que diferencia existe entre `FEDERAL` y `ESTATAL`;
 - que excepciones no deben tratarse como regla maestra permanente.
 
+Este documento responde cuando debe verificarse una unidad, no si ese tipo de verificacion le aplica.
+
+La aplicabilidad se cierra aparte en:
+
+- [40_perfil_canonico_aplicabilidad_verificaciones.md](./40_perfil_canonico_aplicabilidad_verificaciones.md)
+
 ## Decision de modelado
 
 El modelo original de `verification_schedule_rules` solo permitia una ventana por:

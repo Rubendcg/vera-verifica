@@ -53,7 +53,7 @@ Agregar la base estructural de verificaciones en PostgreSQL y en TypeORM, manten
 - `src/modules/vehicles/entities/vehicle.entity.ts`
 - `src/database/typeorm.entities.ts`
 - `src/database/migrations/20260509195500-create-phase-2-verifications.ts`
-- `docs/10_hoja_de_ruta_base_de_datos.md`
+- `docs/base_de_datos/10_hoja_de_ruta_base_de_datos.md`
 
 #### Impacto funcional
 
@@ -109,7 +109,7 @@ Agregar la capa que permita registrar la decision del propietario sobre una veri
 - `src/modules/verifications/verifications.service.ts`
 - `src/database/typeorm.entities.ts`
 - `src/database/migrations/20260509211000-create-verification-obligations.ts`
-- `docs/12_modelo_sql_verification_obligations.md`
+- `docs/base_de_datos/12_modelo_sql_verification_obligations.md`
 
 #### Impacto funcional
 
@@ -161,8 +161,8 @@ Convertir el modulo `verifications` de Vera de un resumen estatico a una API ini
 - `src/modules/verifications/verifications.service.ts`
 - `src/modules/verifications/verifications.module.ts`
 - `src/modules/verifications/dto/*`
-- `docs/13_endpoints_verifications_fase_2.md`
-- `docs/README.md`
+- `docs/base_de_datos/13_endpoints_verifications_fase_2.md`
+- `docs/base_de_datos/README.md`
 
 #### Impacto funcional
 
@@ -203,7 +203,7 @@ Cerrar la brecha principal de fase 2 exponiendo un calculo consolidado del estad
 
 - `src/modules/verifications/verifications.controller.ts`
 - `src/modules/verifications/verifications.service.ts`
-- `docs/13_endpoints_verifications_fase_2.md`
+- `docs/base_de_datos/13_endpoints_verifications_fase_2.md`
 
 #### Impacto funcional
 
@@ -245,8 +245,8 @@ Agregar una operacion sistemica que permita generar obligaciones pendientes a pa
 - `src/modules/verifications/dto/generate-verification-obligations.dto.ts`
 - `src/modules/verifications/verifications.controller.ts`
 - `src/modules/verifications/verifications.service.ts`
-- `docs/13_endpoints_verifications_fase_2.md`
-- `docs/18_generacion_automatica_obligaciones_fase_2.md`
+- `docs/base_de_datos/13_endpoints_verifications_fase_2.md`
+- `docs/base_de_datos/18_generacion_automatica_obligaciones_fase_2.md`
 
 #### Impacto funcional
 
@@ -289,9 +289,9 @@ Cargar una base realista y documentada de reglas de calendario para que Vera pue
 - `src/modules/verifications/dto/query-verification-schedule-rules.dto.ts`
 - `src/modules/verifications/verifications.service.ts`
 - `src/database/migrations/20260512193000-seed-real-verification-schedule-rules.ts`
-- `docs/19_reglas_reales_verification_schedule_rules.md`
-- `docs/10_hoja_de_ruta_base_de_datos.md`
-- `docs/13_endpoints_verifications_fase_2.md`
+- `docs/base_de_datos/19_reglas_reales_verification_schedule_rules.md`
+- `docs/base_de_datos/10_hoja_de_ruta_base_de_datos.md`
+- `docs/base_de_datos/13_endpoints_verifications_fase_2.md`
 
 #### Impacto funcional
 
@@ -331,8 +331,8 @@ Corregir la documentacion para reflejar el criterio confirmado del proyecto sobr
 
 #### Archivos involucrados
 
-- `docs/19_reglas_reales_verification_schedule_rules.md`
-- `docs/11_bitacora_implementacion_fase_2.md`
+- `docs/base_de_datos/19_reglas_reales_verification_schedule_rules.md`
+- `docs/base_de_datos/11_bitacora_implementacion_fase_2.md`
 
 #### Impacto funcional
 
@@ -361,8 +361,8 @@ Corregir el seed y la base ya sembrada para que `ESTATAL` replique las mismas ve
 
 - `src/database/migrations/20260512193000-seed-real-verification-schedule-rules.ts`
 - `src/database/migrations/20260512201500-align-state-schedule-rules.ts`
-- `docs/11_bitacora_implementacion_fase_2.md`
-- `docs/19_reglas_reales_verification_schedule_rules.md`
+- `docs/base_de_datos/11_bitacora_implementacion_fase_2.md`
+- `docs/base_de_datos/19_reglas_reales_verification_schedule_rules.md`
 
 #### Impacto funcional
 
@@ -411,7 +411,7 @@ Validar `POST /verifications/obligations/generate` contra reglas federales y est
 
 #### Archivos involucrados
 
-- `docs/11_bitacora_implementacion_fase_2.md`
+- `docs/base_de_datos/11_bitacora_implementacion_fase_2.md`
 
 #### Impacto funcional
 
@@ -471,7 +471,7 @@ Cerrar el bloque base de seguridad del modulo `verifications` con autenticacion 
 - `test/app.e2e-spec.ts`
 - `test/auth.e2e-spec.ts`
 - `test/verifications.e2e-spec.ts`
-- `docs/13_endpoints_verifications_fase_2.md`
+- `docs/base_de_datos/13_endpoints_verifications_fase_2.md`
 
 #### Impacto funcional
 
@@ -509,7 +509,7 @@ Cubrir con pruebas de integracion ejecutables el flujo principal que aun faltaba
 #### Archivos involucrados
 
 - `test/verifications.e2e-spec.ts`
-- `docs/11_bitacora_implementacion_fase_2.md`
+- `docs/base_de_datos/11_bitacora_implementacion_fase_2.md`
 
 #### Impacto funcional
 
@@ -555,9 +555,9 @@ Fase 2 pasa a estado de **cierre formal** porque ya cumple su criterio funcional
 
 #### Archivos involucrados
 
-- `docs/10_hoja_de_ruta_base_de_datos.md`
-- `docs/11_bitacora_implementacion_fase_2.md`
-- `docs/19_reglas_reales_verification_schedule_rules.md`
+- `docs/base_de_datos/10_hoja_de_ruta_base_de_datos.md`
+- `docs/base_de_datos/11_bitacora_implementacion_fase_2.md`
+- `docs/base_de_datos/19_reglas_reales_verification_schedule_rules.md`
 
 #### Validacion aplicada para sostener la decision
 
@@ -585,12 +585,12 @@ Completar administrativamente el cierre de fase 2 despues de validar alcance, ev
 
 #### Archivos involucrados
 
-- `docs/10_hoja_de_ruta_base_de_datos.md`
-- `docs/11_bitacora_implementacion_fase_2.md`
-- `docs/13_endpoints_verifications_fase_2.md`
-- `docs/19_reglas_reales_verification_schedule_rules.md`
-- `docs/21_cierre_formal_fase_2.md`
-- `docs/README.md`
+- `docs/base_de_datos/10_hoja_de_ruta_base_de_datos.md`
+- `docs/base_de_datos/11_bitacora_implementacion_fase_2.md`
+- `docs/base_de_datos/13_endpoints_verifications_fase_2.md`
+- `docs/base_de_datos/19_reglas_reales_verification_schedule_rules.md`
+- `docs/base_de_datos/21_cierre_formal_fase_2.md`
+- `docs/base_de_datos/README.md`
 
 #### Impacto funcional
 

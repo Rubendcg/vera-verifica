@@ -10,6 +10,7 @@ Esta bitacora cubre:
 
 - `documents`
 - `document_files`
+- `document_access_log`
 - relacion documental con `verification_events`
 - preparacion del modulo `documents` para TypeORM
 
@@ -98,8 +99,8 @@ Dejar explicito en el modelo que el expediente documental soporta la subida de P
 - `src/modules/documents/entities/documents.enums.ts`
 - `src/modules/documents/entities/document.entity.ts`
 - `src/database/migrations/20260512213000-formalize-document-types.ts`
-- `docs/03_reportes_notificaciones_y_documentos.md`
-- `docs/14_bitacora_implementacion_fase_3.md`
+- `docs/base_de_datos/03_reportes_notificaciones_y_documentos.md`
+- `docs/base_de_datos/14_bitacora_implementacion_fase_3.md`
 
 #### Impacto funcional
 
@@ -148,8 +149,8 @@ Sacar el modulo `documents` del estado scaffold y convertirlo en una API funcion
 - `src/modules/documents/documents.service.ts`
 - `src/modules/documents/dto/*`
 - `test/documents.e2e-spec.ts`
-- `docs/14_bitacora_implementacion_fase_3.md`
-- `docs/22_endpoints_documents_fase_3.md`
+- `docs/base_de_datos/14_bitacora_implementacion_fase_3.md`
+- `docs/base_de_datos/22_endpoints_documents_fase_3.md`
 
 #### Impacto funcional
 
@@ -204,9 +205,9 @@ La estrategia estable objetivo de **Vera** sera `OBJECT_STORAGE`.
 #### Archivos involucrados
 
 - `.env.example`
-- `docs/10_hoja_de_ruta_base_de_datos.md`
-- `docs/14_bitacora_implementacion_fase_3.md`
-- `docs/22_endpoints_documents_fase_3.md`
+- `docs/base_de_datos/10_hoja_de_ruta_base_de_datos.md`
+- `docs/base_de_datos/14_bitacora_implementacion_fase_3.md`
+- `docs/base_de_datos/22_endpoints_documents_fase_3.md`
 
 #### Pendientes inmediatos
 
@@ -241,10 +242,10 @@ Implementar una capa de almacenamiento desacoplada para que `documents` pueda es
 - `src/modules/documents/documents.service.ts`
 - `src/modules/documents/storage/*`
 - `test/documents.e2e-spec.ts`
-- `docs/14_bitacora_implementacion_fase_3.md`
-- `docs/22_endpoints_documents_fase_3.md`
-- `docs/10_hoja_de_ruta_base_de_datos.md`
-- `docs/README.md`
+- `docs/base_de_datos/14_bitacora_implementacion_fase_3.md`
+- `docs/base_de_datos/22_endpoints_documents_fase_3.md`
+- `docs/base_de_datos/10_hoja_de_ruta_base_de_datos.md`
+- `docs/base_de_datos/README.md`
 
 #### Impacto funcional
 
@@ -289,10 +290,10 @@ Implementar el flujo admin para migrar archivos documentales ya existentes desde
 - `src/modules/documents/documents.service.ts`
 - `src/modules/documents/storage/documents-storage.service.ts`
 - `test/documents.e2e-spec.ts`
-- `docs/14_bitacora_implementacion_fase_3.md`
-- `docs/22_endpoints_documents_fase_3.md`
-- `docs/10_hoja_de_ruta_base_de_datos.md`
-- `docs/README.md`
+- `docs/base_de_datos/14_bitacora_implementacion_fase_3.md`
+- `docs/base_de_datos/22_endpoints_documents_fase_3.md`
+- `docs/base_de_datos/10_hoja_de_ruta_base_de_datos.md`
+- `docs/base_de_datos/README.md`
 
 #### Impacto funcional
 
@@ -311,3 +312,55 @@ Implementar el flujo admin para migrar archivos documentales ya existentes desde
 - cargar credenciales reales y ejecutar `probe` y `migrate` contra un bucket S3-compatible real;
 - decidir la politica final de borrado de archivos origen despues del cutover;
 - ampliar auditoria de acceso, descargas y migraciones del expediente PDF.
+
+### 2026-05-14 - Trazabilidad operativa del expediente documental
+
+#### Objetivo
+
+Cerrar el faltante de auditoria de fase 3 para dejar registro administrable de accesos, descargas y operaciones sobre PDFs del expediente.
+
+#### Cambios realizados
+
+- se agrego la entidad `DocumentAccessLog`;
+- se preparo la migracion `CreateDocumentAccessLog20260514121500`;
+- se incorporo `document_access_log` a `TypeOrmModule` y al registro global de entidades;
+- se agrego endpoint admin `GET /documents/access-log`;
+- se registro auditoria append-only para `GET /documents/:id`, `GET /documents/:id/files/current/download`, `POST /documents`, `POST /documents/:id/files`, `POST /documents/:id/files/upload`, `POST /documents/storage/object/probe` y `POST /documents/storage/object/migrate`;
+- se extendieron las pruebas e2e para validar consulta admin del log y trazas de probe, migracion y descarga.
+
+#### Archivos involucrados
+
+- `src/modules/documents/entities/document-access-log.entity.ts`
+- `src/modules/documents/entities/documents.enums.ts`
+- `src/modules/documents/dto/query-document-access-log.dto.ts`
+- `src/modules/documents/documents.controller.ts`
+- `src/modules/documents/documents.module.ts`
+- `src/modules/documents/documents.service.ts`
+- `src/database/typeorm.entities.ts`
+- `src/database/migrations/20260514121500-create-document-access-log.ts`
+- `test/documents.e2e-spec.ts`
+- `docs/base_de_datos/03_reportes_notificaciones_y_documentos.md`
+- `docs/base_de_datos/06_diagrama_final_bd.md`
+- `docs/base_de_datos/08_modulos_nest_alineados_bd.md`
+- `docs/base_de_datos/10_hoja_de_ruta_base_de_datos.md`
+- `docs/base_de_datos/14_bitacora_implementacion_fase_3.md`
+- `docs/base_de_datos/22_endpoints_documents_fase_3.md`
+- `docs/base_de_datos/README.md`
+
+#### Impacto funcional
+
+- Vera ya registra quien consulto un documento y quien descargo el PDF vigente;
+- administracion ya puede auditar uploads, nuevas versiones, probe de bucket y migraciones a `OBJECT_STORAGE`;
+- la fase 3 ya no depende solo de permisos en tiempo real, tambien conserva traza operativa del expediente.
+
+#### Validacion ejecutada
+
+- `npm run build`: correcto;
+- `npx jest --runInBand`: correcto;
+- `npx jest --config ./test/jest-e2e.json --runInBand`: correcto.
+
+#### Pendientes inmediatos
+
+- cargar credenciales reales y ejecutar `probe` y `migrate` contra un bucket S3-compatible real;
+- decidir la politica final de borrado de archivos origen despues del cutover;
+- evaluar si conviene agregar retencion, exportacion o alertas sobre `document_access_log`.

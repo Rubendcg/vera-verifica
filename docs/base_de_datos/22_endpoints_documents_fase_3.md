@@ -9,6 +9,7 @@ Documentar los endpoints iniciales del modulo `documents` de **Vera**, alineados
 Estos endpoints cubren:
 
 - consulta de documentos;
+- consulta admin de trazabilidad operativa;
 - consulta detallada de un documento;
 - alta administrativa de expediente documental;
 - alta de nuevas versiones PDF por documento;
@@ -23,6 +24,11 @@ En esta etapa los endpoints ya aplican:
 - visibilidad de propietario basada en `is_visible_to_owner`;
 - control de una sola version vigente por documento.
 
+Nota de transicion:
+
+- esta lectura refleja la implementacion actual;
+- el destino canonico de permisos internos del intermediario se cierra en [48_modelo_canonico_permisos_internos_del_intermediario.md](./48_modelo_canonico_permisos_internos_del_intermediario.md), donde la operacion interna de `documents` migra a `PLATFORM_ADMIN` y `DOCUMENTS_OPERATOR`.
+
 ## Tabla de endpoints
 
 | Metodo | Ruta | Finalidad |
@@ -31,6 +37,7 @@ En esta etapa los endpoints ya aplican:
 | `GET` | `/documents/catalogs` | Catalogos de enums documentales |
 | `POST` | `/documents/storage/object/probe` | Probe admin de conectividad real con bucket S3-compatible |
 | `POST` | `/documents/storage/object/migrate` | Migracion admin de archivos `LOCAL_PATH` hacia `OBJECT_STORAGE` |
+| `GET` | `/documents/access-log` | Consulta admin de trazabilidad operativa del expediente |
 | `GET` | `/documents` | Listado de documentos segun filtros y permisos |
 | `GET` | `/documents/:id` | Detalle de un documento |
 | `POST` | `/documents` | Alta de documento logico |
@@ -43,6 +50,7 @@ En esta etapa los endpoints ya aplican:
 - `GET /documents/summary`, `GET /documents/catalogs` y `GET /documents`: cualquier usuario autenticado;
 - `POST /documents/storage/object/probe`: solo admin;
 - `POST /documents/storage/object/migrate`: solo admin;
+- `GET /documents/access-log`: solo admin;
 - `GET /documents/:id`: admin o usuario con acceso activo al vehiculo y visibilidad permitida del documento;
 - `POST /documents` y `POST /documents/:id/files`: solo admin;
 - `POST /documents/:id/files/upload`: solo admin;
@@ -78,12 +86,41 @@ Token de entrada:
 
 `document_files` representa el PDF real y versionado.
 
+La politica canonica de tipos documentales se cierra en:
+
+- [44_politica_tipos_documentales_oficiales.md](./44_politica_tipos_documentales_oficiales.md)
+
+Regla base:
+
+- `TARJETA_CIRCULACION`, `CONSTANCIA_FISICO_MECANICA` y `CONSTANCIA_EMISIONES` son los tipos oficiales nucleares;
+- `PERMISO`, `CONTRATO_ARRENDAMIENTO` y `OTRO` son auxiliares;
+- los auxiliares no sustituyen un faltante del expediente oficial.
+
+La unicidad logica del expediente se cierra en:
+
+- [45_unicidad_logica_del_expediente.md](./45_unicidad_logica_del_expediente.md)
+
+Reglas base:
+
+- un nuevo PDF del mismo soporte debe crear nueva version en `document_files`;
+- un nuevo soporte con nueva vigencia o nuevo numero debe crear nuevo `document`;
+- para tipos oficiales nucleares solo debe existir un `ACTIVE` por `vehicleId + documentType`.
+
 ### Visibilidad para propietario
 
 Un usuario no administrador solo puede ver:
 
 - documentos de vehiculos asignados en `user_vehicle_access`;
 - documentos con `is_visible_to_owner = true`.
+
+La matriz canonica completa se cierra en:
+
+- [46_matriz_visibilidad_documental_del_propietario.md](./46_matriz_visibilidad_documental_del_propietario.md)
+
+Regla importante:
+
+- la implementacion base actual aplica el minimo `user_vehicle_access + is_visible_to_owner`;
+- la politica canonica completa agrega ademas estado del propietario, estado de vida del vehiculo, tipo documental y estado documental.
 
 ### Version vigente
 
@@ -138,11 +175,60 @@ solo entrega la version vigente cuando el usuario:
 - es admin; o
 - tiene acceso activo al vehiculo y el documento es visible para propietario.
 
+Lectura canonica objetivo para propietario:
+
+- propietario `ACTIVE`;
+- unidad `ACTIVE` o `SUSPENDED`;
+- documento `ACTIVE`;
+- tipo documental elegible por la matriz;
+- `is_visible_to_owner = true`;
+- archivo vigente disponible.
+
 La descarga resuelve el backend segun `document_files.storage_kind`, por lo que puede leer:
 
 - PDFs historicos en `LOCAL_PATH`;
 - PDFs nuevos o migrados en `OBJECT_STORAGE`;
 - `DATABASE` cuando el contenido viva en `content_bytea`.
+
+## Trazabilidad operativa
+
+La tabla `document_access_log` registra eventos append-only del expediente documental.
+
+Eventos cubiertos:
+
+- `VIEW_DOCUMENT`
+- `DOWNLOAD_CURRENT_FILE`
+- `CREATE_DOCUMENT`
+- `ADD_FILE_VERSION`
+- `UPLOAD_FILE`
+- `PROBE_OBJECT_STORAGE`
+- `MIGRATE_FILE_TO_OBJECT_STORAGE`
+
+Campos principales:
+
+- `document_id`
+- `document_file_id`
+- `vehicle_id`
+- `actor_user_id`
+- `action_type`
+- `actor_is_admin`
+- `storage_kind`
+- `details_json`
+- `created_at`
+
+## Consulta admin del log
+
+El endpoint `GET /documents/access-log` permite filtrar por:
+
+- `documentId`
+- `documentFileId`
+- `vehicleId`
+- `actorUserId`
+- `actionType`
+- `storageKind`
+- `createdFrom`
+- `createdTo`
+- `limit`
 
 ## Decision de almacenamiento estable
 
@@ -226,4 +312,4 @@ La siguiente iteracion natural sobre este modulo es:
 
 - cargar credenciales reales y ejecutar el probe admin contra un bucket S3-compatible real;
 - ejecutar la migracion operativa de archivos existentes en `LOCAL_PATH` hacia `OBJECT_STORAGE`;
-- ampliar trazabilidad y auditoria de acceso a PDFs.
+- cerrar el cutover real a bucket y definir la politica final de borrado del origen local.

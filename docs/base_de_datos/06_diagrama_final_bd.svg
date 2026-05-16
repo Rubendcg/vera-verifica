@@ -148,7 +148,7 @@
     <text class="field" x="16" y="138">string window_label</text>
   </g>
 
-  <g transform="translate(1180 180)">
+  <g transform="translate(1210 180)">
     <rect class="entity" x="0" y="0" width="320" height="185" />
     <rect class="entity head" x="0" y="0" width="320" height="34" />
     <text class="headText" x="18" y="22">DOCUMENTS</text>
@@ -161,7 +161,7 @@
     <text class="field" x="16" y="178">boolean is_visible_to_owner, text notes</text>
   </g>
 
-  <g transform="translate(1180 400)">
+  <g transform="translate(1210 400)">
     <rect class="entity" x="0" y="0" width="320" height="225" />
     <rect class="entity head" x="0" y="0" width="320" height="34" />
     <text class="headText" x="18" y="22">DOCUMENT_FILES</text>
@@ -176,13 +176,16 @@
     <text class="field" x="16" y="218">boolean is_current</text>
   </g>
 
-  <g transform="translate(1180 660)">
-    <rect class="note" x="0" y="0" width="320" height="145" />
-    <text class="noteTitle" x="18" y="28">Document layer</text>
-    <text class="noteText" x="18" y="56">- DOCUMENTS stores type, status and owner visibility.</text>
-    <text class="noteText" x="18" y="80">- related_party_id links the relevant party when needed.</text>
-    <text class="noteText" x="18" y="104">- storage_kind supports LOCAL_PATH, OBJECT_STORAGE and DATABASE.</text>
-    <text class="noteText" x="18" y="128">- source_document_id links the event with its evidence PDF.</text>
+  <g transform="translate(1210 650)">
+    <rect class="entity" x="0" y="0" width="320" height="170" />
+    <rect class="entity head" x="0" y="0" width="320" height="34" />
+    <text class="headText" x="18" y="22">DOCUMENT_ACCESS_LOG</text>
+    <text class="field" x="16" y="58">bigint id PK</text>
+    <text class="field" x="16" y="78">bigint document_id FK, document_file_id FK</text>
+    <text class="field" x="16" y="98">bigint vehicle_id FK, actor_user_id FK</text>
+    <text class="field" x="16" y="118">string action_type</text>
+    <text class="field" x="16" y="138">boolean actor_is_admin, string storage_kind</text>
+    <text class="field" x="16" y="158">jsonb details_json, timestamptz created_at</text>
   </g>
 
   <!-- Analytics -->
@@ -362,7 +365,7 @@
     <text class="field" x="16" y="118">string delivery_status, datetime sent_at</text>
   </g>
 
-  <g transform="translate(2250 950)">
+  <g transform="translate(1560 950)">
     <rect class="entity" x="0" y="0" width="280" height="150" />
     <rect class="entity head" x="0" y="0" width="280" height="34" />
     <text class="headText" x="18" y="22">RECEIVABLE_INSTALLMENTS</text>
@@ -373,7 +376,7 @@
     <text class="field" x="16" y="138">string installment_status</text>
   </g>
 
-  <g transform="translate(2250 1145)">
+  <g transform="translate(1560 1135)">
     <rect class="entity" x="0" y="0" width="280" height="150" />
     <rect class="entity head" x="0" y="0" width="280" height="34" />
     <text class="headText" x="18" y="22">PAYMENT_TRANSACTIONS</text>
@@ -384,7 +387,7 @@
     <text class="field" x="16" y="138">string reference</text>
   </g>
 
-  <g transform="translate(2250 1340)">
+  <g transform="translate(1560 1330)">
     <rect class="entity" x="0" y="0" width="280" height="140" />
     <rect class="entity head" x="0" y="0" width="280" height="34" />
     <text class="headText" x="18" y="22">PAYMENT_APPLICATIONS</text>
@@ -394,7 +397,7 @@
     <text class="field" x="16" y="118">decimal applied_amount</text>
   </g>
 
-  <g transform="translate(2250 1530)">
+  <g transform="translate(1560 1525)">
     <rect class="entity" x="0" y="0" width="280" height="145" />
     <rect class="entity head" x="0" y="0" width="280" height="34" />
     <text class="headText" x="18" y="22">ACCOUNT_MOVEMENTS</text>
@@ -441,7 +444,7 @@
   <path class="line" d="M 340 460 L 365 460 L 365 660 L 390 660" />
   <text class="rel" x="372" y="570">1:N access</text>
 
-  <path class="line" d="M 340 235 L 360 235 L 360 155 L 1145 155 L 1145 285 L 1180 285" />
+  <path class="line" d="M 340 235 L 360 235 L 360 155 L 1175 155 L 1175 285 L 1210 285" />
   <text class="rel" x="600" y="148">1:N related docs</text>
 
   <path class="line" d="M 340 652 L 365 652 L 365 780 L 1860 780 L 1860 250 L 1910 250" />
@@ -450,7 +453,7 @@
   <path class="line" d="M 710 255 L 765 255 L 765 455 L 820 455" />
   <text class="rel" x="776" y="350">1:N verification events</text>
 
-  <path class="line" d="M 710 210 L 740 210 L 740 165 L 1160 165 L 1160 255 L 1180 255" />
+  <path class="line" d="M 710 210 L 740 210 L 740 165 L 1185 165 L 1185 255 L 1210 255" />
   <text class="rel" x="860" y="158">1:N documents</text>
 
   <path class="line" d="M 710 305 L 760 305 L 760 820 L 1380 820 L 1380 940" />
@@ -469,40 +472,46 @@
   <text class="rel" x="700" y="1332">1:1 client account</text>
 
   <path class="line" d="M 1120 250 L 1160 250 L 1160 455 L 1120 455" />
-  <text class="rel" x="1168" y="360">1:N center events</text>
+  <text class="rel" x="1035" y="360">1:N center events</text>
 
   <path class="line" d="M 1120 250 L 1160 250 L 1160 1025 L 1120 1025" />
-  <text class="rel" x="1168" y="650">1:N center sessions</text>
+  <text class="rel" x="1030" y="650">1:N center sessions</text>
 
   <path class="line" d="M 1120 250 L 1160 250 L 1160 1245 L 1120 1245" />
-  <text class="rel" x="1168" y="800">1:N center capacity</text>
+  <text class="rel" x="1015" y="800">1:N center capacity</text>
 
-  <path class="line" d="M 1120 455 L 1150 455 L 1150 360 L 1340 360 L 1340 345" />
-  <text class="rel" x="1185" y="352">source doc</text>
+  <path class="line" d="M 1120 455 L 1165 455 L 1165 360 L 1370 360 L 1370 345" />
+  <text class="rel" x="1085" y="352">source doc</text>
 
-  <path class="line" d="M 1340 345 L 1340 400" />
-  <text class="rel" x="1352" y="378">1:N versions</text>
+  <path class="line" d="M 1370 345 L 1370 400" />
+  <text class="rel" x="1382" y="378">1:N versions</text>
+
+  <path class="line" d="M 1370 365 L 1370 650" />
+  <text class="rel" x="1382" y="520">1:N audit</text>
+
+  <path class="line" d="M 1410 625 L 1410 650" />
+  <text class="rel" x="1422" y="642">file trace</text>
 
   <path class="line" d="M 1380 1085 L 1380 1140" />
   <text class="rel" x="1392" y="1120">1:N items</text>
 
-  <path class="line" d="M 1530 1012 L 1560 1012 L 1560 1610 L 1530 1610" />
-  <text class="rel" x="1568" y="1320">0..N receivables</text>
+  <path class="line" d="M 1530 1012 L 1545 1012 L 1545 1610 L 1530 1610" />
+  <text class="rel" x="1415" y="1308">0..N receivables</text>
 
   <path class="line" d="M 1380 1470 L 1380 1525" />
   <text class="rel" x="1392" y="1504">1:N docs</text>
 
-  <path class="line" d="M 1530 1395 L 1860 1395 L 1860 1130 L 2230 1130 L 2230 1220 L 2250 1220" />
-  <text class="rel" x="1890" y="1122">1:N payments</text>
+  <path class="line" d="M 1530 1395 L 1620 1395 L 1620 1120 L 1700 1120 L 1700 1135" />
+  <text class="rel" x="1630" y="1112">1:N payments</text>
 
-  <path class="line" d="M 1530 1395 L 1860 1395 L 1860 1602 L 2250 1602" />
-  <text class="rel" x="1890" y="1594">1:N movements</text>
+  <path class="line" d="M 1530 1395 L 1620 1395 L 1620 1510 L 1700 1510 L 1700 1525" />
+  <text class="rel" x="1630" y="1502">1:N movements</text>
 
-  <path class="line" d="M 1530 1610 L 1860 1610 L 1860 935 L 2230 935 L 2230 1025 L 2250 1025" />
-  <text class="rel" x="1890" y="927">1:N installments</text>
+  <path class="line" d="M 1530 1610 L 1635 1610 L 1635 935 L 1700 935 L 1700 950" />
+  <text class="rel" x="1645" y="927">1:N installments</text>
 
-  <path class="line" d="M 2390 1295 L 2390 1340" />
-  <text class="rel" x="2402" y="1320">1:N</text>
+  <path class="line" d="M 1700 1285 L 1700 1330" />
+  <text class="rel" x="1712" y="1318">1:N</text>
 
   <path class="line" d="M 2210 250 L 2240 250 L 2240 825 L 2210 825" />
   <text class="rel" x="2250" y="540">1:N batches</text>
@@ -546,8 +555,8 @@
     <text class="noteText" x="18" y="130">- DATA_QUALITY_ISSUES captures reliability gaps for review.</text>
   </g>
 
-  <g transform="translate(1230 1740)">
-    <rect class="note" x="0" y="0" width="640" height="82" />
+  <g transform="translate(1215 1740)">
+    <rect class="note" x="0" y="0" width="620" height="82" />
     <text class="noteTitle" x="18" y="28">Billing layer</text>
     <text class="noteText" x="18" y="56">Charges start in SERVICE_ORDERS, become receivables, then payments and account movements keep the balance traceable.</text>
   </g>

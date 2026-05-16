@@ -109,12 +109,18 @@ Campos sugeridos:
 - `vehicle_id`
 - `client_party_id`
 - `regime`
+- `lifecycle_status_current`
 - `schedule_marker_effective`
 - `physical_status`
 - `emissions_status`
 - `physical_days_to_due`
 - `emissions_days_to_due`
 - `is_active`
+
+Notas:
+
+- `lifecycle_status_current` debe distinguir la vida administrativa del vehiculo;
+- `is_active` no debe leerse como sustituto del estado administrativo canonico.
 
 Uso:
 
@@ -226,6 +232,44 @@ Se recomienda separar:
 - los pagos;
 - los movimientos de cuenta.
 
+### `service_orders` como remision de verificaciones
+
+Antes de abrir cartera o pagos, `service_orders` debe cerrarse como encabezado de remision de verificaciones.
+
+Regla canonica:
+
+- una remision por `vehicle_id`;
+- una remision por evento de captura administrativa;
+- y un solo contexto comercial base por encabezado.
+
+No debe usarse como:
+
+- lote multi-vehiculo;
+- factura;
+- pago;
+- o tabla generica de cualquier servicio.
+
+Su contrato formal se cierra en:
+
+- [49_contrato_canonico_remision_verificaciones.md](./49_contrato_canonico_remision_verificaciones.md)
+
+### `service_order_items` como conceptos economicos auditables
+
+El detalle economico no debe quedarse en `concept + amount`.
+
+Cada renglon debe poder responder:
+
+- que concepto economico se esta cobrando;
+- si corresponde a una verificacion puntual o a un cargo de orden;
+- que `verification_type` representa cuando aplica;
+- a que `verification_obligation` o `verification_event` apunta;
+- cual era el monto canonico;
+- y cual fue el monto realmente aplicado.
+
+Su contrato formal se cierra en:
+
+- [50_contrato_canonico_conceptos_economicos_por_verificacion.md](./50_contrato_canonico_conceptos_economicos_por_verificacion.md)
+
 ## 2. Cuentas por cliente
 
 Tabla sugerida:
@@ -249,6 +293,12 @@ Uso:
 - control de crédito.
 
 ## 3. Documentos por cobrar
+
+Regla canonica para cuentas:
+
+- la cuenta administrativa agrupa la cartera por `client_party_id`;
+- el pagador real puede ser distinto y se registra aparte en el pago;
+- la trazabilidad completa se cierra en `51_flujo_canonico_cobranza_desde_remision_hasta_pago_aplicado.md`.
 
 Tabla sugerida:
 
@@ -285,6 +335,12 @@ Uso:
 
 ## 4. Parcialidades o vencimientos
 
+Regla canonica para documentos por cobrar:
+
+- la deuda no nace directo en `service_orders`;
+- nace cuando la remision genera `receivable_documents`;
+- dentro del alcance actual debe existir como maximo un documento activo por remision cobrable.
+
 Tabla sugerida:
 
 - `receivable_installments`
@@ -306,6 +362,12 @@ Uso:
 - control de vencimientos múltiples.
 
 ## 5. Pagos
+
+Regla canonica para parcialidades:
+
+- incluso el cobro de una sola exhibicion debe tener una parcialidad `1`;
+- la suma de `amount_due` debe igualar el total del documento;
+- la suma de `amount_paid` no puede exceder la deuda de la parcialidad.
 
 Tabla sugerida:
 
@@ -409,6 +471,31 @@ Debe quedar reservada para:
 - `receivable_installments`
 - `payment_transactions`
 - `account_movements`
+
+## Flujo canonico de cobranza
+
+La trazabilidad financiera ya no debe leerse como salto directo de remision a pago.
+
+Su contrato canonico se cierra en:
+
+- [51_flujo_canonico_cobranza_desde_remision_hasta_pago_aplicado.md](./51_flujo_canonico_cobranza_desde_remision_hasta_pago_aplicado.md)
+
+Cadena base:
+
+- `service_orders`
+- `service_order_items`
+- `receivable_documents`
+- `receivable_installments`
+- `payment_transactions`
+- `payment_applications`
+- `account_movements`
+
+Reglas base:
+
+- la deuda nace en `receivable_documents`;
+- el pago se registra primero y se cancela deuda solo cuando queda aplicado;
+- la cuenta administrativa sigue agrupada por cliente;
+- el pagador real puede ser distinto del cliente y se conserva en el pago.
 
 ## Beneficios para Vera
 

@@ -48,13 +48,13 @@ Eso permite distinguir correctamente entre:
 
 ## Documentación
 
-La documentación del modelo actual está en [docs/README.md](./docs/README.md).
+La documentación del modelo actual está en [docs/base_de_datos/README.md](./docs/base_de_datos/README.md).
 
 Documentos principales:
 
-- [docs/01_esquema_sql_general.md](./docs/01_esquema_sql_general.md)
-- [docs/02_tablas_y_relaciones.md](./docs/02_tablas_y_relaciones.md)
-- [docs/03_reportes_notificaciones_y_documentos.md](./docs/03_reportes_notificaciones_y_documentos.md)
+- [docs/base_de_datos/01_esquema_sql_general.md](./docs/base_de_datos/01_esquema_sql_general.md)
+- [docs/base_de_datos/02_tablas_y_relaciones.md](./docs/base_de_datos/02_tablas_y_relaciones.md)
+- [docs/base_de_datos/03_reportes_notificaciones_y_documentos.md](./docs/base_de_datos/03_reportes_notificaciones_y_documentos.md)
 
 ## Puesta en marcha local
 
@@ -95,7 +95,7 @@ Estado técnico actual:
 - TypeORM configurado;
 - migración inicial de fase 1 aplicada;
 - conexión local validada contra PostgreSQL;
-- documentación técnica y bitácora de implementación en `docs/`.
+- documentación técnica y bitácora de implementación en `docs/base_de_datos/`.
 
 El siguiente paso natural es desarrollar:
 

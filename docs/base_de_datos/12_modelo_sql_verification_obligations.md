@@ -25,6 +25,26 @@ Esa separación permite que un propietario responda:
 
 sin alterar todavía el cumplimiento real del vehículo.
 
+Adicionalmente, antes de generar o evaluar una obligacion, el sistema debe resolver si ese tipo de verificacion aplica al vehiculo.
+
+Esa capa se cierra documentalmente en:
+
+- [40_perfil_canonico_aplicabilidad_verificaciones.md](./40_perfil_canonico_aplicabilidad_verificaciones.md)
+
+## Cierre canonico con `verification_events`
+
+La relacion canonica entre obligacion y evento queda cerrada en:
+
+- [41_cierre_canonico_entre_obligacion_y_evento.md](./41_cierre_canonico_entre_obligacion_y_evento.md)
+
+Reglas base:
+
+- una obligacion puede ligar `0..1` evento;
+- un evento puede cerrar `0..1` obligacion;
+- `COMPLETED` exige `verification_event_id`;
+- `CANCELLED` se usa para cierre administrativo sin evento;
+- `COMPLETED` no equivale por si mismo a cumplimiento vigente.
+
 ## Tablas propuestas
 
 ### 1. `verification_obligations`
@@ -92,10 +112,26 @@ Respuesta del propietario en `owner_response`:
 | El propietario confirma que sí la hará | `owner_response = CONFIRMED`, `status = OWNER_CONFIRMED` | El administrador ve la decisión en tiempo real. |
 | El propietario pide apoyo | `owner_response = REQUEST_ASSISTANCE`, `status = REQUESTED_ASSISTANCE` | El administrador sabe que debe intervenir. |
 | El administrador agenda cita | `scheduled_center_id`, `scheduled_for`, `status = SCHEDULED` | El propietario y el administrador ven el mismo compromiso. |
-| Se realiza la verificación | se vincula `verification_event_id`, `status = COMPLETED` | El caso deja de ser solo intención y pasa a cumplimiento real. |
+| Se atiende la verificación y se registra un evento real | se vincula `verification_event_id`, `status = COMPLETED` | El caso deja de ser seguimiento abierto. El cumplimiento vigente se evalua aparte desde el evento y su `valid_until`. |
 | Se vence sin atención | `status = OVERDUE` | Entra a reportes y alertas como pendiente vencida. |
 
 ## Restricciones recomendadas
+
+## Limite de alcance de `owner_response`
+
+`owner_response` solo debe usarse para seguimiento de verificaciones pendientes.
+
+No debe resolver por si mismo:
+
+- cambio de dueno;
+- reclamo de nuevo dueno;
+- suspension;
+- baja;
+- restablecimiento.
+
+Ese flujo administrativo se cierra aparte en:
+
+- [36_flujo_canonico_solicitudes_del_propietario.md](./36_flujo_canonico_solicitudes_del_propietario.md)
 
 ### Unicidad
 
@@ -111,6 +147,14 @@ Respuesta del propietario en `owner_response`:
 - `admin_user_id` → `users.id`
 - `scheduled_center_id` → `verification_centers.id`
 - `verification_event_id` → `verification_events.id`
+
+### Semantica de cierre
+
+- `COMPLETED` solo debe existir con `verification_event_id` y `closed_at`;
+- `CANCELLED` solo debe existir sin `verification_event_id` y con `closed_at`;
+- un evento ligado cierra un solo caso operativo;
+- una obligacion completada no sustituye al analisis de cumplimiento vigente;
+- el estado regulatorio debe seguir usando el ultimo evento compliant, no solo `status = COMPLETED`.
 
 ### Historial
 

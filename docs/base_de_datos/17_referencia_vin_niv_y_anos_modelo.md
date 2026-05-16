@@ -23,12 +23,17 @@ Esto aplica a los VIN modernos usados para identificacion vehicular y para la po
 
 ## Lo mas importante para Vera
 
+- toda unidad operativa debe tener `serie_niv`;
 - la `serie_niv` debe tratarse como identificador unico y estable del vehiculo;
 - la placa, el motor, el tipo y el dueno pueden cambiar;
 - la serie no debe reutilizarse;
 - la posicion `10` del VIN representa el ano-modelo;
 - la posicion `9` es el digito verificador;
 - la posicion `11` identifica la planta donde el fabricante afijo el VIN.
+
+La regla documental cerrada para identidad del vehiculo se fija en:
+
+- [34_politica_identidad_maestra_del_vehiculo.md](./34_politica_identidad_maestra_del_vehiculo.md)
 
 ## Tabla de ano-modelo
 

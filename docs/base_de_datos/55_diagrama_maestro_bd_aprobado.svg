@@ -1,0 +1,670 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="5400" height="3200" viewBox="0 0 5400 3200">
+  <defs>
+    <style>
+      .bg { fill: #f5f7fb; }
+      .title { font: 700 34px "Segoe UI", Arial, sans-serif; fill: #15314b; }
+      .subtitle { font: 400 17px "Segoe UI", Arial, sans-serif; fill: #486581; }
+      .lane { rx: 18; ry: 18; stroke-width: 2.2; fill-opacity: 0.22; }
+      .laneTitle { font: 700 22px "Segoe UI", Arial, sans-serif; }
+      .box { fill: #ffffff; stroke: #243b53; stroke-width: 2; rx: 12; ry: 12; }
+      .head { fill: #243b53; rx: 12; ry: 12; }
+      .headText { font: 700 15px "Segoe UI", Arial, sans-serif; fill: #ffffff; }
+      .field { font: 12px "Consolas", "Courier New", monospace; fill: #243b53; }
+      .line { stroke: #425466; stroke-width: 2.3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .lineDash { stroke: #6c7a89; stroke-width: 2.1; fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 10 8; }
+      .note { fill: #ffffff; stroke: #8aa2c0; stroke-width: 1.8; rx: 14; ry: 14; }
+      .noteTitle { font: 700 16px "Segoe UI", Arial, sans-serif; fill: #15314b; }
+      .noteText { font: 13px "Segoe UI", Arial, sans-serif; fill: #334e68; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="5400" height="3200" />
+  <text class="title" x="50" y="60">Vera - Diagrama Maestro de Base de Datos Aprobado</text>
+  <text class="subtitle" x="50" y="92">Cierre estructural senior-reviewed. Lineas ortogonales, tipos de datos resumidos y relaciones estructurales primarias.</text>
+
+  <rect class="lane" x="40" y="130" width="960" height="1080" fill="#d9ecff" stroke="#6baed6" />
+  <text class="laneTitle" x="65" y="165" fill="#2b6c9c">1. Identity and Access</text>
+
+  <rect class="lane" x="1040" y="130" width="900" height="1820" fill="#e8f7e8" stroke="#74c69d" />
+  <text class="laneTitle" x="1065" y="165" fill="#2d6a4f">2. Vehicle Governance</text>
+
+  <rect class="lane" x="1960" y="130" width="1280" height="920" fill="#fff4d6" stroke="#e0a100" />
+  <text class="laneTitle" x="1985" y="165" fill="#9c6b00">3. Compliance and Documents</text>
+
+  <rect class="lane" x="3260" y="130" width="970" height="1500" fill="#fde8ef" stroke="#d66a8a" />
+  <text class="laneTitle" x="3285" y="165" fill="#a23b5a">4. Finance and Settlement</text>
+
+  <rect class="lane" x="4250" y="130" width="1110" height="1560" fill="#ece7ff" stroke="#8f7aea" />
+  <text class="laneTitle" x="4275" y="165" fill="#5a46c8">5. Notifications</text>
+
+  <rect class="lane" x="1040" y="1980" width="3190" height="1040" fill="#e8fbf7" stroke="#58a6a6" />
+  <text class="laneTitle" x="1065" y="2015" fill="#1f6f78">6. Analytics and Quality</text>
+
+  <!-- Identity and access -->
+  <g transform="translate(80 190)">
+    <rect class="box" x="0" y="0" width="330" height="170" />
+    <rect class="head" x="0" y="0" width="330" height="34" />
+    <text class="headText" x="16" y="22">PARTIES</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">party_type_enum party_type</text>
+    <text class="field" x="14" y="98">varchar(13) rfc</text>
+    <text class="field" x="14" y="118">varchar(200) legal_name</text>
+    <text class="field" x="14" y="138">varchar(200) display_name</text>
+    <text class="field" x="14" y="158">owner_status_enum owner_admin_status_current</text>
+  </g>
+
+  <g transform="translate(80 400)">
+    <rect class="box" x="0" y="0" width="330" height="150" />
+    <rect class="head" x="0" y="0" width="330" height="34" />
+    <text class="headText" x="16" y="22">USERS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint party_id FK</text>
+    <text class="field" x="14" y="98">varchar(320) email</text>
+    <text class="field" x="14" y="118">varchar(200) full_name</text>
+    <text class="field" x="14" y="138">boolean is_admin, boolean is_active</text>
+  </g>
+
+  <g transform="translate(80 590)">
+    <rect class="box" x="0" y="0" width="330" height="165" />
+    <rect class="head" x="0" y="0" width="330" height="34" />
+    <text class="headText" x="16" y="22">PARTY_CONTACTS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint party_id FK</text>
+    <text class="field" x="14" y="98">varchar(320) email</text>
+    <text class="field" x="14" y="118">varchar(20) whatsapp_e164</text>
+    <text class="field" x="14" y="138">boolean receives_reports</text>
+    <text class="field" x="14" y="158">boolean is_primary, boolean is_active</text>
+  </g>
+
+  <g transform="translate(80 800)">
+    <rect class="box" x="0" y="0" width="330" height="170" />
+    <rect class="head" x="0" y="0" width="330" height="34" />
+    <text class="headText" x="16" y="22">PARTY_OWNER_STATUS_HISTORY</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint party_id FK</text>
+    <text class="field" x="14" y="98">owner_status_enum new_status</text>
+    <text class="field" x="14" y="118">date effective_date</text>
+    <text class="field" x="14" y="138">bigint support_document_id FK</text>
+    <text class="field" x="14" y="158">timestamptz created_at</text>
+  </g>
+
+  <g transform="translate(470 190)">
+    <rect class="box" x="0" y="0" width="300" height="120" />
+    <rect class="head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="16" y="22">INTERNAL_ROLES</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">varchar(100) role_code</text>
+    <text class="field" x="14" y="98">boolean is_active</text>
+  </g>
+
+  <g transform="translate(470 350)">
+    <rect class="box" x="0" y="0" width="300" height="135" />
+    <rect class="head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="16" y="22">INTERNAL_PERMISSIONS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">varchar(120) permission_code</text>
+    <text class="field" x="14" y="98">varchar(60) module_code</text>
+    <text class="field" x="14" y="118">varchar(60) action_code</text>
+  </g>
+
+  <g transform="translate(470 525)">
+    <rect class="box" x="0" y="0" width="300" height="120" />
+    <rect class="head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="16" y="22">INTERNAL_ROLE_PERMISSIONS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint internal_role_id FK</text>
+    <text class="field" x="14" y="98">bigint internal_permission_id FK</text>
+  </g>
+
+  <g transform="translate(470 685)">
+    <rect class="box" x="0" y="0" width="300" height="150" />
+    <rect class="head" x="0" y="0" width="300" height="34" />
+    <text class="headText" x="16" y="22">USER_INTERNAL_ROLES</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint user_id FK</text>
+    <text class="field" x="14" y="98">bigint internal_role_id FK</text>
+    <text class="field" x="14" y="118">date start_date, date end_date</text>
+    <text class="field" x="14" y="138">boolean is_current</text>
+  </g>
+
+  <!-- Vehicle governance -->
+  <g transform="translate(1080 190)">
+    <rect class="box" x="0" y="0" width="360" height="190" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">VEHICLES</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">varchar(17) serial_niv</text>
+    <text class="field" x="14" y="98">varchar(20) plate</text>
+    <text class="field" x="14" y="118">vehicle_regime_enum regime</text>
+    <text class="field" x="14" y="138">lifecycle_status_enum lifecycle_status_current</text>
+    <text class="field" x="14" y="158">varchar(10) schedule_marker_effective</text>
+    <text class="field" x="14" y="178">boolean is_active</text>
+  </g>
+
+  <g transform="translate(1080 430)">
+    <rect class="box" x="0" y="0" width="360" height="170" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">VEHICLE_PARTY_ROLES</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint vehicle_id FK</text>
+    <text class="field" x="14" y="98">bigint party_id FK</text>
+    <text class="field" x="14" y="118">vehicle_role_enum role_type</text>
+    <text class="field" x="14" y="138">date start_date, date end_date</text>
+    <text class="field" x="14" y="158">boolean is_current</text>
+  </g>
+
+  <g transform="translate(1080 640)">
+    <rect class="box" x="0" y="0" width="360" height="150" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">USER_VEHICLE_ACCESS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint user_id FK</text>
+    <text class="field" x="14" y="98">bigint vehicle_id FK</text>
+    <text class="field" x="14" y="118">access_type_enum access_type</text>
+    <text class="field" x="14" y="138">boolean is_active</text>
+  </g>
+
+  <g transform="translate(1080 830)">
+    <rect class="box" x="0" y="0" width="360" height="170" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">VEHICLE_VERIFICATION_PROFILE</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint vehicle_id FK</text>
+    <text class="field" x="14" y="98">verification_type_enum verification_type</text>
+    <text class="field" x="14" y="118">applicability_enum applicability_status</text>
+    <text class="field" x="14" y="138">date effective_date</text>
+    <text class="field" x="14" y="158">boolean is_current</text>
+  </g>
+
+  <g transform="translate(1080 1040)">
+    <rect class="box" x="0" y="0" width="360" height="140" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">VEHICLE_VERIFICATION_PROFILE_HISTORY</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint profile_id FK</text>
+    <text class="field" x="14" y="98">applicability_enum previous_status</text>
+    <text class="field" x="14" y="118">applicability_enum new_status</text>
+  </g>
+
+  <g transform="translate(1490 430)">
+    <rect class="box" x="0" y="0" width="360" height="170" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">VEHICLE_LIFECYCLE_EVENTS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint vehicle_id FK</text>
+    <text class="field" x="14" y="98">lifecycle_status_enum previous_status</text>
+    <text class="field" x="14" y="118">lifecycle_status_enum new_status</text>
+    <text class="field" x="14" y="138">date effective_date</text>
+    <text class="field" x="14" y="158">bigint support_document_id FK</text>
+  </g>
+
+  <g transform="translate(1490 640)">
+    <rect class="box" x="0" y="0" width="360" height="190" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">VEHICLE_CHANGE_REQUESTS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint vehicle_id FK</text>
+    <text class="field" x="14" y="98">request_type_enum request_type</text>
+    <text class="field" x="14" y="118">request_status_enum request_status</text>
+    <text class="field" x="14" y="138">bigint claimant_party_id FK</text>
+    <text class="field" x="14" y="158">date requested_effective_date</text>
+    <text class="field" x="14" y="178">bigint support_document_id FK</text>
+  </g>
+
+  <g transform="translate(1490 870)">
+    <rect class="box" x="0" y="0" width="360" height="140" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">VEHICLE_CHANGE_REQUEST_HISTORY</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint request_id FK</text>
+    <text class="field" x="14" y="98">request_status_enum previous_status</text>
+    <text class="field" x="14" y="118">request_status_enum new_status</text>
+  </g>
+
+  <!-- Compliance and documents -->
+  <g transform="translate(2000 190)">
+    <rect class="box" x="0" y="0" width="360" height="160" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">VERIFICATION_CENTERS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">varchar(30) code</text>
+    <text class="field" x="14" y="98">varchar(200) name</text>
+    <text class="field" x="14" y="118">varchar(10) state_code</text>
+    <text class="field" x="14" y="138">varchar(120) city, boolean is_active</text>
+  </g>
+
+  <g transform="translate(2000 390)">
+    <rect class="box" x="0" y="0" width="360" height="180" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">VERIFICATION_CENTER_CONTACTS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint center_id FK</text>
+    <text class="field" x="14" y="98">varchar(60) contact_role</text>
+    <text class="field" x="14" y="118">varchar(320) email</text>
+    <text class="field" x="14" y="138">varchar(20) whatsapp_phone</text>
+    <text class="field" x="14" y="158">boolean is_primary, boolean is_active</text>
+  </g>
+
+  <g transform="translate(2000 610)">
+    <rect class="box" x="0" y="0" width="360" height="200" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">VERIFICATION_SCHEDULE_RULES</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">vehicle_regime_enum regime</text>
+    <text class="field" x="14" y="98">integer schedule_position</text>
+    <text class="field" x="14" y="118">varchar(10) schedule_marker</text>
+    <text class="field" x="14" y="138">verification_type_enum verification_type</text>
+    <text class="field" x="14" y="158">smallint window_start_month, window_end_month</text>
+    <text class="field" x="14" y="178">smallint cutoff_day, varchar(40) window_label</text>
+  </g>
+
+  <g transform="translate(2420 190)">
+    <rect class="box" x="0" y="0" width="360" height="190" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">VERIFICATION_OBLIGATIONS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint vehicle_id FK</text>
+    <text class="field" x="14" y="98">bigint scheduled_center_id FK</text>
+    <text class="field" x="14" y="118">verification_type_enum verification_type</text>
+    <text class="field" x="14" y="138">obligation_status_enum obligation_status</text>
+    <text class="field" x="14" y="158">owner_response_enum owner_response</text>
+    <text class="field" x="14" y="178">date due_date</text>
+  </g>
+
+  <g transform="translate(2420 420)">
+    <rect class="box" x="0" y="0" width="360" height="160" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">VERIFICATION_OBLIGATION_HISTORY</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint obligation_id FK</text>
+    <text class="field" x="14" y="98">varchar(60) action_type</text>
+    <text class="field" x="14" y="118">obligation_status_enum previous_status</text>
+    <text class="field" x="14" y="138">obligation_status_enum new_status</text>
+  </g>
+
+  <g transform="translate(2420 620)">
+    <rect class="box" x="0" y="0" width="360" height="190" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">VERIFICATION_EVENTS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint vehicle_id FK</text>
+    <text class="field" x="14" y="98">bigint center_id FK</text>
+    <text class="field" x="14" y="118">bigint source_document_id FK</text>
+    <text class="field" x="14" y="138">verification_type_enum verification_type</text>
+    <text class="field" x="14" y="158">date event_date, date valid_until</text>
+    <text class="field" x="14" y="178">result_status_enum result_status</text>
+  </g>
+
+  <g transform="translate(2850 190)">
+    <rect class="box" x="0" y="0" width="360" height="210" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">DOCUMENTS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint vehicle_id FK</text>
+    <text class="field" x="14" y="98">bigint related_party_id FK</text>
+    <text class="field" x="14" y="118">document_type_enum document_type</text>
+    <text class="field" x="14" y="138">verification_type_enum verification_type</text>
+    <text class="field" x="14" y="158">document_status_enum document_status</text>
+    <text class="field" x="14" y="178">date valid_until</text>
+    <text class="field" x="14" y="198">boolean is_visible_to_owner</text>
+  </g>
+
+  <g transform="translate(2850 440)">
+    <rect class="box" x="0" y="0" width="360" height="210" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">DOCUMENT_FILES</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint document_id FK</text>
+    <text class="field" x="14" y="98">integer version_no</text>
+    <text class="field" x="14" y="118">storage_kind_enum storage_kind</text>
+    <text class="field" x="14" y="138">text storage_path</text>
+    <text class="field" x="14" y="158">bigint file_size_bytes</text>
+    <text class="field" x="14" y="178">char(64) sha256_hex</text>
+    <text class="field" x="14" y="198">boolean is_current</text>
+  </g>
+
+  <g transform="translate(2850 690)">
+    <rect class="box" x="0" y="0" width="360" height="170" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">DOCUMENT_ACCESS_LOG</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint document_id FK</text>
+    <text class="field" x="14" y="98">bigint document_file_id FK</text>
+    <text class="field" x="14" y="118">bigint vehicle_id FK</text>
+    <text class="field" x="14" y="138">varchar(60) action_type</text>
+    <text class="field" x="14" y="158">timestamptz created_at</text>
+  </g>
+
+  <!-- Finance -->
+  <g transform="translate(3320 190)">
+    <rect class="box" x="0" y="0" width="340" height="180" />
+    <rect class="head" x="0" y="0" width="340" height="34" />
+    <text class="headText" x="16" y="22">SERVICE_ORDERS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">varchar(100) folio</text>
+    <text class="field" x="14" y="98">bigint vehicle_id FK</text>
+    <text class="field" x="14" y="118">bigint client_party_id FK</text>
+    <text class="field" x="14" y="138">bigint verification_center_id FK</text>
+    <text class="field" x="14" y="158">numeric(14,2) total_amount</text>
+  </g>
+
+  <g transform="translate(3320 410)">
+    <rect class="box" x="0" y="0" width="340" height="190" />
+    <rect class="head" x="0" y="0" width="340" height="34" />
+    <text class="headText" x="16" y="22">SERVICE_ORDER_ITEMS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint service_order_id FK</text>
+    <text class="field" x="14" y="98">integer line_no</text>
+    <text class="field" x="14" y="118">varchar(80) concept_code</text>
+    <text class="field" x="14" y="138">verification_type_enum verification_type</text>
+    <text class="field" x="14" y="158">bigint obligation_id FK, event_id FK</text>
+    <text class="field" x="14" y="178">numeric(14,2) line_total_amount</text>
+  </g>
+
+  <g transform="translate(3740 190)">
+    <rect class="box" x="0" y="0" width="340" height="140" />
+    <rect class="head" x="0" y="0" width="340" height="34" />
+    <text class="headText" x="16" y="22">CLIENT_ACCOUNTS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint client_party_id FK</text>
+    <text class="field" x="14" y="98">varchar(40) account_status</text>
+    <text class="field" x="14" y="118">char(3) currency</text>
+  </g>
+
+  <g transform="translate(3740 370)">
+    <rect class="box" x="0" y="0" width="340" height="180" />
+    <rect class="head" x="0" y="0" width="340" height="34" />
+    <text class="headText" x="16" y="22">RECEIVABLE_DOCUMENTS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint client_account_id FK</text>
+    <text class="field" x="14" y="98">bigint service_order_id FK</text>
+    <text class="field" x="14" y="118">varchar(100) folio</text>
+    <text class="field" x="14" y="138">date due_date</text>
+    <text class="field" x="14" y="158">numeric(14,2) total_amount, balance_amount</text>
+    <text class="field" x="14" y="178">varchar(40) receivable_status</text>
+  </g>
+
+  <g transform="translate(3740 590)">
+    <rect class="box" x="0" y="0" width="340" height="160" />
+    <rect class="head" x="0" y="0" width="340" height="34" />
+    <text class="headText" x="16" y="22">RECEIVABLE_INSTALLMENTS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint receivable_document_id FK</text>
+    <text class="field" x="14" y="98">integer installment_no</text>
+    <text class="field" x="14" y="118">date due_date</text>
+    <text class="field" x="14" y="138">numeric(14,2) amount_due, amount_paid</text>
+  </g>
+
+  <g transform="translate(3740 790)">
+    <rect class="box" x="0" y="0" width="340" height="180" />
+    <rect class="head" x="0" y="0" width="340" height="34" />
+    <text class="headText" x="16" y="22">PAYMENT_TRANSACTIONS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint client_account_id FK</text>
+    <text class="field" x="14" y="98">bigint payer_party_id FK</text>
+    <text class="field" x="14" y="118">date payment_date</text>
+    <text class="field" x="14" y="138">numeric(14,2) amount</text>
+    <text class="field" x="14" y="158">numeric(14,2) unapplied_amount</text>
+    <text class="field" x="14" y="178">varchar(40) payment_status</text>
+  </g>
+
+  <g transform="translate(3740 1010)">
+    <rect class="box" x="0" y="0" width="340" height="180" />
+    <rect class="head" x="0" y="0" width="340" height="34" />
+    <text class="headText" x="16" y="22">PAYMENT_APPLICATIONS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint payment_transaction_id FK</text>
+    <text class="field" x="14" y="98">bigint receivable_document_id FK</text>
+    <text class="field" x="14" y="118">bigint receivable_installment_id FK</text>
+    <text class="field" x="14" y="138">numeric(14,2) applied_amount</text>
+    <text class="field" x="14" y="158">timestamptz applied_at</text>
+  </g>
+
+  <g transform="translate(3740 1230)">
+    <rect class="box" x="0" y="0" width="340" height="160" />
+    <rect class="head" x="0" y="0" width="340" height="34" />
+    <text class="headText" x="16" y="22">ACCOUNT_MOVEMENTS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint client_account_id FK</text>
+    <text class="field" x="14" y="98">varchar(40) movement_type</text>
+    <text class="field" x="14" y="118">varchar(40) reference_type</text>
+    <text class="field" x="14" y="138">numeric(14,2) balance_after_amount</text>
+  </g>
+
+  <!-- Notifications -->
+  <g transform="translate(4310 190)">
+    <rect class="box" x="0" y="0" width="340" height="160" />
+    <rect class="head" x="0" y="0" width="340" height="34" />
+    <text class="headText" x="16" y="22">REPORT_RECIPIENTS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint client_party_id FK</text>
+    <text class="field" x="14" y="98">bigint party_contact_id FK</text>
+    <text class="field" x="14" y="118">channel_enum channel</text>
+    <text class="field" x="14" y="138">report_type_enum report_type</text>
+  </g>
+
+  <g transform="translate(4310 390)">
+    <rect class="box" x="0" y="0" width="340" height="170" />
+    <rect class="head" x="0" y="0" width="340" height="34" />
+    <text class="headText" x="16" y="22">NOTIFICATION_RULES</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">varchar(100) rule_code</text>
+    <text class="field" x="14" y="98">report_type_enum report_type</text>
+    <text class="field" x="14" y="118">verification_type_enum verification_type</text>
+    <text class="field" x="14" y="138">varchar(40) trigger_status</text>
+    <text class="field" x="14" y="158">integer trigger_offset_days</text>
+  </g>
+
+  <g transform="translate(4310 600)">
+    <rect class="box" x="0" y="0" width="340" height="160" />
+    <rect class="head" x="0" y="0" width="340" height="34" />
+    <text class="headText" x="16" y="22">MESSAGE_TEMPLATES</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">varchar(100) template_code</text>
+    <text class="field" x="14" y="98">channel_enum channel</text>
+    <text class="field" x="14" y="118">report_type_enum report_type</text>
+    <text class="field" x="14" y="138">integer version_no</text>
+  </g>
+
+  <g transform="translate(4740 190)">
+    <rect class="box" x="0" y="0" width="340" height="210" />
+    <rect class="head" x="0" y="0" width="340" height="34" />
+    <text class="headText" x="16" y="22">NOTIFICATION_BATCHES</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint report_recipient_id FK</text>
+    <text class="field" x="14" y="98">bigint rule_id FK</text>
+    <text class="field" x="14" y="118">bigint template_id FK</text>
+    <text class="field" x="14" y="138">channel_enum channel</text>
+    <text class="field" x="14" y="158">report_type_enum report_type</text>
+    <text class="field" x="14" y="178">batch_status_enum status</text>
+    <text class="field" x="14" y="198">char(64) source_snapshot_hash</text>
+  </g>
+
+  <g transform="translate(4740 440)">
+    <rect class="box" x="0" y="0" width="340" height="190" />
+    <rect class="head" x="0" y="0" width="340" height="34" />
+    <text class="headText" x="16" y="22">NOTIFICATION_BATCH_ITEMS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint batch_id FK</text>
+    <text class="field" x="14" y="98">bigint vehicle_id FK</text>
+    <text class="field" x="14" y="118">bigint obligation_id FK</text>
+    <text class="field" x="14" y="138">verification_type_enum verification_type</text>
+    <text class="field" x="14" y="158">date due_anchor_date</text>
+    <text class="field" x="14" y="178">item_status_enum final_status</text>
+  </g>
+
+  <g transform="translate(4740 670)">
+    <rect class="box" x="0" y="0" width="340" height="210" />
+    <rect class="head" x="0" y="0" width="340" height="34" />
+    <text class="headText" x="16" y="22">NOTIFICATION_LOG</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint batch_id FK</text>
+    <text class="field" x="14" y="98">bigint batch_item_id FK</text>
+    <text class="field" x="14" y="118">integer attempt_no</text>
+    <text class="field" x="14" y="138">channel_enum channel</text>
+    <text class="field" x="14" y="158">log_status_enum status</text>
+    <text class="field" x="14" y="178">varchar(150) provider_message_id</text>
+    <text class="field" x="14" y="198">timestamptz dispatched_at</text>
+  </g>
+
+  <!-- Analytics -->
+  <g transform="translate(1080 2060)">
+    <rect class="box" x="0" y="0" width="340" height="160" />
+    <rect class="head" x="0" y="0" width="340" height="34" />
+    <text class="headText" x="16" y="22">VEHICLE_STATUS_HISTORY</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint vehicle_id FK</text>
+    <text class="field" x="14" y="98">date status_date</text>
+    <text class="field" x="14" y="118">varchar(40) physical_status</text>
+    <text class="field" x="14" y="138">varchar(40) emissions_status</text>
+  </g>
+
+  <g transform="translate(1490 2060)">
+    <rect class="box" x="0" y="0" width="360" height="170" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">DAILY_VEHICLE_STATUS_SNAPSHOT</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">date snapshot_date</text>
+    <text class="field" x="14" y="98">bigint vehicle_id FK</text>
+    <text class="field" x="14" y="118">bigint client_party_id FK</text>
+    <text class="field" x="14" y="138">vehicle_regime_enum regime</text>
+    <text class="field" x="14" y="158">varchar(10) schedule_marker_effective</text>
+  </g>
+
+  <g transform="translate(2000 2060)">
+    <rect class="box" x="0" y="0" width="340" height="170" />
+    <rect class="head" x="0" y="0" width="340" height="34" />
+    <text class="headText" x="16" y="22">VERIFICATION_SESSIONS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint vehicle_id FK</text>
+    <text class="field" x="14" y="98">bigint center_id FK</text>
+    <text class="field" x="14" y="118">date session_date</text>
+    <text class="field" x="14" y="138">integer duration_minutes</text>
+    <text class="field" x="14" y="158">varchar(40) outcome_code</text>
+  </g>
+
+  <g transform="translate(2420 2060)">
+    <rect class="box" x="0" y="0" width="360" height="170" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">VERIFICATION_CENTER_CAPACITY_DAILY</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint center_id FK</text>
+    <text class="field" x="14" y="98">date capacity_date</text>
+    <text class="field" x="14" y="118">integer total_slots</text>
+    <text class="field" x="14" y="138">integer booked_slots</text>
+    <text class="field" x="14" y="158">integer available_slots</text>
+  </g>
+
+  <g transform="translate(2850 2060)">
+    <rect class="box" x="0" y="0" width="320" height="140" />
+    <rect class="head" x="0" y="0" width="320" height="34" />
+    <text class="headText" x="16" y="22">CALENDAR_BUSINESS_DAYS</text>
+    <text class="field" x="14" y="58">date business_date PK</text>
+    <text class="field" x="14" y="78">vehicle_regime_enum regime</text>
+    <text class="field" x="14" y="98">boolean is_business_day</text>
+    <text class="field" x="14" y="118">text notes</text>
+  </g>
+
+  <g transform="translate(3270 2060)">
+    <rect class="box" x="0" y="0" width="360" height="160" />
+    <rect class="head" x="0" y="0" width="360" height="34" />
+    <text class="headText" x="16" y="22">DATA_QUALITY_ISSUES</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint vehicle_id FK NULL</text>
+    <text class="field" x="14" y="98">varchar(80) issue_code</text>
+    <text class="field" x="14" y="118">varchar(20) severity, varchar(20) status</text>
+    <text class="field" x="14" y="138">timestamptz detected_at</text>
+  </g>
+
+  <!-- Notes -->
+  <g transform="translate(4310 930)">
+    <rect class="note" x="0" y="0" width="990" height="250" />
+    <text class="noteTitle" x="18" y="28">Legend and reading rules</text>
+    <text class="noteText" x="18" y="60">• Solo se dibujan relaciones estructurales primarias.</text>
+    <text class="noteText" x="18" y="84">• FK de auditoria hacia users y documents permanecen en campos, no en lineas.</text>
+    <text class="noteText" x="18" y="108">• Las vistas vw_* se omiten del SVG para mantener legibilidad.</text>
+    <text class="noteText" x="18" y="132">• Tipos de dato se muestran en forma resumida y operativa.</text>
+    <text class="noteText" x="18" y="156">• Linea punteada = relacion opcional o contextual.</text>
+    <path class="lineDash" d="M 28 188 H 140" />
+    <text class="noteText" x="160" y="193">ejemplo: evento puede cerrar una obligacion, pero no siempre nace de ella</text>
+    <text class="noteText" x="18" y="224">Fuente estructural canonica: 02_tablas_y_relaciones.md</text>
+  </g>
+
+  <g transform="translate(4310 1210)">
+    <rect class="note" x="0" y="0" width="990" height="330" />
+    <text class="noteTitle" x="18" y="28">Relations intentionally left out of strokes</text>
+    <text class="noteText" x="18" y="60">• actor_user_id, created_by_user_id, granted_by_user_id and similar audit links</text>
+    <text class="noteText" x="18" y="84">• support_document_id links from lifecycle, profile and owner-admin history</text>
+    <text class="noteText" x="18" y="108">• repeated contextual links from finance back to parties and vehicles</text>
+    <text class="noteText" x="18" y="132">• repeated contextual links from notifications back to parties and vehicles</text>
+    <text class="noteText" x="18" y="156">• source-document and related-party contextual links in the document layer</text>
+    <text class="noteText" x="18" y="180">This omission is deliberate: the fields remain in the boxes and the contract remains</text>
+    <text class="noteText" x="18" y="204">complete in 02_tablas_y_relaciones.md. The SVG privileges a usable visual map over</text>
+    <text class="noteText" x="18" y="228">an exhaustive web of arrows.</text>
+    <text class="noteText" x="18" y="268">Senior status: approved visual master for post-normalization development.</text>
+    <text class="noteText" x="18" y="296">Companion docs: 54_visto_bueno_senior_modelo_bd.md and 55_diagrama_maestro_bd_aprobado.md</text>
+  </g>
+
+  <!-- Relations: identity and access -->
+  <path class="line" d="M 245 360 V 400" />
+  <path class="line" d="M 80 245 H 60 V 672 H 80" />
+  <path class="line" d="M 80 265 H 45 V 885 H 80" />
+  <path class="line" d="M 410 475 H 440 V 760 H 470" />
+  <path class="line" d="M 770 245 H 800 V 585 H 770" />
+  <path class="line" d="M 770 417 H 820 V 585 H 770" />
+  <path class="line" d="M 770 235 H 840 V 760 H 770" />
+
+  <!-- Relations: parties, access and vehicles -->
+  <path class="line" d="M 410 235 H 430 V 170 H 1040 V 515 H 1080" />
+  <path class="line" d="M 1260 380 V 430" />
+  <path class="line" d="M 410 450 H 430 V 160 H 1040 V 715 H 1080" />
+  <path class="line" d="M 1080 300 H 1040 V 715 H 1080" />
+  <path class="line" d="M 1440 270 H 1460 V 915 H 1440" />
+  <path class="line" d="M 1260 1000 V 1040" />
+  <path class="line" d="M 1440 290 H 1470 V 515 H 1490" />
+  <path class="line" d="M 1440 310 H 1480 V 735 H 1490" />
+  <path class="line" d="M 1670 830 V 870" />
+
+  <!-- Relations: compliance and documents -->
+  <path class="line" d="M 2180 350 V 390" />
+  <path class="line" d="M 2360 260 H 2420" />
+  <path class="line" d="M 2360 280 H 2390 V 715 H 2420" />
+  <path class="line" d="M 1440 235 H 1460 V 170 H 2420 V 285" />
+  <path class="line" d="M 1440 255 H 1480 V 180 H 2400 V 715 H 2420" />
+  <path class="line" d="M 1440 275 H 1500 V 150 H 2830 V 295 H 2850" />
+  <path class="line" d="M 2600 380 V 420" />
+  <path class="lineDash" d="M 2780 285 H 2810 V 715 H 2780" />
+  <path class="line" d="M 3030 400 V 440" />
+  <path class="line" d="M 3030 650 V 690" />
+
+  <!-- Relations: finance -->
+  <path class="line" d="M 410 225 H 430 V 140 H 3720 V 260 H 3740" />
+  <path class="line" d="M 1440 215 H 1520 V 145 H 3320 V 280" />
+  <path class="line" d="M 2360 220 H 2380 V 155 H 3320 V 300" />
+  <path class="line" d="M 3490 370 V 410" />
+  <path class="line" d="M 3660 260 H 3710 V 460 H 3740" />
+  <path class="line" d="M 3920 330 V 370" />
+  <path class="line" d="M 3920 550 V 590" />
+  <path class="line" d="M 4100 260 H 4130 V 880 H 4100" />
+  <path class="line" d="M 3920 970 V 1010" />
+  <path class="line" d="M 4100 460 H 4140 V 1100 H 4100" />
+  <path class="line" d="M 4100 670 H 4160 V 1100 H 4100" />
+  <path class="line" d="M 4100 280 H 4180 V 1310 H 4100" />
+  <path class="line" d="M 2780 300 H 2800 V 900 H 3270 V 505 H 3320" />
+  <path class="line" d="M 2780 715 H 2810 V 915 H 3290 V 505 H 3320" />
+
+  <!-- Relations: notifications -->
+  <path class="line" d="M 410 650 H 430 V 150 H 4290 V 270 H 4310" />
+  <path class="line" d="M 4650 250 H 4740" />
+  <path class="line" d="M 4650 475 H 4690 V 310 H 4740" />
+  <path class="line" d="M 4650 680 H 4705 V 340 H 4740" />
+  <path class="line" d="M 4910 400 V 440" />
+  <path class="line" d="M 4910 630 V 670" />
+
+  <!-- Relations: analytics -->
+  <path class="line" d="M 1080 330 H 1060 V 2140 H 1080" />
+  <path class="line" d="M 1440 350 H 1470 V 2145 H 1490" />
+  <path class="line" d="M 1440 370 H 1460 V 1960 H 2000 V 2145" />
+  <path class="line" d="M 2000 300 H 1980 V 2145 H 2000" />
+  <path class="line" d="M 2360 320 H 2400 V 2145 H 2420" />
+</svg>

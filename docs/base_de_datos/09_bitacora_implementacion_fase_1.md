@@ -105,7 +105,7 @@ Dejar el proyecto en un estado seguro, entendible y reproducible antes del sigui
 - se saneó `.env.example` para no publicar una contraseña de ejemplo engañosa;
 - se agregó `.gitattributes` para normalizar textos y tratar imágenes como binarios;
 - se actualizó el `README.md` raíz con pasos reales de arranque local;
-- se actualizó `docs/README.md` para reflejar que la fase 1 ya está implementada;
+- se actualizó `docs/base_de_datos/README.md` para reflejar que la fase 1 ya está implementada;
 - se verificó que `.env` siga fuera del control de versiones;
 - se confirmó el remoto `origin` del repositorio.
 

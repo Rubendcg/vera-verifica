@@ -26,6 +26,11 @@ Reglas activas:
 - propietarios y usuarios autorizados solo pueden consultar vehiculos asignados en `user_vehicle_access`;
 - las operaciones administrativas de alta, generacion y programacion quedan restringidas a admin.
 
+Nota de transicion:
+
+- esta lectura refleja la implementacion actual;
+- el destino canonico de permisos internos del intermediario se cierra en [48_modelo_canonico_permisos_internos_del_intermediario.md](./48_modelo_canonico_permisos_internos_del_intermediario.md), donde las operaciones de `verifications` migran a `PLATFORM_ADMIN` y `OPERATIONS_OPERATOR`.
+
 ## Tabla de endpoints
 
 | Metodo | Ruta | Finalidad |
@@ -109,6 +114,23 @@ Token de entrada:
 
 `verification_obligations` representa lo pendiente, confirmado, programado, vencido o cerrado.
 
+### Centros y contacto operativo
+
+El contrato canonico del centro queda cerrado en:
+
+- [42_contrato_operativo_verification_centers.md](./42_contrato_operativo_verification_centers.md)
+
+Regla base:
+
+- `verification_centers` identifica la sede;
+- el contacto operativo se resuelve aparte;
+- un centro puede tener varios contactos historicos;
+- pero solo uno debe resolver la via primaria activa de operacion.
+
+El contrato del reporte o solicitud hacia centro se cierra aparte en:
+
+- [43_contrato_reporte_hacia_agente_de_centro.md](./43_contrato_reporte_hacia_agente_de_centro.md)
+
 ### Respuesta del propietario
 
 El endpoint:
@@ -164,6 +186,14 @@ y se envia `verificationObligationId`, el sistema:
 - marca la obligacion como `COMPLETED`;
 - registra entrada de historial.
 
+Reglas canonicas:
+
+- el evento cierra como maximo una obligacion;
+- la obligacion puede recibir como maximo un evento de cierre;
+- `COMPLETED` significa cierre operativo atendido, no necesariamente cumplimiento vigente aprobado;
+- la lectura de vigencia real debe seguir saliendo de `verification_events`, `resultStatus` y `validUntil`;
+- si existe evento sin obligacion previa, el endpoint puede registrar el evento sin inventar una obligacion retroactiva.
+
 ### Estado regulatorio por vehiculo
 
 El endpoint:
@@ -193,7 +223,7 @@ Regla operativa actual:
 - `POR_VENCER` aplica cuando faltan `30` dias o menos para la fecha de referencia;
 - `VENCIDO` aplica cuando la fecha de referencia ya paso;
 - `SIN_REGISTRO` aplica cuando no hay evento vigente ni obligacion activa para resolver el caso;
-- `NO_APLICA` se usa para verificaciones no requeridas, por ejemplo emisiones en unidades de arrastre;
+- `NO_APLICA` se usa solo cuando el perfil vigente de aplicabilidad marca esa verificacion como `NOT_REQUIRED`, por ejemplo emisiones en unidades de arrastre;
 - `INACTIVO` se usa cuando la unidad no esta activa.
 
 ## Siguiente paso recomendado

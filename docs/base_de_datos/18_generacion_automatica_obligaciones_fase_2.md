@@ -30,8 +30,10 @@ Documentar la logica con la que **Vera** puede generar obligaciones de verificac
 
 ### 1. Seleccion del tipo de verificacion
 
-- toda unidad activa requiere `PHYSICAL_MECHANICAL`;
-- `EMISSIONS` solo aplica si la unidad no es de arrastre.
+- primero se consulta `vehicle_verification_profile`;
+- `PHYSICAL_MECHANICAL` se considera aplicable solo si el perfil vigente marca `REQUIRED`;
+- `EMISSIONS` se considera aplicable solo si el perfil vigente marca `REQUIRED`;
+- si el perfil vigente marca `NOT_REQUIRED`, la corrida omite esa verificacion sin inferencia adicional.
 
 ### 2. Seleccion de la regla
 
@@ -68,6 +70,11 @@ La corrida devuelve `SKIPPED` cuando:
 - la ventana aun no abre y `includeUpcomingWindow = false`;
 - ya existe un evento vigente que cubre la fecha de vencimiento;
 - ya existe una obligacion activa para la misma fecha y no necesita cambio.
+
+Regla canonica asociada:
+
+- la generacion se frena por evento compliant vigente, no por la sola existencia de una obligacion `COMPLETED`;
+- una obligacion cerrada sin cobertura vigente suficiente no bloquea una obligacion futura.
 
 ## 5. Casos que si generan o actualizan
 
