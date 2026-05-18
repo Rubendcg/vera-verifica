@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3000" height="1460" viewBox="0 0 3000 1460">
+  <defs>
+    <style>
+      .bg { fill: #f6f8fb; }
+      .title { font: 700 34px "Segoe UI", Arial, sans-serif; fill: #18344a; }
+      .subtitle { font: 400 17px "Segoe UI", Arial, sans-serif; fill: #52667a; }
+      .lane { rx: 18; ry: 18; stroke-width: 2.2; fill-opacity: 0.22; }
+      .laneTitle { font: 700 22px "Segoe UI", Arial, sans-serif; }
+      .box { fill: #ffffff; stroke: #24445c; stroke-width: 2; rx: 12; ry: 12; }
+      .head { fill: #24445c; rx: 12; ry: 12; }
+      .headText { font: 700 15px "Segoe UI", Arial, sans-serif; fill: #ffffff; }
+      .field { font: 12px "Consolas", "Courier New", monospace; fill: #24445c; }
+      .line { stroke: #3f5568; stroke-width: 2.3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .lineDash { stroke: #6f8090; stroke-width: 2.1; fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 10 8; }
+      .linkLabel { font: 12px "Segoe UI", Arial, sans-serif; fill: #3f5568; }
+      .note { fill: #ffffff; stroke: #8ea3b8; stroke-width: 1.8; rx: 14; ry: 14; }
+      .noteTitle { font: 700 16px "Segoe UI", Arial, sans-serif; fill: #18344a; }
+      .noteText { font: 13px "Segoe UI", Arial, sans-serif; fill: #3d4f61; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="3000" height="1460" />
+  <text class="title" x="50" y="60">Vera - Diagrama MVP de Base de Datos</text>
+  <text class="subtitle" x="50" y="92">Recorte minimo para intermediario: consulta, reportes y resguardo documental oficial.</text>
+
+  <rect class="lane" x="40" y="130" width="560" height="850" fill="#d8ebff" stroke="#6aa8db" />
+  <text class="laneTitle" x="65" y="166" fill="#2a6c9b">1. Identity and Parties</text>
+
+  <rect class="lane" x="640" y="130" width="560" height="850" fill="#e7f7e7" stroke="#72bf8f" />
+  <text class="laneTitle" x="665" y="166" fill="#2d6a4f">2. Vehicle Core</text>
+
+  <rect class="lane" x="1240" y="130" width="560" height="850" fill="#fff2d6" stroke="#d9a441" />
+  <text class="laneTitle" x="1265" y="166" fill="#9a6a00">3. Verifications</text>
+
+  <rect class="lane" x="1840" y="130" width="620" height="850" fill="#fde5ee" stroke="#d37596" />
+  <text class="laneTitle" x="1865" y="166" fill="#a03b5b">4. Documents</text>
+
+  <rect class="note" x="40" y="1020" width="1120" height="330" />
+  <text class="noteTitle" x="70" y="1050">Report layer derived from this MVP</text>
+  <text class="noteText" x="70" y="1085">- Padron vehicular por serie, placa, propietario, cliente y poseedor legal.</text>
+  <text class="noteText" x="70" y="1110">- Vigencias de fisico mecanica y contaminantes por fecha de vencimiento.</text>
+  <text class="noteText" x="70" y="1135">- Historial de verificaciones por vehiculo y por centro.</text>
+  <text class="noteText" x="70" y="1160">- Estado del expediente oficial: tarjeta, fisico mecanica y emisiones.</text>
+  <text class="noteText" x="70" y="1185">- Historial de versiones documentales por unidad.</text>
+  <text class="noteText" x="70" y="1225">No requiere tablas nuevas de reporteria: sale de joins y filtros sobre el submodelo base.</text>
+
+  <rect class="note" x="1200" y="1020" width="1260" height="330" />
+  <text class="noteTitle" x="1230" y="1050">Out of scope in the MVP</text>
+  <text class="noteText" x="1230" y="1085">- Obligaciones, calendario regulatorio y lotes de seguimiento.</text>
+  <text class="noteText" x="1230" y="1110">- Notificaciones, mensajes push y portal del propietario.</text>
+  <text class="noteText" x="1230" y="1135">- Transferencias, bajas, restablecimientos y flujos administrativos complejos.</text>
+  <text class="noteText" x="1230" y="1160">- Remisiones, cuentas por cobrar, pagos y cartera.</text>
+  <text class="noteText" x="1230" y="1185">- Storage avanzado y auditoria extendida.</text>
+  <text class="noteText" x="1230" y="1225">Regla MVP: si no ayuda a consultar, reportar o guardar PDFs oficiales, queda fuera.</text>
+
+  <g transform="translate(90 220)">
+    <rect class="box" x="0" y="0" width="420" height="175" />
+    <rect class="head" x="0" y="0" width="420" height="34" />
+    <text class="headText" x="16" y="22">PARTIES</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">party_type_enum party_type</text>
+    <text class="field" x="14" y="98">varchar(13) rfc</text>
+    <text class="field" x="14" y="118">varchar(200) legal_name</text>
+    <text class="field" x="14" y="138">varchar(200) display_name</text>
+    <text class="field" x="14" y="158">varchar(20) phone, varchar(320) email</text>
+  </g>
+
+  <g transform="translate(90 470)">
+    <rect class="box" x="0" y="0" width="420" height="145" />
+    <rect class="head" x="0" y="0" width="420" height="34" />
+    <text class="headText" x="16" y="22">USERS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint party_id FK</text>
+    <text class="field" x="14" y="98">varchar(320) email</text>
+    <text class="field" x="14" y="118">varchar(200) full_name</text>
+    <text class="field" x="14" y="138">boolean is_active</text>
+  </g>
+
+  <g transform="translate(700 220)">
+    <rect class="box" x="0" y="0" width="440" height="190" />
+    <rect class="head" x="0" y="0" width="440" height="34" />
+    <text class="headText" x="16" y="22">VEHICLES</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">varchar(17) serial_niv UQ</text>
+    <text class="field" x="14" y="98">varchar(20) plate</text>
+    <text class="field" x="14" y="118">vehicle_regime_enum regime</text>
+    <text class="field" x="14" y="138">vehicle_type_enum unit_type</text>
+    <text class="field" x="14" y="158">varchar(10) schedule_marker_effective</text>
+    <text class="field" x="14" y="178">boolean is_active</text>
+  </g>
+
+  <g transform="translate(700 490)">
+    <rect class="box" x="0" y="0" width="440" height="170" />
+    <rect class="head" x="0" y="0" width="440" height="34" />
+    <text class="headText" x="16" y="22">VEHICLE_PARTY_ROLES</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint vehicle_id FK</text>
+    <text class="field" x="14" y="98">bigint party_id FK</text>
+    <text class="field" x="14" y="118">vehicle_role_enum role_type</text>
+    <text class="field" x="14" y="138">date start_date, date end_date</text>
+    <text class="field" x="14" y="158">boolean is_current</text>
+  </g>
+
+  <g transform="translate(1300 220)">
+    <rect class="box" x="0" y="0" width="440" height="185" />
+    <rect class="head" x="0" y="0" width="440" height="34" />
+    <text class="headText" x="16" y="22">VERIFICATION_CENTERS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">varchar(40) code</text>
+    <text class="field" x="14" y="98">varchar(200) name</text>
+    <text class="field" x="14" y="118">center_type_enum center_type</text>
+    <text class="field" x="14" y="138">varchar(120) city</text>
+    <text class="field" x="14" y="158">varchar(20) phone, varchar(320) email</text>
+    <text class="field" x="14" y="178">boolean is_active</text>
+  </g>
+
+  <g transform="translate(1300 500)">
+    <rect class="box" x="0" y="0" width="440" height="185" />
+    <rect class="head" x="0" y="0" width="440" height="34" />
+    <text class="headText" x="16" y="22">VERIFICATION_EVENTS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint vehicle_id FK</text>
+    <text class="field" x="14" y="98">verification_type_enum verification_type</text>
+    <text class="field" x="14" y="118">date event_date</text>
+    <text class="field" x="14" y="138">date valid_until</text>
+    <text class="field" x="14" y="158">result_status_enum result_status</text>
+    <text class="field" x="14" y="178">bigint center_id FK, bigint source_document_id FK?</text>
+  </g>
+
+  <g transform="translate(1900 220)">
+    <rect class="box" x="0" y="0" width="500" height="210" />
+    <rect class="head" x="0" y="0" width="500" height="34" />
+    <text class="headText" x="16" y="22">DOCUMENTS</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint vehicle_id FK</text>
+    <text class="field" x="14" y="98">bigint related_party_id FK?</text>
+    <text class="field" x="14" y="118">document_type_enum document_type</text>
+    <text class="field" x="14" y="138">verification_type_enum verification_type?</text>
+    <text class="field" x="14" y="158">date issue_date, date valid_until</text>
+    <text class="field" x="14" y="178">document_status_enum document_status</text>
+    <text class="field" x="14" y="198">boolean is_visible_to_owner</text>
+  </g>
+
+  <g transform="translate(1900 525)">
+    <rect class="box" x="0" y="0" width="500" height="170" />
+    <rect class="head" x="0" y="0" width="500" height="34" />
+    <text class="headText" x="16" y="22">DOCUMENT_FILES</text>
+    <text class="field" x="14" y="58">bigint id PK</text>
+    <text class="field" x="14" y="78">bigint document_id FK</text>
+    <text class="field" x="14" y="98">integer version_no</text>
+    <text class="field" x="14" y="118">varchar(120) mime_type</text>
+    <text class="field" x="14" y="138">storage_kind_enum storage_kind</text>
+    <text class="field" x="14" y="158">text storage_path, char(64) sha256_hex, boolean is_current</text>
+  </g>
+
+  <path class="line" d="M300 395 L300 470" />
+  <text class="linkLabel" x="314" y="440">party_id</text>
+
+  <path class="line" d="M510 308 L610 308 L610 575 L700 575" />
+  <text class="linkLabel" x="548" y="298">party_id</text>
+
+  <path class="line" d="M920 410 L920 490" />
+  <text class="linkLabel" x="934" y="455">vehicle_id</text>
+
+  <path class="line" d="M1140 315 L1210 315 L1210 592 L1300 592" />
+  <text class="linkLabel" x="1160" y="305">vehicle_id</text>
+
+  <path class="line" d="M1520 405 L1520 500" />
+  <text class="linkLabel" x="1534" y="455">center_id</text>
+
+  <path class="line" d="M1140 275 L1210 275 L1210 445 L1840 445 L1840 325 L1900 325" />
+  <text class="linkLabel" x="1460" y="435">vehicle_id</text>
+
+  <path class="line" d="M2150 430 L2150 525" />
+  <text class="linkLabel" x="2164" y="482">document_id</text>
+
+  <path class="lineDash" d="M1740 592 L1810 592 L1810 345 L1900 345" />
+  <text class="linkLabel" x="1760" y="580">source_document_id optional</text>
+</svg>
